@@ -7,7 +7,7 @@
 		/// </summary>
 		/// <param name="m">input matrix</param>
 		/// <returns></returns>
-		public static Matrix<TElement> Transpose<TElement>(Matrix<TElement> m)
+		public static Matrix<TElement> Transpose<TElement>(this Matrix<TElement> m)
 		{
 			var t = new Matrix<TElement>(m.Cols, m.Rows);
 
