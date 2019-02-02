@@ -17,5 +17,57 @@
 
 			return t;
 		}
+
+		/// <summary>
+		/// Get value one row above
+		/// </summary>
+		/// <typeparam name="TElement"></typeparam>
+		/// <param name="m"></param>
+		/// <param name="row">current row</param>
+		/// <param name="column">current column</param>
+		/// <returns></returns>
+		public static TElement GetAbove<TElement>(this Matrix<TElement> m, int row, int column)
+		{
+			return m[row - 1, column];
+		}
+
+		/// <summary>
+		/// Get value one row below
+		/// </summary>
+		/// <typeparam name="TElement"></typeparam>
+		/// <param name="m"></param>
+		/// <param name="row">current row</param>
+		/// <param name="column">current column</param>
+		/// <returns></returns>
+		public static TElement GetBelow<TElement>(this Matrix<TElement> m, int row, int column)
+		{
+			return m[row + 1, column];
+		}
+
+		/// <summary>
+		/// Get value one column left
+		/// </summary>
+		/// <typeparam name="TElement"></typeparam>
+		/// <param name="m"></param>
+		/// <param name="row">current row</param>
+		/// <param name="column">current column</param>
+		/// <returns></returns>
+		public static TElement GetLeft<TElement>(this Matrix<TElement> m, int row, int column)
+		{
+			return m[row, column + 1];
+		}
+
+		/// <summary>
+		/// Get value one column right
+		/// </summary>
+		/// <typeparam name="TElement"></typeparam>
+		/// <param name="m"></param>
+		/// <param name="row">current row</param>
+		/// <param name="column">current column</param>
+		/// <returns></returns>
+		public static TElement GetRight<TElement>(this Matrix<TElement> m, int row, int column)
+		{
+			return m[row, column - 1];
+		}
 	}
 }

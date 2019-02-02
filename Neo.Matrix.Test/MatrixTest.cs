@@ -69,7 +69,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetUniDimensionalView_ReturnsUniDimensionalView()
 		{
-			var col = Mat.GetUniDimensionalView().ToList();
+			var col = Mat.GetUni().ToList();
 
 			var expectedCol = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
@@ -79,15 +79,15 @@ namespace NeoMatrix.Test
 		[Test]
 		public void Duplicate_ReturnsDuplicate()
 		{
-			var duplicate = Mat.Duplicate().GetUniDimensionalView(); // this is not the best way to use uni dimensional view, but it works
+			var duplicate = Mat.Duplicate().GetUni(); // this is not the best way to use uni dimensional view, but it works
 
-			Assert.That(duplicate, Is.EqualTo(Mat.GetUniDimensionalView()));
+			Assert.That(duplicate, Is.EqualTo(Mat.GetUni()));
 		}
 
 		[Test]
 		public void ZeroMatrix_CreateNewMatrixAndInitializeIt()
 		{
-			var x = Matrix<int>.ZeroMatrix(2, 2, () => 4).GetUniDimensionalView();
+			var x = Matrix<int>.ZeroMatrix(2, 2, () => 4).GetUni();
 
 			var expectedCol = new List<int> {4, 4, 4, 4};
 			Assert.That(x, Is.EqualTo(expectedCol));

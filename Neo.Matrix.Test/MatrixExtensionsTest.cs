@@ -22,11 +22,35 @@ namespace NeoMatrix.Test
 		[Test]
 		public void Transpose_TransposesMatrix()
 		{
-			var x = Mat.Transpose().GetUniDimensionalView();
+			var x = Mat.Transpose().GetUni();
 
 			var expectedCol = new List<int> {1, 4, 7, 2, 5, 8, 3, 6, 9};
 
 			Assert.That(x, Is.EqualTo(expectedCol));
+		}
+
+		[Test]
+		public void GetAbove_ReturnsValue()
+		{
+			Assert.AreEqual(Mat.GetAbove(1, 1), 2);
+		}
+
+		[Test]
+		public void GetBelow_ReturnsValue()
+		{
+			Assert.AreEqual(Mat.GetBelow(1, 1), 8);
+		}
+
+		[Test]
+		public void GetLeft_ReturnsValue()
+		{
+			Assert.AreEqual(Mat.GetLeft(1, 1), 6);
+		}
+
+		[Test]
+		public void GetRight_ReturnsValue()
+		{
+			Assert.AreEqual(Mat.GetRight(1, 1), 4);
 		}
 	}
 }

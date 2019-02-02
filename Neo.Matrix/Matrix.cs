@@ -97,7 +97,7 @@ namespace NeoMatrix
 		/// <summary>
 		/// Get Uni Dimensional Matrix view
 		/// </summary>
-		public IEnumerable<TElement> GetUniDimensionalView()
+		public IEnumerable<TElement> GetUni()
 		{
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Cols; j++)
