@@ -10,6 +10,7 @@
     <RepositoryUrl>https://github.com/klyse/Neo.Matrix</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/klyse/Neo.Matrix/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/klyse/Neo.Matrix</PackageProjectUrl>
+    <RootNamespace>NeoMatrix</RootNamespace>
   </PropertyGroup>
 
 </Project>
