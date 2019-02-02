@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.2;netstandard2.0;net472</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>derKlyse</Authors>
+    <Company />
+    <Product />
+    <Description>This is a small Matrix helper</Description>
+    <RepositoryUrl>https://github.com/klyse/Neo.Matrix</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/klyse/Neo.Matrix/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/klyse/Neo.Matrix</PackageProjectUrl>
+  </PropertyGroup>
+
+</Project>
