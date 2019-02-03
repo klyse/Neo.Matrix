@@ -261,5 +261,30 @@ namespace NeoMatrix
 		{
 			return GetBox(pt.Y, pt.X, size);
 		}
+
+		/// <summary>
+		/// Executes an <see cref="Action{T}"/> on every element
+		/// </summary>
+		/// <param name="f">Action function</param>
+		public void ExecuteOnAll(Action<TElement> f)
+		{
+			var flatMatrix = GetFlat();
+
+			foreach (var element in flatMatrix)
+			{
+				f.Invoke(element);
+			}
+		}
+
+		/// <summary>
+		/// Executes an <see cref="Action{T}"/> on every element
+		/// </summary>
+		/// <param name="f">Action element, row, column</param>
+		public void ExecuteOnAll(Action<TElement, int, int> f)
+		{
+			for (var i = 0; i < Rows; i++)
+			for (var j = 0; j < Cols; j++)
+				f.Invoke(Mat[i, j], i, j);
+		}
 	}
 }
