@@ -2,4 +2,4 @@
 Matrix helper
 
 # Build Status
-[![Build status](https://github.com/klyse/Neo.Matrix)](https://derklyse.visualstudio.com/GitBuilds/_build/latest?definitionId=6)
+[![Build status](https://derklyse.visualstudio.com/GitBuilds/_apis/build/status/Neo.Matrix)](https://derklyse.visualstudio.com/GitBuilds/_build/latest?definitionId=6)
