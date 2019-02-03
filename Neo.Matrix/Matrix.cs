@@ -22,12 +22,12 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Create new matrix of 0
+		/// Create new matrix of element
 		/// </summary>
 		/// <param name="rows">rows</param>
 		/// <param name="cols">columns</param>
-		/// <param name="f">func to create zero element</param>
-		public static Matrix<TElement> ZeroMatrix(int rows, int cols, Func<TElement> f)
+		/// <param name="f">func to create new element</param>
+		public static Matrix<TElement> NewMatrix(int rows, int cols, Func<TElement> f)
 		{
 			var matrix = new Matrix<TElement>(rows, cols);
 
@@ -97,7 +97,7 @@ namespace NeoMatrix
 		/// <summary>
 		/// Get Uni Dimensional Matrix view
 		/// </summary>
-		public IEnumerable<TElement> GetUni()
+		public IEnumerable<TElement> GetFlat()
 		{
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Cols; j++)
@@ -115,6 +115,70 @@ namespace NeoMatrix
 			for (var j = 0; j < Cols; j++)
 				matrix[i, j] = Mat[i, j];
 			return matrix;
+		}
+
+		/// <summary>
+		/// Transpose Matrix (change x / y)
+		/// </summary>
+		/// <returns>x / y inverted copy of matrix</returns>
+		public Matrix<TElement> Transpose()
+		{
+			var t = new Matrix<TElement>(Cols, Rows);
+
+			for (var i = 0; i < Rows; i++)
+			for (var j = 0; j < Cols; j++)
+				t[j, i] = Mat[i, j];
+
+			return t;
+		}
+
+
+		/// <summary>
+		/// Get value one row above
+		/// </summary>
+		/// <typeparam name="TElement"></typeparam>
+		/// <param name="row">current row</param>
+		/// <param name="column">current column</param>
+		/// <returns></returns>
+		public TElement GetAbove(int row, int column)
+		{
+			return Mat[row - 1, column];
+		}
+
+		/// <summary>
+		/// Get value one row below
+		/// </summary>
+		/// <typeparam name="TElement"></typeparam>
+		/// <param name="row">current row</param>
+		/// <param name="column">current column</param>
+		/// <returns></returns>
+		public TElement GetBelow(int row, int column)
+		{
+			return Mat[row + 1, column];
+		}
+
+		/// <summary>
+		/// Get value one column left
+		/// </summary>
+		/// <typeparam name="TElement"></typeparam>
+		/// <param name="row">current row</param>
+		/// <param name="column">current column</param>
+		/// <returns></returns>
+		public TElement GetLeft(int row, int column)
+		{
+			return Mat[row, column + 1];
+		}
+
+		/// <summary>
+		/// Get value one column right
+		/// </summary>
+		/// <typeparam name="TElement"></typeparam>
+		/// <param name="row">current row</param>
+		/// <param name="column">current column</param>
+		/// <returns></returns>
+		public TElement GetRight(int row, int column)
+		{
+			return Mat[row, column - 1];
 		}
 	}
 }
