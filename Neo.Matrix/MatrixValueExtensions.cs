@@ -26,20 +26,20 @@ namespace NeoMatrix
 		/// </summary>
 		/// <param name="matrix">current matrix</param>
 		/// <typeparam name="TMatrixValueType">Matrix element type</typeparam>
-		/// <returns>sum of matrix</returns>
+		/// <returns>average of matrix</returns>
 		public static double GetAverage<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
 		{
 			var totalSum = matrix.GetTotalSum();
 
 			return totalSum / (matrix.Cols * matrix.Rows);
 		}
-		
+
 		/// <summary>
 		/// Calculates min of matrix
 		/// </summary>
 		/// <param name="matrix">current matrix</param>
 		/// <typeparam name="TMatrixValueType">Matrix element type</typeparam>
-		/// <returns>sum of matrix</returns>
+		/// <returns>min of matrix</returns>
 		public static double GetMin<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
 		{
 			double minV = double.MaxValue;
@@ -53,7 +53,7 @@ namespace NeoMatrix
 		/// </summary>
 		/// <param name="matrix">current matrix</param>
 		/// <typeparam name="TMatrixValueType">Matrix element type</typeparam>
-		/// <returns>sum of matrix</returns>
+		/// <returns>max of matrix</returns>
 		public static double GetMax<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
 		{
 			double maxV = double.MinValue;
