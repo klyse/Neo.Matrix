@@ -12,10 +12,25 @@
     <PackageProjectUrl>https://github.com/klyse/Neo.Matrix</PackageProjectUrl>
     <RootNamespace>NeoMatrix</RootNamespace>
     <Version>1.1.0</Version>
+    <AssemblyVersion>1.1.2.19034</AssemblyVersion>
+    <FileVersion>1.1.2.19034</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.2|AnyCPU'">
     <DocumentationFile>.\Neo.Matrix.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.2|AnyCPU'">
+    <ShouldCreateLogs>True</ShouldCreateLogs>
+    <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>None.IncrementOnDemand.IncrementWithResetOnIncrease.DateStamp</AssemblyVersionSettings>
+    <UpdatePackageVersion>False</UpdatePackageVersion>
+    <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+    <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+    <AssemblyFileVersionSettings>None.IncrementOnDemand.IncrementWithResetOnIncrease.DateStamp</AssemblyFileVersionSettings>
   </PropertyGroup>
 
 </Project>
