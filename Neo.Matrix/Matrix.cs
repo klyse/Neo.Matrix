@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace NeoMatrix
 {
@@ -166,7 +167,7 @@ namespace NeoMatrix
 		/// <returns></returns>
 		public TElement GetLeft(int row, int column)
 		{
-			return Mat[row, column + 1];
+			return Mat[row, column - 1];
 		}
 
 		/// <summary>
@@ -178,7 +179,44 @@ namespace NeoMatrix
 		/// <returns></returns>
 		public TElement GetRight(int row, int column)
 		{
-			return Mat[row, column - 1];
+			return Mat[row, column + 1];
+		}
+
+
+		public Matrix<TElement> GetRect(int centerRow, int centerColumn, int width, int height)
+		{
+			if (height % 2 == 0 || width % 2 == 0||
+			    height == 1 || width == 1)
+			{
+				throw new Exception("Height and or width must be uneven.");
+			}
+
+			var firstRow = centerRow - (height - 1) / 2;
+			var firstColumn = centerColumn - (width - 1) / 2;
+
+			var lastRow = centerRow + (height - 1) / 2;
+			var lastColumn = centerColumn + (width - 1) / 2;
+
+			if (firstColumn < 0 || firstRow < 0 ||
+				lastColumn >= Cols || lastRow >= Rows)
+			{
+				throw new IndexOutOfRangeException("Box size is out of range.");
+			}
+
+			var t = new Matrix<TElement>(height, width);
+
+			var r = 0;
+			var c = 0;
+			for (var i = firstRow; i <= lastRow; i++, r++, c = 0)
+			for (var j = firstColumn; j <= lastColumn; j++, c++)
+				t[r, c] = Mat[i, j];
+
+			return t;
+		}
+
+		public Matrix<TElement> GetRect(Rectangle rect)
+		{
+			return GetRect(rect.Y, rect.X, rect.Width, rect.Height);
 		}
 	}
 }

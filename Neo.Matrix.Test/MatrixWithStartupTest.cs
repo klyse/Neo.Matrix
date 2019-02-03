@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using NUnit.Framework;
 
 namespace NeoMatrix.Test
@@ -85,21 +88,67 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
+		public void GetAbove_OutOfRange_ThrowsException()
+		{
+			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetAbove(0, 0));
+		}
+
+		[Test]
 		public void GetBelow_ReturnsValue()
 		{
 			Assert.AreEqual(Mat.GetBelow(1, 1), 8);
 		}
 
 		[Test]
+		public void GetBelow_OutOfRange_ThrowsException()
+		{
+			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetBelow(2, 2));
+		}
+
+		[Test]
 		public void GetLeft_ReturnsValue()
 		{
-			Assert.AreEqual(Mat.GetLeft(1, 1), 6);
+			Assert.AreEqual(Mat.GetLeft(1, 1), 4);
+		}
+
+		[Test]
+		public void GetLeft_OutOfRange_ThrowsException()
+		{
+			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetLeft(0, 0));
 		}
 
 		[Test]
 		public void GetRight_ReturnsValue()
 		{
-			Assert.AreEqual(Mat.GetRight(1, 1), 4);
+			Assert.AreEqual(Mat.GetRight(1, 1), 6);
+		}
+
+		[Test]
+		public void GetRight_OutOfRange_ThrowsException()
+		{
+			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetRight(2, 2));
+		}
+
+		[Test]
+		[TestCase(1, 2)]
+		[TestCase(2, 1)]
+		[TestCase(1, 1)]
+		[TestCase(5, 10)]
+		[TestCase(12, 13)]
+		public void GetBox_WithEvenNumber_ThrowsException(int height, int width)
+		{
+			Assert.Throws<Exception>(() => Mat.GetRect(1, 1, height, width));
+		}
+
+		[Test]
+		[TestCase(1, 2)]
+		[TestCase(2, 1)]
+		[TestCase(1, 1)]
+		[TestCase(5, 10)]
+		[TestCase(12, 13)]
+		public void GetBox_TakesRectangle_WithEvenNumber_ThrowsException(int height, int width)
+		{
+			Assert.Throws<Exception>(() => Mat.GetRect(new Rectangle(1, 1, height, width)));
 		}
 	}
 }
