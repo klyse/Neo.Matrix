@@ -4,10 +4,25 @@ using System.Drawing;
 
 namespace NeoMatrix
 {
+	/// <summary>
+	/// Neo.Matrix
+	/// </summary>
+	/// <typeparam name="TElement">type of content</typeparam>
 	public class Matrix<TElement>
 	{
+		/// <summary>
+		/// Total Rows
+		/// </summary>
 		public int Rows { get; }
+
+		/// <summary>
+		/// Total Columns
+		/// </summary>
 		public int Cols { get; }
+
+		/// <summary>
+		/// Matrix
+		/// </summary>
 		public readonly TElement[,] Mat;
 
 		/// <summary>
@@ -137,7 +152,6 @@ namespace NeoMatrix
 		/// <summary>
 		/// Get value one row above
 		/// </summary>
-		/// <typeparam name="TElement"></typeparam>
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
 		/// <returns></returns>
@@ -149,7 +163,6 @@ namespace NeoMatrix
 		/// <summary>
 		/// Get value one row below
 		/// </summary>
-		/// <typeparam name="TElement"></typeparam>
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
 		/// <returns></returns>
@@ -161,7 +174,6 @@ namespace NeoMatrix
 		/// <summary>
 		/// Get value one column left
 		/// </summary>
-		/// <typeparam name="TElement"></typeparam>
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
 		/// <returns></returns>
@@ -173,7 +185,6 @@ namespace NeoMatrix
 		/// <summary>
 		/// Get value one column right
 		/// </summary>
-		/// <typeparam name="TElement"></typeparam>
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
 		/// <returns></returns>

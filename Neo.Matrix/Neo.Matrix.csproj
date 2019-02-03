@@ -13,4 +13,8 @@
     <RootNamespace>NeoMatrix</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.2|AnyCPU'">
+    <DocumentationFile>.\Neo.Matrix.xml</DocumentationFile>
+  </PropertyGroup>
+
 </Project>
