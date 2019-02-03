@@ -3,15 +3,14 @@ using NUnit.Framework;
 
 namespace NeoMatrix.Test
 {
-
-
 	[TestFixture]
 	public class ExecuteOnAllTest
 	{
-	public class DummyObject
-	{
-		public bool IsExecuted { get; set; }
-	}
+		public class DummyObject
+		{
+			public bool IsExecuted { get; set; }
+		}
+
 		public Matrix<DummyObject> Matrix { get; set; }
 
 		[SetUp]
