@@ -183,10 +183,17 @@ namespace NeoMatrix
 		}
 
 
+		/// <summary>
+		/// Returns a rectangle sized matrix of elements around the center
+		/// </summary>
+		/// <param name="centerRow">center row</param>
+		/// <param name="centerColumn">center column</param>
+		/// <param name="width">width of rectangle</param>
+		/// <param name="height">height of rectangle</param>
 		public Matrix<TElement> GetRect(int centerRow, int centerColumn, int width, int height)
 		{
-			if (height % 2 == 0 || width % 2 == 0||
-			    height == 1 || width == 1)
+			if (height % 2 == 0 || width % 2 == 0 ||
+				height == 1 || width == 1)
 			{
 				throw new Exception("Height and or width must be uneven.");
 			}
@@ -214,9 +221,34 @@ namespace NeoMatrix
 			return t;
 		}
 
+		/// <summary>
+		/// Returns a rectangle sized matrix of elements around the center
+		/// </summary>
+		/// <param name="rect">rectangle</param>
 		public Matrix<TElement> GetRect(Rectangle rect)
 		{
 			return GetRect(rect.Y, rect.X, rect.Width, rect.Height);
+		}
+
+		/// <summary>
+		/// Returns an even sized box of elements around the center
+		/// </summary>
+		/// <param name="centerRow">center row</param>
+		/// <param name="centerColumn">center column</param>
+		/// <param name="size">size of return array</param>
+		public Matrix<TElement> GetBox(int centerRow, int centerColumn, int size)
+		{
+			return GetRect(centerRow, centerColumn, size, size);
+		}
+
+		/// <summary>
+		/// Returns an even sized box of elements around the center
+		/// </summary>
+		/// <param name="pt">center point</param>
+		/// <param name="size">size of return array</param>
+		public Matrix<TElement> GetBox(Point pt, int size)
+		{
+			return GetRect(pt.Y, pt.X, size, size);
 		}
 	}
 }

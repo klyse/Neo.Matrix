@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq.Expressions;
 using NUnit.Framework;
 
 namespace NeoMatrix.Test
@@ -57,7 +56,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetRect_ReturnsRect_TakesRectInput()
 		{
-			var box = Mat.GetRect(new Rectangle(2, 2, 5,3));
+			var box = Mat.GetRect(new Rectangle(2, 2, 5, 3));
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -82,6 +81,69 @@ namespace NeoMatrix.Test
 			});
 
 			Assert.AreEqual(box.GetFlat(), expectedBox.GetFlat());
+		}
+
+		[Test]
+		[TestCase(33)]
+		[TestCase(11)]
+		[TestCase(5)]
+		public void GetBox_OutOfRange_ThrowsException(int size)
+		{
+			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetBox(8, 8, size));
+		}
+
+		[Test]
+		public void GetRect_ReturnsRect1()
+		{
+			var box = Mat.GetRect(2, 2, 3, 3);
+
+			var expectedBox = new Matrix<int>(new[,]
+			{
+				{11, 12, 13},
+				{20, 21, 22},
+				{29, 30, 31}
+			});
+
+			Assert.AreEqual(box.GetFlat(), expectedBox.GetFlat());
+		}
+
+		[Test]
+		public void GetBox_ReturnsBox()
+		{
+			var box = Mat.GetBox(2, 2, 3);
+
+			var expectedBox = new Matrix<int>(new[,]
+			{
+				{11, 12, 13},
+				{20, 21, 22},
+				{29, 30, 31}
+			});
+
+			Assert.AreEqual(box.GetFlat(), expectedBox.GetFlat());
+		}
+
+		[Test]
+		public void GetBox_ReturnsBox_TakesPointInput2()
+		{
+			var box = Mat.GetBox(new Point(3, 2), 3);
+
+			var expectedBox = new Matrix<int>(new[,]
+			{
+				{12, 13, 14},
+				{21, 22, 23},
+				{30, 31, 32}
+			});
+
+			Assert.AreEqual(box.GetFlat(), expectedBox.GetFlat());
+		}
+
+		[Test]
+		[TestCase(33)]
+		[TestCase(11)]
+		[TestCase(5)]
+		public void GetBox_TakesPoint_OutOfRange_ThrowsException(int size)
+		{
+			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetBox(new Point(8, 8), size));
 		}
 	}
 }
