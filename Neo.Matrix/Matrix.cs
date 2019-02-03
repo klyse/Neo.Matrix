@@ -259,7 +259,7 @@ namespace NeoMatrix
 		/// <param name="size">size of return array</param>
 		public Matrix<TElement> GetBox(Point pt, int size)
 		{
-			return GetRect(pt.Y, pt.X, size, size);
+			return GetBox(pt.Y, pt.X, size);
 		}
 	}
 }
