@@ -1,3 +1,5 @@
 # Neo.Matrix
 Matrix helper
-[![Build status](https://derklyse.visualstudio.com/GitBuilds/_apis/build/status/Neo.Matrix)](https://derklyse.visualstudio.com/GitBuilds/_build/latest?definitionId=6)
+
+# Build Status
+[![Build status]](https://derklyse.visualstudio.com/GitBuilds/_apis/build/status/Neo.Matrix?branchName=master)
