@@ -1,7 +1,7 @@
 ﻿namespace NeoMatrix
 {
 	/// <summary>
-	/// Implement this interface to allow matrix calculations like <see cref="MatrixValueExtensions.GetTotalSum{TMatrixValueType}"/>
+	/// Implement this interface to allow matrix calculations like <see cref="MatrixValueExtensions.Sum{TMatrixValueType}"/>
 	/// </summary>
 	/// <typeparam name="TValueType"></typeparam>
 	public interface IMatrixValue<out TValueType>

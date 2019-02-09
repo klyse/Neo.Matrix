@@ -34,28 +34,27 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
-		public void GetTotalSum_CalculatesTotalSumOnMatrix()
+		public void Sum_CalculatesTotalSumOnMatrix()
 		{
-			Assert.AreEqual(Matrix.GetTotalSum(), (16 * 16 + 16) / 2);
+			Assert.AreEqual(Matrix.Sum(), (16 * 16 + 16) / 2);
 		}
 
 		[Test]
-		public void GetAverage_CalculatesAverageOnMatrix()
+		public void Average_CalculatesAverageOnMatrix()
 		{
-			Assert.AreEqual(Matrix.GetAverage(), 8.5);
+			Assert.AreEqual(Matrix.Average(), 8.5);
 		}
 
 		[Test]
-		public void GetMin_ReturnsMinValueOfMatrix()
+		public void Min_ReturnsMinValueOfMatrix()
 		{
-			Assert.AreEqual(Matrix.GetMin(), 1);
+			Assert.AreEqual(Matrix.Min(), 1);
 		}
 
 		[Test]
-		public void GetMax_ReturnsMaxValueOfMatrix()
+		public void Max_ReturnsMaxValueOfMatrix()
 		{
-			Assert.AreEqual(Matrix.GetMax(), 16);
+			Assert.AreEqual(Matrix.Max(), 16);
 		}
-
 	}
 }

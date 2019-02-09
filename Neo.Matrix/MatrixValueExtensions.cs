@@ -14,7 +14,7 @@ namespace NeoMatrix
 		/// <param name="matrix">current matrix</param>
 		/// <typeparam name="TMatrixValueType">Matrix element type</typeparam>
 		/// <returns>sum of matrix</returns>
-		public static double GetTotalSum<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
+		public static double Sum<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
 		{
 			var v = matrix.GetFlat().Sum(c => c.GetValue());
 			return v;
@@ -26,7 +26,7 @@ namespace NeoMatrix
 		/// <param name="matrix">current matrix</param>
 		/// <typeparam name="TMatrixValueType">Matrix element type</typeparam>
 		/// <returns>average of matrix</returns>
-		public static double GetAverage<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
+		public static double Average<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
 		{
 			var avg = matrix.GetFlat().Average(c => c.GetValue());
 
@@ -39,7 +39,7 @@ namespace NeoMatrix
 		/// <param name="matrix">current matrix</param>
 		/// <typeparam name="TMatrixValueType">Matrix element type</typeparam>
 		/// <returns>min of matrix</returns>
-		public static double GetMin<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
+		public static double Min<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
 		{
 			var minV = matrix.GetFlat().Min(c => c.GetValue());
 			return minV;
@@ -51,7 +51,7 @@ namespace NeoMatrix
 		/// <param name="matrix">current matrix</param>
 		/// <typeparam name="TMatrixValueType">Matrix element type</typeparam>
 		/// <returns>max of matrix</returns>
-		public static double GetMax<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
+		public static double Max<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
 		{
 			var maxV = matrix.GetFlat().Max(c => c.GetValue());
 			return maxV;

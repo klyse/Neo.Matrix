@@ -59,11 +59,13 @@ namespace NeoMatrix.Test
 		{
 			var matrix = new Matrix<double>(new double[,]
 			{
-				{1,2},
-				{1,2},
+				{54, 63},
+				{90, 99},
 			});
 
-			Assert.AreEqual(Matrix.RectSumFilter(3,3), matrix);
+			var sum = Matrix.RectSumFilter(3, 3);
+
+			Assert.AreEqual(sum, matrix);
 		}
 	}
 }
