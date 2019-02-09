@@ -129,14 +129,14 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
-		[TestCase(1, 2)]
-		[TestCase(2, 1)]
-		[TestCase(1, 1)]
-		[TestCase(5, 10)]
-		[TestCase(12, 13)]
-		public void GetBox_WithEvenNumber_ThrowsException(int height, int width)
+		[TestCase(1)]
+		[TestCase(0)]
+		[TestCase(-1)]
+		[TestCase(2)]
+		[TestCase(6)]
+		public void GetBox_NotValidBox_ThrowsException(int box)
 		{
-			Assert.Throws<Exception>(() => Mat.GetRect(1, 1, height, width));
+			Assert.Throws<Exception>(() => Mat.GetBox(1, 1, box));
 		}
 
 		[Test]
@@ -145,7 +145,12 @@ namespace NeoMatrix.Test
 		[TestCase(1, 1)]
 		[TestCase(5, 10)]
 		[TestCase(12, 13)]
-		public void GetBox_TakesRectangle_WithEvenNumber_ThrowsException(int height, int width)
+		[TestCase(12, 0)]
+		[TestCase(0, 5)]
+		[TestCase(-1, 5)]
+		[TestCase(1, -5)]
+		[TestCase(-1, -5)]
+		public void GetRect_TakesRectangle_NotValidBox_ThrowsException(int height, int width)
 		{
 			Assert.Throws<Exception>(() => Mat.GetRect(new Rectangle(1, 1, height, width)));
 		}
