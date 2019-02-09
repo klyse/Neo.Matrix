@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace NeoMatrix
 {
@@ -8,7 +9,7 @@ namespace NeoMatrix
 	/// Neo.Matrix
 	/// </summary>
 	/// <typeparam name="TElement">type of content</typeparam>
-	public class Matrix<TElement>
+	public class Matrix<TElement> : IEqualityComparer<Matrix<TElement>>
 	{
 		/// <summary>
 		/// Total Rows
@@ -18,7 +19,7 @@ namespace NeoMatrix
 		/// <summary>
 		/// Total Columns
 		/// </summary>
-		public int Cols { get; }
+		public int Columns { get; }
 
 		/// <summary>
 		/// Matrix
@@ -29,26 +30,26 @@ namespace NeoMatrix
 		/// Constructor
 		/// </summary>
 		/// <param name="rows"></param>
-		/// <param name="cols"></param>
-		public Matrix(int rows, int cols)
+		/// <param name="columns"></param>
+		public Matrix(int rows, int columns)
 		{
 			Rows = rows;
-			Cols = cols;
-			Mat = new TElement[Rows, Cols];
+			Columns = columns;
+			Mat = new TElement[Rows, Columns];
 		}
 
 		/// <summary>
 		/// Create new matrix of element
 		/// </summary>
 		/// <param name="rows">rows</param>
-		/// <param name="cols">columns</param>
+		/// <param name="columns">columns</param>
 		/// <param name="f">func to create new element</param>
-		public static Matrix<TElement> NewMatrix(int rows, int cols, Func<TElement> f)
+		public static Matrix<TElement> NewMatrix(int rows, int columns, Func<TElement> f)
 		{
-			var matrix = new Matrix<TElement>(rows, cols);
+			var matrix = new Matrix<TElement>(rows, columns);
 
 			for (var i = 0; i < rows; i++)
-			for (var j = 0; j < cols; j++)
+			for (var j = 0; j < columns; j++)
 				matrix[i, j] = f.Invoke();
 
 			return matrix;
@@ -56,17 +57,18 @@ namespace NeoMatrix
 
 		/// <summary>
 		/// Constructor
+		/// <paramref name="data"/> if formatted: Dimension 0 is Rows, Dimension 1 is Columns
 		/// </summary>
 		/// <param name="data">Data array</param>
 		public Matrix(TElement[,] data)
 		{
 			Rows = data.GetLength(0);
-			Cols = data.GetLength(1);
+			Columns = data.GetLength(1);
 
-			Mat = new TElement[Rows, Cols];
+			Mat = new TElement[Rows, Columns];
 
 			for (var i = 0; i < Rows; i++)
-			for (var j = 0; j < Cols; j++)
+			for (var j = 0; j < Columns; j++)
 				Mat[i, j] = data[i, j];
 		}
 
@@ -75,7 +77,7 @@ namespace NeoMatrix
 		/// </summary>
 		public bool IsSquare()
 		{
-			return Rows == Cols;
+			return Rows == Columns;
 		}
 
 		/// <summary>
@@ -106,7 +108,7 @@ namespace NeoMatrix
 		/// <param name="k">row index</param>
 		public IEnumerable<TElement> GetRow(int k)
 		{
-			for (var i = 0; i < Cols; i++)
+			for (var i = 0; i < Columns; i++)
 				yield return Mat[k, i];
 		}
 
@@ -116,7 +118,7 @@ namespace NeoMatrix
 		public IEnumerable<TElement> GetFlat()
 		{
 			for (var i = 0; i < Rows; i++)
-			for (var j = 0; j < Cols; j++)
+			for (var j = 0; j < Columns; j++)
 				yield return Mat[i, j];
 		}
 
@@ -126,9 +128,9 @@ namespace NeoMatrix
 		/// <returns>copy of this matrix</returns>
 		public Matrix<TElement> Duplicate()
 		{
-			var matrix = new Matrix<TElement>(Rows, Cols);
+			var matrix = new Matrix<TElement>(Rows, Columns);
 			for (var i = 0; i < Rows; i++)
-			for (var j = 0; j < Cols; j++)
+			for (var j = 0; j < Columns; j++)
 				matrix[i, j] = Mat[i, j];
 			return matrix;
 		}
@@ -139,10 +141,10 @@ namespace NeoMatrix
 		/// <returns>x / y inverted copy of matrix</returns>
 		public Matrix<TElement> Transpose()
 		{
-			var t = new Matrix<TElement>(Cols, Rows);
+			var t = new Matrix<TElement>(Columns, Rows);
 
 			for (var i = 0; i < Rows; i++)
-			for (var j = 0; j < Cols; j++)
+			for (var j = 0; j < Columns; j++)
 				t[j, i] = Mat[i, j];
 
 			return t;
@@ -199,29 +201,29 @@ namespace NeoMatrix
 		/// </summary>
 		/// <param name="centerRow">center row</param>
 		/// <param name="centerColumn">center column</param>
-		/// <param name="width">width of rectangle</param>
-		/// <param name="height">height of rectangle</param>
-		public Matrix<TElement> GetRect(int centerRow, int centerColumn, int width, int height)
+		/// <param name="rows">rows of rectangle</param>
+		/// <param name="columns">columns of rectangle</param>
+		public Matrix<TElement> GetRect(int centerRow, int centerColumn, int rows, int columns)
 		{
-			if (height % 2 == 0 || width % 2 == 0 ||
-				height <= 1 || width <= 1)
+			if (rows % 2 == 0 || columns % 2 == 0 ||
+				rows <= 1 || columns <= 1)
 			{
-				throw new Exception("Height and or width must be uneven.");
+				throw new Exception("Rows and or columns must be uneven and bigger than 1.");
 			}
 
-			var firstRow = centerRow - (height - 1) / 2;
-			var firstColumn = centerColumn - (width - 1) / 2;
+			var firstRow = centerRow - (rows - 1) / 2;
+			var firstColumn = centerColumn - (columns - 1) / 2;
 
-			var lastRow = centerRow + (height - 1) / 2;
-			var lastColumn = centerColumn + (width - 1) / 2;
+			var lastRow = centerRow + (rows - 1) / 2;
+			var lastColumn = centerColumn + (columns - 1) / 2;
 
 			if (firstColumn < 0 || firstRow < 0 ||
-				lastColumn >= Cols || lastRow >= Rows)
+				lastColumn >= Columns || lastRow >= Rows)
 			{
-				throw new IndexOutOfRangeException("Box size is out of range.");
+				throw new IndexOutOfRangeException("Rect size is out of range.");
 			}
 
-			var t = new Matrix<TElement>(height, width);
+			var t = new Matrix<TElement>(rows, columns);
 
 			var r = 0;
 			var c = 0;
@@ -238,7 +240,7 @@ namespace NeoMatrix
 		/// <param name="rect">rectangle</param>
 		public Matrix<TElement> GetRect(Rectangle rect)
 		{
-			return GetRect(rect.Y, rect.X, rect.Width, rect.Height);
+			return GetRect(rect.Y, rect.X, rect.Height, rect.Width);
 		}
 
 		/// <summary>
@@ -283,8 +285,75 @@ namespace NeoMatrix
 		public void ExecuteOnAll(Action<TElement, int, int> f)
 		{
 			for (var i = 0; i < Rows; i++)
-			for (var j = 0; j < Cols; j++)
+			for (var j = 0; j < Columns; j++)
 				f.Invoke(Mat[i, j], i, j);
+		}
+
+		/// <summary>
+		/// Checks if current instance is to another
+		/// </summary>
+		/// <param name="obj">instance to compare</param>
+		/// <returns>true if equal, false if not</returns>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != GetType()) return false;
+			return Equals(this, (Matrix<TElement>)obj);
+		}
+
+		/// <inheritdoc />
+		/// <summary>
+		/// Checks if tow matrix are same
+		/// </summary>
+		/// <param name="a">first matrix</param>
+		/// <param name="b">second matrix</param>
+		/// <returns></returns>
+		public bool Equals(Matrix<TElement> a, Matrix<TElement> b)
+		{
+			if (b is null || a is null)
+				return false;
+
+			return a.GetHashCode() == b.GetHashCode();
+		}
+
+		/// <summary>
+		/// Get Hashcode for matrix. Every element in the array is evaluated.
+		/// </summary>
+		/// <returns>HashCode</returns>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int MatHashCode()
+				{
+					var flatView = GetFlat().ToList();
+					var len = flatView.Count;
+					var hc = len;
+					for (var i = 0; i < len; ++i)
+					{
+						hc = unchecked(hc * 314159 + flatView[i].GetHashCode());
+					}
+
+					return hc;
+				}
+
+				var hashCode = (Mat != null ? MatHashCode() : 0);
+				hashCode = (hashCode * 397) ^ Rows;
+				hashCode = (hashCode * 397) ^ Columns;
+				return hashCode;
+			}
+		}
+
+		/// <inheritdoc />
+		/// <summary>
+		/// Gets Hashcode for matrix object
+		/// </summary>
+		/// <param name="obj">hashed object</param>
+		/// <returns>hashcode</returns>
+		public int GetHashCode(Matrix<TElement> obj)
+		{
+			return obj.GetHashCode();
 		}
 	}
 }

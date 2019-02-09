@@ -10,6 +10,6 @@
 		/// Returns value object of custom type
 		/// </summary>
 		/// <returns></returns>
-		TValueType GetValueObject();
+		TValueType GetValue();
 	}
 }

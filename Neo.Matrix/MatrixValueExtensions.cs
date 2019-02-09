@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace NeoMatrix
 {
@@ -15,9 +16,7 @@ namespace NeoMatrix
 		/// <returns>sum of matrix</returns>
 		public static double GetTotalSum<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
 		{
-			double v = 0;
-			matrix.ExecuteOnAll(c => { v += c.GetValueObject(); });
-
+			var v = matrix.GetFlat().Sum(c => c.GetValue());
 			return v;
 		}
 
@@ -29,9 +28,9 @@ namespace NeoMatrix
 		/// <returns>average of matrix</returns>
 		public static double GetAverage<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
 		{
-			var totalSum = matrix.GetTotalSum();
+			var avg = matrix.GetFlat().Average(c => c.GetValue());
 
-			return totalSum / (matrix.Cols * matrix.Rows);
+			return avg;
 		}
 
 		/// <summary>
@@ -42,9 +41,7 @@ namespace NeoMatrix
 		/// <returns>min of matrix</returns>
 		public static double GetMin<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
 		{
-			double minV = double.MaxValue;
-
-			matrix.ExecuteOnAll(c => { minV = Math.Min(minV, c.GetValueObject()); });
+			var minV = matrix.GetFlat().Min(c => c.GetValue());
 			return minV;
 		}
 
@@ -56,42 +53,8 @@ namespace NeoMatrix
 		/// <returns>max of matrix</returns>
 		public static double GetMax<TMatrixValueType>(this Matrix<TMatrixValueType> matrix) where TMatrixValueType : IMatrixValue<double>
 		{
-			double maxV = double.MinValue;
-
-			matrix.ExecuteOnAll(c => { maxV = Math.Max(maxV, c.GetValueObject()); });
+			var maxV = matrix.GetFlat().Max(c => c.GetValue());
 			return maxV;
-		}
-
-		public static Matrix<double> GetRectSum<TMatrixValueType>(this Matrix<TMatrixValueType> matrix, int rows, int columns) where TMatrixValueType : IMatrixValue<double>
-		{
-			if (columns % 2 == 0 || columns % 2 == 0 ||
-				rows > matrix.Cols - 1 || rows > matrix.Rows - 1 ||
-				columns <= 0 || rows <= 0)
-			{
-				throw new IndexOutOfRangeException("Rectangle is not in valid range.");
-			}
-
-			var colOffset = (columns - 1) / 2;
-			var rowOffset = (rows - 1) / 2;
-
-			var resCols = matrix.Cols - 2 * colOffset;
-			var resRows = matrix.Rows - 2 * rowOffset;
-
-			var returnMat = new Matrix<double>(resRows, resCols);
-
-
-			for (var i = rowOffset; i < matrix.Rows - rowOffset; i++)
-			for (var j = colOffset; j < matrix.Cols - colOffset; j++)
-			{
-				returnMat[i - rowOffset] = matrix.GetRect(i, j, columns, rows).GetTotalSum();
-			}
-
-			return returnMat;
-		}
-
-		public static Matrix<double> GetBoxSum<TMatrixValueType>(this Matrix<TMatrixValueType> matrix, int box) where TMatrixValueType : IMatrixValue<double>
-		{
-			return matrix.GetRectSum(box, box);
 		}
 	}
 }

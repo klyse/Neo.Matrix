@@ -11,7 +11,7 @@ namespace NeoMatrix.Test
 			public bool IsExecuted { get; set; }
 			public int Value { get; set; }
 
-			public double GetValueObject()
+			public double GetValue()
 			{
 				return Value;
 			}
@@ -57,51 +57,5 @@ namespace NeoMatrix.Test
 			Assert.AreEqual(Matrix.GetMax(), 16);
 		}
 
-		[Test]
-		[TestCase(5,1)]
-		[TestCase(1,5)]
-		[TestCase(5,5)]
-		public void GetRectSum_BoxToBig(int cols, int width)
-		{
-			Assert.Throws<IndexOutOfRangeException>(() => Matrix.GetRectSum(cols,width));
-		}
-
-		[Test]
-		[TestCase(3,2)]
-		[TestCase(4,3)]
-		[TestCase(2,2)]
-		public void GetRectSum_BoxNotUneven(int cols, int width)
-		{
-			Assert.Throws<IndexOutOfRangeException>(() => Matrix.GetRectSum(cols,width));
-		}
-
-		[Test]
-		[TestCase(0,0)]
-		[TestCase(-1,-1)]
-		[TestCase(-2,2)]
-		public void GetRectSum_NotAllowedDimension(int cols, int width)
-		{
-			Assert.Throws<IndexOutOfRangeException>(() => Matrix.GetRectSum(cols,width));
-		}
-
-		[Test]
-		public void GetBoxSum_BoxToBig()
-		{
-			Assert.Throws<IndexOutOfRangeException>(() => Matrix.GetBoxSum(5));
-		}
-
-		[Test]
-		public void GetBoxSum_BoxNotUneven()
-		{
-			Assert.Throws<IndexOutOfRangeException>(() => Matrix.GetBoxSum(2));
-		}
-
-		[Test]
-		[TestCase(0)]
-		[TestCase(-2)]
-		public void GetBoxSum_NotAllowedDimension(int box)
-		{
-			Assert.Throws<IndexOutOfRangeException>(() => Matrix.GetBoxSum(box));
-		}
 	}
 }

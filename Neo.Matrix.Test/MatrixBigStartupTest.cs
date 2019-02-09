@@ -32,7 +32,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetRect_ReturnsRect()
 		{
-			var box = Mat.GetRect(2, 2, 5, 3);
+			var box = Mat.GetRect(2, 2, 3, 5);
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -41,7 +41,7 @@ namespace NeoMatrix.Test
 				{28, 29, 30, 31, 32}
 			});
 
-			Assert.AreEqual(box.GetFlat(), expectedBox.GetFlat());
+			Assert.AreEqual(box, expectedBox);
 		}
 
 		[Test]
@@ -65,7 +65,7 @@ namespace NeoMatrix.Test
 				{28, 29, 30, 31, 32}
 			});
 
-			Assert.AreEqual(box.GetFlat(), expectedBox.GetFlat());
+			Assert.AreEqual(box, expectedBox);
 		}
 
 		[Test]
@@ -80,7 +80,7 @@ namespace NeoMatrix.Test
 				{29, 30, 31, 32, 33}
 			});
 
-			Assert.AreEqual(box.GetFlat(), expectedBox.GetFlat());
+			Assert.AreEqual(box, expectedBox);
 		}
 
 		[Test]
@@ -104,7 +104,7 @@ namespace NeoMatrix.Test
 				{29, 30, 31}
 			});
 
-			Assert.AreEqual(box.GetFlat(), expectedBox.GetFlat());
+			Assert.AreEqual(box, expectedBox);
 		}
 
 		[Test]
@@ -119,7 +119,7 @@ namespace NeoMatrix.Test
 				{29, 30, 31}
 			});
 
-			Assert.AreEqual(box.GetFlat(), expectedBox.GetFlat());
+			Assert.AreEqual(box, expectedBox);
 		}
 
 		[Test]
@@ -134,7 +134,7 @@ namespace NeoMatrix.Test
 				{30, 31, 32}
 			});
 
-			Assert.AreEqual(box.GetFlat(), expectedBox.GetFlat());
+			Assert.AreEqual(box, expectedBox);
 		}
 
 		[Test]
