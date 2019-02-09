@@ -203,7 +203,8 @@ namespace NeoMatrix
 		/// <param name="height">height of rectangle</param>
 		public Matrix<TElement> GetRect(int centerRow, int centerColumn, int width, int height)
 		{
-			if (height % 2 == 0 || width % 2 == 0)
+			if (height % 2 == 0 || width % 2 == 0 ||
+				height <= 1 || width <= 1)
 			{
 				throw new Exception("Height and or width must be uneven.");
 			}

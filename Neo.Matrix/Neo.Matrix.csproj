@@ -12,8 +12,8 @@
     <PackageProjectUrl>https://github.com/klyse/Neo.Matrix</PackageProjectUrl>
     <RootNamespace>NeoMatrix</RootNamespace>
     <Version>1.1.0</Version>
-    <AssemblyVersion>1.1.2.19034</AssemblyVersion>
-    <FileVersion>1.1.2.19034</FileVersion>
+    <AssemblyVersion>1.1.4.19040</AssemblyVersion>
+    <FileVersion>1.1.4.19040</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.2|AnyCPU'">
