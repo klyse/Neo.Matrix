@@ -21,6 +21,21 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
+		public void GetFromRegion()
+		{
+			var matReg = Mat.GetFromRegion(Region.FromCenter(3, 2, 3, 5));
+
+			var expectedBox = new Matrix<int>(new[,]
+			{
+				{19, 20, 21, 22, 23},
+				{28, 29, 30, 31, 32},
+				{37, 38, 39, 40, 41}
+			});
+
+			Assert.AreEqual(matReg, expectedBox);
+		}
+
+		[Test]
 		[TestCase(33, 3)]
 		[TestCase(11, 11)]
 		[TestCase(11, 3)]

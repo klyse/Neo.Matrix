@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace NeoMatrix.Test
 {
@@ -23,7 +19,7 @@ namespace NeoMatrix.Test
 		public void FromCenter_ReturnRegion_CheckBoarders()
 		{
 			var roi = Region.FromCenter(5, 10, 4, 8);
-			
+
 			Assert.AreEqual(3, roi.Top);
 			Assert.AreEqual(6, roi.Left);
 			Assert.AreEqual(14, roi.Right);

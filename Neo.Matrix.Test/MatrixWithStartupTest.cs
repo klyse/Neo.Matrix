@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 
@@ -126,33 +125,6 @@ namespace NeoMatrix.Test
 		public void GetRight_OutOfRange_ThrowsException()
 		{
 			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetRight(2, 2));
-		}
-
-		[Test]
-		[TestCase(1)]
-		[TestCase(0)]
-		[TestCase(-1)]
-		[TestCase(2)]
-		[TestCase(6)]
-		public void GetBox_NotValidBox_ThrowsException(int box)
-		{
-			Assert.Throws<Exception>(() => Mat.GetBox(1, 1, box));
-		}
-
-		[Test]
-		[TestCase(1, 2)]
-		[TestCase(2, 1)]
-		[TestCase(1, 1)]
-		[TestCase(5, 10)]
-		[TestCase(12, 13)]
-		[TestCase(12, 0)]
-		[TestCase(0, 5)]
-		[TestCase(-1, 5)]
-		[TestCase(1, -5)]
-		[TestCase(-1, -5)]
-		public void GetRect_TakesRectangle_NotValidBox_ThrowsException(int height, int width)
-		{
-			Assert.Throws<Exception>(() => Mat.GetRect(new Rectangle(1, 1, height, width)));
 		}
 	}
 }

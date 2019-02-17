@@ -202,6 +202,23 @@ namespace NeoMatrix
 			return Mat[row, column + 1];
 		}
 
+		/// <summary>
+		/// Returns matrix subset of a given region
+		/// </summary>
+		/// <param name="region">region</param>
+		/// <returns>Matrix according dimensions from region</returns>
+		public Matrix<TElement> GetFromRegion(Region region)
+		{
+			var t = new Matrix<TElement>(region.Height, region.Width);
+
+			var r = 0;
+			var c = 0;
+			for (var i = region.Top; i < region.Bottom; i++, r++, c = 0)
+			for (var j = region.Left; j < region.Right; j++, c++)
+				t[r, c] = Mat[i, j];
+
+			return t;
+		}
 
 		/// <summary>
 		/// Returns a rectangle sized matrix of elements around the center
@@ -212,33 +229,9 @@ namespace NeoMatrix
 		/// <param name="columns">columns of rectangle</param>
 		public Matrix<TElement> GetRect(int centerRow, int centerColumn, int rows, int columns)
 		{
-			if (rows % 2 == 0 || columns % 2 == 0 ||
-				rows <= 1 || columns <= 1)
-			{
-				throw new Exception("Rows and or columns must be uneven and bigger than 1.");
-			}
+			var reg = Region.FromCenter(centerRow, centerColumn, rows, columns);
 
-			var firstRow = centerRow - (rows - 1) / 2;
-			var firstColumn = centerColumn - (columns - 1) / 2;
-
-			var lastRow = centerRow + (rows - 1) / 2;
-			var lastColumn = centerColumn + (columns - 1) / 2;
-
-			if (firstColumn < 0 || firstRow < 0 ||
-				lastColumn >= Columns || lastRow >= Rows)
-			{
-				throw new IndexOutOfRangeException("Rect size is out of range.");
-			}
-
-			var t = new Matrix<TElement>(rows, columns);
-
-			var r = 0;
-			var c = 0;
-			for (var i = firstRow; i <= lastRow; i++, r++, c = 0)
-			for (var j = firstColumn; j <= lastColumn; j++, c++)
-				t[r, c] = Mat[i, j];
-
-			return t;
+			return GetFromRegion(reg);
 		}
 
 		/// <summary>
