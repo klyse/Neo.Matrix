@@ -22,6 +22,13 @@ namespace NeoMatrix
 		public int Columns { get; }
 
 		/// <summary>
+		/// Total elements count.
+		/// 
+		/// <see cref="Rows"/> * <see cref="Columns"/>
+		/// </summary>
+		public int TotalCount => Rows * Columns;
+
+		/// <summary>
 		/// Matrix
 		/// </summary>
 		public readonly TElement[,] Mat;
