@@ -21,12 +21,13 @@ namespace NeoMatrix.Test
 			{
 				if (ReferenceEquals(null, obj)) return false;
 				if (ReferenceEquals(this, obj)) return true;
-				if (obj.GetType() != this.GetType()) return false;
+				if (obj.GetType() != GetType()) return false;
 				return Equals((CustomElement)obj);
 			}
 
 			public override int GetHashCode()
 			{
+				// ReSharper disable once NonReadonlyMemberInGetHashCode
 				return I;
 			}
 		}
