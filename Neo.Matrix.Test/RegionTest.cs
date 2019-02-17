@@ -20,12 +20,32 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
-		public void FromTopLeft_ReturnsRegion_CheckDimensions()
+		public void FromCenter_ReturnRegion_CheckBoarders()
+		{
+			var roi = Region.FromCenter(5, 10, 4, 8);
+			
+			Assert.AreEqual(3, roi.Top);
+			Assert.AreEqual(6, roi.Left);
+			Assert.AreEqual(14, roi.Right);
+			Assert.AreEqual(7, roi.Bottom);
+		}
+
+		[Test]
+		public void Region_CheckDimensions()
 		{
 			var roi = Region.FromTopLeft(0, 1, 10, 5);
 
 			Assert.AreEqual(10, roi.Height);
 			Assert.AreEqual(5, roi.Width);
+		}
+
+		[Test]
+		public void Region_CheckCenter()
+		{
+			var roi = Region.FromTopLeft(0, 1, 10, 5);
+
+			Assert.AreEqual(2, roi.CenterColumn);
+			Assert.AreEqual(5, roi.CenterRow);
 		}
 
 		[Test]

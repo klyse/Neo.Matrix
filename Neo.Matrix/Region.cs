@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Specialized;
+using System.Drawing;
 
 namespace NeoMatrix
 {
@@ -34,7 +36,7 @@ namespace NeoMatrix
 		/// ....
 		/// </example>
 		public int CenterRow => (Bottom - Top) / 2;
-		
+
 		/// <summary>
 		/// Center Column
 		/// </summary>
@@ -81,14 +83,34 @@ namespace NeoMatrix
 		/// </summary>
 		/// <param name="row">top row</param>
 		/// <param name="column">left column</param>
-		/// <param name="height">height</param>
-		/// <param name="width">width</param>
+		/// <param name="height">total height</param>
+		/// <param name="width">total width</param>
 		/// <returns></returns>
 		public static Region FromTopLeft(int row, int column, int height, int width)
 		{
 			var region = new Region();
 
 			region._rect = new Rectangle(column, row, width, height);
+
+			return region;
+		}
+
+		/// <summary>
+		/// Create region from center coordinates and height / width
+		/// </summary>
+		/// <param name="row">center row</param>
+		/// <param name="column">center column</param>
+		/// <param name="height">total height</param>
+		/// <param name="width">total width</param>
+		/// <returns></returns>
+		public static Region FromCenter(int row, int column, int height, int width)
+		{
+			var top = row - height / 2;
+			var left = column - width / 2;
+
+			var region = new Region();
+
+			region._rect = new Rectangle(left, top, width, height);
 
 			return region;
 		}
