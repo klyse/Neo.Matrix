@@ -109,7 +109,7 @@ namespace NeoMatrix
 		{
 			return NewMatrix(rows, columns, (r, c) => f.Invoke());
 		}
-		
+
 		/// <summary>
 		///     Create new matrix of element
 		/// </summary>
