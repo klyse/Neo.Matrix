@@ -41,19 +41,19 @@ namespace NeoMatrix.Test
 		[Test]
 		public void Average_CalculatesAverageOnMatrix()
 		{
-			Assert.AreEqual(Matrix.Average(), 8.5);
+			Assert.AreEqual(Matrix.Average(c => c.Value), 8.5);
 		}
 
 		[Test]
 		public void Min_ReturnsMinValueOfMatrix()
 		{
-			Assert.AreEqual(Matrix.Min(), 1);
+			Assert.AreEqual(Matrix.Min(c => c.Value), 1);
 		}
 
 		[Test]
 		public void Max_ReturnsMaxValueOfMatrix()
 		{
-			Assert.AreEqual(Matrix.Max(), 16);
+			Assert.AreEqual(Matrix.Max(c => c.Value), 16);
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace NeoMatrix
 {
@@ -44,7 +45,7 @@ namespace NeoMatrix
 			for (var i = rowOffset; i < matrix.Rows - rowOffset; i++)
 			for (var j = colOffset; j < matrix.Columns - colOffset; j++)
 			{
-				returnMat[i - rowOffset, j - colOffset] = matrix.GetRect(i, j, columns, rows).Sum();
+				returnMat[i - rowOffset, j - colOffset] = matrix.GetRect(i, j, columns, rows).GetFlat().Sum();
 			}
 
 			return returnMat;
