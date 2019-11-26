@@ -54,9 +54,7 @@ namespace NeoMatrix.Test
 		public void ToBitmap_ReturnsBitmapOfMatrix()
 		{
 			var bitmap = Matrix.ToBitmap(c => c.Value);
-
-			bitmap.Save(@"C:\Users\Klaus\Downloads\test.bmp");
-			Assert.AreEqual(Matrix.Sum(c => c.Value), (16 * 16 + 16) / 2);
+			Assert.NotNull(bitmap);
 		}
 	}
 }

@@ -107,11 +107,22 @@ namespace NeoMatrix
 		/// <param name="f">func to create new element</param>
 		public static Matrix<TElement> NewMatrix(int rows, int columns, Func<TElement> f)
 		{
+			return NewMatrix(rows, columns, (r, c) => f.Invoke());
+		}
+		
+		/// <summary>
+		///     Create new matrix of element
+		/// </summary>
+		/// <param name="rows">rows</param>
+		/// <param name="columns">columns</param>
+		/// <param name="f">func to create new element, row, column return value</param>
+		public static Matrix<TElement> NewMatrix(int rows, int columns, Func<int, int, TElement> f)
+		{
 			var matrix = new Matrix<TElement>(rows, columns);
 
 			for (var i = 0; i < rows; i++)
 			for (var j = 0; j < columns; j++)
-				matrix[i, j] = f.Invoke();
+				matrix[i, j] = f.Invoke(i, j);
 
 			return matrix;
 		}
