@@ -10,13 +10,16 @@ namespace NeoMatrix
 		/// <summary>
 		/// Sum of a rectangle
 		/// </summary>
-		/// <typeparam name="TMatrixValueType">matrix type</typeparam>
 		/// <param name="matrix">matrix</param>
 		/// <param name="rows">rows</param>
 		/// <param name="columns">columns</param>
 		/// <returns>matrix with results</returns>
-		public static Matrix<double> RectSumFilter<TMatrixValueType>(this Matrix<TMatrixValueType> matrix, int rows, int columns) where TMatrixValueType : IMatrixValue<double>
+		public static Matrix<double> RectSumFilter<TType>(this Matrix<TType> matrix, int rows, int columns)
 		{
+			return null;}
+		public static Matrix<double> RectSumFilter(this Matrix<double> matrix, int rows, int columns)
+		{
+			// k.p. better api design required
 			if (rows % 2 == 0 || columns % 2 == 0)
 			{
 				throw new Exception("Matrix rectangle rows or columns are even.");

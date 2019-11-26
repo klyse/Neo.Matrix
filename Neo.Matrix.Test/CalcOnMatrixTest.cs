@@ -35,7 +35,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void Sum_CalculatesTotalSumOnMatrix()
 		{
-			Assert.AreEqual(Matrix.Sum(), (16 * 16 + 16) / 2);
+			Assert.AreEqual(Matrix.Sum(c => c.Value), (16 * 16 + 16) / 2);
 		}
 
 		[Test]
