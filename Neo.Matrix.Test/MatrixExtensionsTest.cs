@@ -19,15 +19,9 @@ namespace NeoMatrix.Test
 														 });
 		}
 
-		public class DummyObject : IMatrixValue<double>
+		public class DummyObject
 		{
-			public bool IsExecuted { get; set; }
 			public int Value { get; set; }
-
-			public double GetValue()
-			{
-				return Value;
-			}
 		}
 
 		public Matrix<DummyObject> Matrix { get; set; }
