@@ -3,81 +3,81 @@
 namespace NeoMatrix
 {
 	/// <summary>
-	/// Region Class
+	///     Region Class
 	/// </summary>
 	public class Region
 	{
 		private Rectangle _rect;
 
 		/// <summary>
-		/// Is total height even
+		///     Is total height even
 		/// </summary>
 		public bool IsHeightEven => Height % 2 == 0;
 
 		/// <summary>
-		/// Is total width even
+		///     Is total width even
 		/// </summary>
 		public bool IsWidthEven => Width % 2 == 0;
 
 		/// <summary>
-		/// Is width and height even
+		///     Is width and height even
 		/// </summary>
 		public bool IsEven => IsHeightEven && IsWidthEven;
 
 		/// <summary>
-		/// Center Row
+		///     Center Row
 		/// </summary>
 		/// <example>
-		/// 10 => 5
-		/// 11 => 5
-		/// 12 => 6
-		/// ....
+		///     10 => 5
+		///     11 => 5
+		///     12 => 6
+		///     ....
 		/// </example>
 		public int CenterRow => (Bottom - Top) / 2;
 
 		/// <summary>
-		/// Center Column
+		///     Center Column
 		/// </summary>
 		/// <example>
-		/// 10 => 5
-		/// 11 => 5
-		/// 12 => 6
-		/// ....
+		///     10 => 5
+		///     11 => 5
+		///     12 => 6
+		///     ....
 		/// </example>
 		public int CenterColumn => (Right - Left) / 2;
 
 		/// <summary>
-		/// Region top
+		///     Region top
 		/// </summary>
 		public int Top => _rect.Top;
 
 		/// <summary>
-		/// Region bottom
+		///     Region bottom
 		/// </summary>
 		public int Bottom => _rect.Bottom;
 
 		/// <summary>
-		/// Region left
+		///     Region left
 		/// </summary>
 		public int Left => _rect.Left;
 
 		/// <summary>
-		/// Region right
+		///     Region right
 		/// </summary>
 		public int Right => _rect.Right;
 
 		/// <summary>
-		/// Total height
+		///     Total height
 		/// </summary>
 		public int Height => Bottom - Top;
 
 		/// <summary>
-		/// Total width
+		///     Total width
 		/// </summary>
 		public int Width => Right - Left;
 
 		/// <summary>
-		/// Create region from top left coordinates and height / width
+		///     Create region from top left coordinates and height / width
 		/// </summary>
 		/// <param name="row">top row</param>
 		/// <param name="column">left column</param>
@@ -94,7 +94,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Create region from center coordinates and height / width
+		///     Create region from center coordinates and height / width
 		/// </summary>
 		/// <param name="row">center row</param>
 		/// <param name="column">center column</param>

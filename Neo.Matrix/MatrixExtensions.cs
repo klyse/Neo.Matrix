@@ -5,12 +5,12 @@ using System.Linq.Expressions;
 namespace NeoMatrix
 {
 	/// <summary>
-	/// Matrix Value Extension helper
+	///     Matrix Value Extension helper
 	/// </summary>
-	public static class MatrixValueExtensions
+	public static class MatrixExtensions
 	{
 		/// <summary>
-		/// Calculates total sum of matrix
+		///     Calculates total sum of matrix
 		/// </summary>
 		/// <param name="matrix">current matrix</param>
 		/// <param name="selector">selector</param>
@@ -25,7 +25,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Calculates average of matrix
+		///     Calculates average of matrix
 		/// </summary>
 		/// <param name="matrix">current matrix</param>
 		/// <param name="selector">selector</param>
@@ -40,7 +40,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Calculates min of matrix
+		///     Calculates min of matrix
 		/// </summary>
 		/// <param name="matrix">current matrix</param>
 		/// <param name="selector">selector</param>
@@ -54,7 +54,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Calculates max of matrix
+		///     Calculates max of matrix
 		/// </summary>
 		/// <param name="matrix">current matrix</param>
 		/// <param name="selector">selector</param>
