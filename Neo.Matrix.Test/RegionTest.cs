@@ -2,7 +2,7 @@
 
 namespace NeoMatrix.Test
 {
-	class RegionTest
+	internal class RegionTest
 	{
 		[Test]
 		public void FromTopLeft_ReturnsRegion_CheckBoarders()

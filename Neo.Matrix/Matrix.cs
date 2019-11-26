@@ -6,35 +6,46 @@ using System.Linq;
 namespace NeoMatrix
 {
 	/// <summary>
-	/// Neo.Matrix
+	///     Neo.Matrix
 	/// </summary>
 	/// <typeparam name="TElement">type of content</typeparam>
 	public class Matrix<TElement> : IEqualityComparer<Matrix<TElement>>
 	{
 		/// <summary>
-		/// Total Rows
-		/// </summary>
-		public int Rows { get; }
-
-		/// <summary>
-		/// Total Columns
-		/// </summary>
-		public int Columns { get; }
-
-		/// <summary>
-		/// Total elements count.
-		/// 
-		/// <see cref="Rows"/> * <see cref="Columns"/>
-		/// </summary>
-		public int TotalCount => Rows * Columns;
-
-		/// <summary>
-		/// Matrix
+		///     Matrix
 		/// </summary>
 		public readonly TElement[,] Mat;
 
 		/// <summary>
-		/// Constructor
+		///     Total Rows
+		/// </summary>
+		public int Rows { get; }
+
+		/// <summary>
+		///     Total Columns
+		/// </summary>
+		public int Columns { get; }
+
+		/// <summary>
+		///     Total elements count.
+		///     <see cref="Rows" /> * <see cref="Columns" />
+		/// </summary>
+		public int TotalCount => Rows * Columns;
+
+		/// <summary>
+		///     Access matrix as 2D array
+		/// </summary>
+		/// <param name="row"></param>
+		/// <param name="col"></param>
+		/// <returns></returns>
+		public TElement this[int row, int col]
+		{
+			get => Mat[row, col];
+			set => Mat[row, col] = value;
+		}
+
+		/// <summary>
+		///     Constructor
 		/// </summary>
 		/// <param name="rows"></param>
 		/// <param name="columns"></param>
@@ -46,7 +57,50 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Create new matrix of element
+		///     Constructor
+		///     <paramref name="data" /> if formatted: Dimension 0 is Rows, Dimension 1 is Columns
+		/// </summary>
+		/// <param name="data">Data array</param>
+		public Matrix(TElement[,] data)
+		{
+			Rows = data.GetLength(0);
+			Columns = data.GetLength(1);
+
+			Mat = new TElement[Rows, Columns];
+
+			for (var i = 0; i < Rows; i++)
+			for (var j = 0; j < Columns; j++)
+				Mat[i, j] = data[i, j];
+		}
+
+		/// <inheritdoc />
+		/// <summary>
+		///     Checks if tow matrix are same
+		/// </summary>
+		/// <param name="a">first matrix</param>
+		/// <param name="b">second matrix</param>
+		/// <returns></returns>
+		public bool Equals(Matrix<TElement> a, Matrix<TElement> b)
+		{
+			if (b is null || a is null)
+				return false;
+
+			return a.GetHashCode() == b.GetHashCode();
+		}
+
+		/// <inheritdoc />
+		/// <summary>
+		///     Gets Hashcode for matrix object
+		/// </summary>
+		/// <param name="obj">hashed object</param>
+		/// <returns>hashcode</returns>
+		public int GetHashCode(Matrix<TElement> obj)
+		{
+			return obj.GetHashCode();
+		}
+
+		/// <summary>
+		///     Create new matrix of element
 		/// </summary>
 		/// <param name="rows">rows</param>
 		/// <param name="columns">columns</param>
@@ -63,24 +117,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Constructor
-		/// <paramref name="data"/> if formatted: Dimension 0 is Rows, Dimension 1 is Columns
-		/// </summary>
-		/// <param name="data">Data array</param>
-		public Matrix(TElement[,] data)
-		{
-			Rows = data.GetLength(0);
-			Columns = data.GetLength(1);
-
-			Mat = new TElement[Rows, Columns];
-
-			for (var i = 0; i < Rows; i++)
-			for (var j = 0; j < Columns; j++)
-				Mat[i, j] = data[i, j];
-		}
-
-		/// <summary>
-		/// Square Matrix
+		///     Square Matrix
 		/// </summary>
 		public bool IsSquare()
 		{
@@ -88,19 +125,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Access matrix as 2D array
-		/// </summary>
-		/// <param name="row"></param>
-		/// <param name="col"></param>
-		/// <returns></returns>
-		public TElement this[int row, int col]
-		{
-			get => Mat[row, col];
-			set => Mat[row, col] = value;
-		}
-
-		/// <summary>
-		/// Get Matrix for one column
+		///     Get Matrix for one column
 		/// </summary>
 		/// <param name="k">column index</param>
 		public IEnumerable<TElement> GetCol(int k)
@@ -110,7 +135,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Get Matrix for one row
+		///     Get Matrix for one row
 		/// </summary>
 		/// <param name="k">row index</param>
 		public IEnumerable<TElement> GetRow(int k)
@@ -120,7 +145,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Get Uni Dimensional Matrix view
+		///     Get Uni Dimensional Matrix view
 		/// </summary>
 		public IEnumerable<TElement> GetFlat()
 		{
@@ -130,7 +155,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Matrix shallow copy
+		///     Matrix shallow copy
 		/// </summary>
 		/// <returns>copy of this matrix</returns>
 		public Matrix<TElement> Duplicate()
@@ -143,7 +168,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Transpose Matrix (change x / y)
+		///     Transpose Matrix (change x / y)
 		/// </summary>
 		/// <returns>x / y inverted copy of matrix</returns>
 		public Matrix<TElement> Transpose()
@@ -159,7 +184,7 @@ namespace NeoMatrix
 
 
 		/// <summary>
-		/// Get value one row above
+		///     Get value one row above
 		/// </summary>
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
@@ -170,7 +195,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Get value one row below
+		///     Get value one row below
 		/// </summary>
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
@@ -181,7 +206,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Get value one column left
+		///     Get value one column left
 		/// </summary>
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
@@ -192,7 +217,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Get value one column right
+		///     Get value one column right
 		/// </summary>
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
@@ -203,11 +228,11 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Returns matrix subset of a given region
+		///     Returns matrix subset of a given region
 		/// </summary>
 		/// <param name="region">region</param>
 		/// <returns>Matrix according dimensions from region</returns>
-		public Matrix<TElement> GetFromRegion(Region region)
+		public Matrix<TElement> GetRect(Region region)
 		{
 			var t = new Matrix<TElement>(region.Height, region.Width);
 
@@ -221,7 +246,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Returns a rectangle sized matrix of elements around the center
+		///     Returns a rectangle sized matrix of elements around the center
 		/// </summary>
 		/// <param name="centerRow">center row</param>
 		/// <param name="centerColumn">center column</param>
@@ -231,11 +256,11 @@ namespace NeoMatrix
 		{
 			var reg = Region.FromCenter(centerRow, centerColumn, rows, columns);
 
-			return GetFromRegion(reg);
+			return GetRect(reg);
 		}
 
 		/// <summary>
-		/// Returns a rectangle sized matrix of elements around the center
+		///     Returns a rectangle sized matrix of elements around the center
 		/// </summary>
 		/// <param name="rect">rectangle</param>
 		public Matrix<TElement> GetRect(Rectangle rect)
@@ -244,7 +269,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Returns an even sized box of elements around the center
+		///     Returns an even sized box of elements around the center
 		/// </summary>
 		/// <param name="centerRow">center row</param>
 		/// <param name="centerColumn">center column</param>
@@ -255,7 +280,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Returns an even sized box of elements around the center
+		///     Returns an even sized box of elements around the center
 		/// </summary>
 		/// <param name="pt">center point</param>
 		/// <param name="size">size of return array</param>
@@ -265,21 +290,16 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Executes an <see cref="Action{T}"/> on every element
+		///     Executes an <see cref="Action{T}" /> on every element
 		/// </summary>
 		/// <param name="f">Action function</param>
 		public void ExecuteOnAll(Action<TElement> f)
 		{
-			var flatMatrix = GetFlat();
-
-			foreach (var element in flatMatrix)
-			{
-				f.Invoke(element);
-			}
+			foreach (var element in GetFlat()) f.Invoke(element);
 		}
 
 		/// <summary>
-		/// Executes an <see cref="Action{T}"/> on every element
+		///     Executes an <see cref="Action{T}" /> on every element
 		/// </summary>
 		/// <param name="f">Action element, row, column</param>
 		public void ExecuteOnAll(Action<TElement, int, int> f)
@@ -290,7 +310,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Checks if current instance is to another
+		///     Checks if current instance is to another
 		/// </summary>
 		/// <param name="obj">instance to compare</param>
 		/// <returns>true if equal, false if not</returns>
@@ -302,23 +322,8 @@ namespace NeoMatrix
 			return Equals(this, (Matrix<TElement>)obj);
 		}
 
-		/// <inheritdoc />
 		/// <summary>
-		/// Checks if tow matrix are same
-		/// </summary>
-		/// <param name="a">first matrix</param>
-		/// <param name="b">second matrix</param>
-		/// <returns></returns>
-		public bool Equals(Matrix<TElement> a, Matrix<TElement> b)
-		{
-			if (b is null || a is null)
-				return false;
-
-			return a.GetHashCode() == b.GetHashCode();
-		}
-
-		/// <summary>
-		/// Get Hashcode for matrix. Every element in the array is evaluated.
+		///     Get Hashcode for matrix. Every element in the array is evaluated.
 		/// </summary>
 		/// <returns>HashCode</returns>
 		public override int GetHashCode()
@@ -330,30 +335,16 @@ namespace NeoMatrix
 					var flatView = GetFlat().ToList();
 					var len = flatView.Count;
 					var hc = len;
-					for (var i = 0; i < len; ++i)
-					{
-						hc = unchecked(hc * 314159 + flatView[i].GetHashCode());
-					}
+					for (var i = 0; i < len; ++i) hc = unchecked(hc * 314159 + flatView[i].GetHashCode());
 
 					return hc;
 				}
 
-				var hashCode = (Mat != null ? MatHashCode() : 0);
+				var hashCode = Mat != null ? MatHashCode() : 0;
 				hashCode = (hashCode * 397) ^ Rows;
 				hashCode = (hashCode * 397) ^ Columns;
 				return hashCode;
 			}
-		}
-
-		/// <inheritdoc />
-		/// <summary>
-		/// Gets Hashcode for matrix object
-		/// </summary>
-		/// <param name="obj">hashed object</param>
-		/// <returns>hashcode</returns>
-		public int GetHashCode(Matrix<TElement> obj)
-		{
-			return obj.GetHashCode();
 		}
 	}
 }

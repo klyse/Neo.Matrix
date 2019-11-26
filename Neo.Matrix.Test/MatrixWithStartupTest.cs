@@ -14,11 +14,11 @@ namespace NeoMatrix.Test
 		public void OneTimeSetUp()
 		{
 			Mat = new Matrix<int>(new[,]
-			{
-				{1, 2, 3},
-				{4, 5, 6},
-				{7, 8, 9}
-			});
+								  {
+									  { 1, 2, 3 },
+									  { 4, 5, 6 },
+									  { 7, 8, 9 }
+								  });
 		}
 
 		[Test]
@@ -32,57 +32,11 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
-		public void GetCol_ReturnsColumn()
-		{
-			var col = Mat.GetCol(1).ToList();
-
-			var expectedCol = new List<int> {2, 5, 8};
-
-			Assert.That(col, Is.EqualTo(expectedCol));
-		}
-
-		[Test]
-		public void GetRow_ReturnsRow()
-		{
-			var row = Mat.GetRow(1).ToList();
-
-			var expectedCol = new List<int> {4, 5, 6};
-
-			Assert.That(row, Is.EqualTo(expectedCol));
-		}
-
-		[Test]
-		public void GetFlat_ReturnsUniDimensionalView()
-		{
-			var col = Mat.GetFlat().ToList();
-
-			var expectedCol = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9};
-
-			Assert.That(col, Is.EqualTo(expectedCol));
-		}
-
-		[Test]
 		public void Duplicate_ReturnsDuplicate()
 		{
 			var duplicate = Mat.Duplicate().GetFlat(); // this is not the best way to use uni dimensional view, but it works
 
 			Assert.That(duplicate, Is.EqualTo(Mat.GetFlat()));
-		}
-
-		[Test]
-		public void Transpose_TransposesMatrix()
-		{
-			var x = Mat.Transpose().GetFlat();
-
-			var expectedCol = new List<int> {1, 4, 7, 2, 5, 8, 3, 6, 9};
-
-			Assert.That(x, Is.EqualTo(expectedCol));
-		}
-
-		[Test]
-		public void GetAbove_ReturnsValue()
-		{
-			Assert.AreEqual(Mat.GetAbove(1, 1), 2);
 		}
 
 		[Test]
@@ -92,9 +46,9 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
-		public void GetBelow_ReturnsValue()
+		public void GetAbove_ReturnsValue()
 		{
-			Assert.AreEqual(Mat.GetBelow(1, 1), 8);
+			Assert.AreEqual(Mat.GetAbove(1, 1), 2);
 		}
 
 		[Test]
@@ -104,9 +58,29 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
-		public void GetLeft_ReturnsValue()
+		public void GetBelow_ReturnsValue()
 		{
-			Assert.AreEqual(Mat.GetLeft(1, 1), 4);
+			Assert.AreEqual(Mat.GetBelow(1, 1), 8);
+		}
+
+		[Test]
+		public void GetCol_ReturnsColumn()
+		{
+			var col = Mat.GetCol(1).ToList();
+
+			var expectedCol = new List<int> { 2, 5, 8 };
+
+			Assert.That(col, Is.EqualTo(expectedCol));
+		}
+
+		[Test]
+		public void GetFlat_ReturnsUniDimensionalView()
+		{
+			var col = Mat.GetFlat().ToList();
+
+			var expectedCol = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+			Assert.That(col, Is.EqualTo(expectedCol));
 		}
 
 		[Test]
@@ -116,15 +90,41 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
-		public void GetRight_ReturnsValue()
+		public void GetLeft_ReturnsValue()
 		{
-			Assert.AreEqual(Mat.GetRight(1, 1), 6);
+			Assert.AreEqual(Mat.GetLeft(1, 1), 4);
 		}
 
 		[Test]
 		public void GetRight_OutOfRange_ThrowsException()
 		{
 			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetRight(2, 2));
+		}
+
+		[Test]
+		public void GetRight_ReturnsValue()
+		{
+			Assert.AreEqual(Mat.GetRight(1, 1), 6);
+		}
+
+		[Test]
+		public void GetRow_ReturnsRow()
+		{
+			var row = Mat.GetRow(1).ToList();
+
+			var expectedCol = new List<int> { 4, 5, 6 };
+
+			Assert.That(row, Is.EqualTo(expectedCol));
+		}
+
+		[Test]
+		public void Transpose_TransposesMatrix()
+		{
+			var x = Mat.Transpose().GetFlat();
+
+			var expectedCol = new List<int> { 1, 4, 7, 2, 5, 8, 3, 6, 9 };
+
+			Assert.That(x, Is.EqualTo(expectedCol));
 		}
 	}
 }

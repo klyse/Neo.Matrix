@@ -6,18 +6,18 @@ namespace NeoMatrix.Test
 	[TestFixture]
 	public class ExecuteOnAllTest
 	{
+		[SetUp]
+		public void SetUp()
+		{
+			Matrix = Matrix<DummyObject>.NewMatrix(4, 4, () => new DummyObject());
+		}
+
 		public class DummyObject
 		{
 			public bool IsExecuted { get; set; }
 		}
 
 		public Matrix<DummyObject> Matrix { get; set; }
-
-		[SetUp]
-		public void SetUp()
-		{
-			Matrix = Matrix<DummyObject>.NewMatrix(4, 4, () => new DummyObject());
-		}
 
 		[Test]
 		public void ExecuteOnAll_ExecutesFuncOnAll()
