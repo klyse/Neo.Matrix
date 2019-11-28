@@ -35,7 +35,7 @@ namespace NeoMatrix.Test
 		[TestCase(5, 5)]
 		public void GetRectSum_NotAllowedDimension(int cols, int width)
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => Matrix.RectSumFilter(cols, width));
+			Assert.Throws<IndexOutOfRangeException>(() => Matrix.RectFilter(cols, width, matrix => matrix.Sum(c => c.Value)));
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace NeoMatrix.Test
 												{ 90, 99 }
 											});
 
-			var sum = Matrix.RectSumFilter(3, 3);
+			var sum = Matrix.RectFilter(3, 3, m => m.Sum(c => c.Value));
 
 			Assert.AreEqual(sum, matrix);
 		}
@@ -58,7 +58,7 @@ namespace NeoMatrix.Test
 		[TestCase(4, 3)]
 		public void RectSumFilter_DimensionAreEven(int cols, int width)
 		{
-			Assert.Throws<Exception>(() => Matrix.RectSumFilter(cols, width));
+			Assert.Throws<Exception>(() => Matrix.RectFilter(cols, width, m => m.Sum(c => c.Value)));
 		}
 	}
 }
