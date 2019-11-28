@@ -53,6 +53,21 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
+		public void RectFilter_Test()
+		{
+			var matrix = Matrix<DummyObject>.NewMatrix(300, 300, () => new DummyObject
+																	   {
+																		   Value = new Random().Next(0, 3000)
+																	   });
+
+			var filtered = matrix.RectFilter(11, 11, m => m.Average(c => c.Value));
+
+			//matrix.ToBitmap(c => c.Value).Save("C:\\Users\\Klaus\\Downloads\\test.bmp");
+			//filtered.ToBitmap(c => c).Save("C:\\Users\\Klaus\\Downloads\\test1.bmp");
+			Assert.NotNull(filtered);
+		}
+
+		[Test]
 		[TestCase(0, 0)]
 		[TestCase(3, 2)]
 		[TestCase(4, 3)]

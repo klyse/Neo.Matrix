@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace NeoMatrix
 {
@@ -34,7 +32,6 @@ namespace NeoMatrix
 			var resRows = matrix.Rows - 2 * rowOffset;
 
 			var returnMat = new Matrix<double>(resRows, resCols);
-
 
 			for (var i = rowOffset; i < matrix.Rows - rowOffset; i++)
 			for (var j = colOffset; j < matrix.Columns - colOffset; j++)

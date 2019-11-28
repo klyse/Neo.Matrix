@@ -54,6 +54,7 @@ namespace NeoMatrix.Test
 		public void ToBitmap_ReturnsBitmapOfMatrix()
 		{
 			var bitmap = Matrix.ToBitmap(c => c.Value);
+
 			Assert.NotNull(bitmap);
 		}
 	}
