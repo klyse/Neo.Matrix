@@ -17,7 +17,6 @@ namespace NeoMatrix
 		/// <returns>matrix with results</returns>
 		public static Matrix<double> RectFilter<TType>(this Matrix<TType> matrix, int rows, int columns, Func<Matrix<TType>, double> func)
 		{
-			// k.p. better api design required
 			if (rows % 2 == 0 || columns % 2 == 0) throw new Exception("Matrix rectangle rows or columns are even.");
 
 			if (columns > matrix.Columns - 1 ||
