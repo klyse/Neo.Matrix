@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<IsPackable>false</IsPackable>
-		<RootNamespace>NeoMatrix.Test</RootNamespace>
+		<RootNamespace>Neo.Matrix.Test</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
