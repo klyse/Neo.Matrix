@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace NeoMatrix
 {
@@ -14,13 +13,9 @@ namespace NeoMatrix
 		/// <param name="matrix">matrix</param>
 		/// <param name="rows">rows</param>
 		/// <param name="columns">columns</param>
+		/// <param name="func">function for filter</param>
 		/// <returns>matrix with results</returns>
-		public static Matrix<double> RectSumFilter<TType>(this Matrix<TType> matrix, int rows, int columns)
-		{
-			return null;
-		}
-
-		public static Matrix<double> RectSumFilter(this Matrix<double> matrix, int rows, int columns)
+		public static Matrix<double> RectFilter<TType>(this Matrix<TType> matrix, int rows, int columns, Func<Matrix<TType>, double> func)
 		{
 			// k.p. better api design required
 			if (rows % 2 == 0 || columns % 2 == 0) throw new Exception("Matrix rectangle rows or columns are even.");
@@ -38,10 +33,9 @@ namespace NeoMatrix
 
 			var returnMat = new Matrix<double>(resRows, resCols);
 
-
 			for (var i = rowOffset; i < matrix.Rows - rowOffset; i++)
 			for (var j = colOffset; j < matrix.Columns - colOffset; j++)
-				returnMat[i - rowOffset, j - colOffset] = matrix.GetRect(i, j, columns, rows).GetFlat().Sum();
+				returnMat[i - rowOffset, j - colOffset] = func(matrix.GetRect(i, j, columns, rows));
 
 			return returnMat;
 		}
