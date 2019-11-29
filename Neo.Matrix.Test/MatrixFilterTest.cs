@@ -37,7 +37,7 @@ namespace NeoMatrix.Test
 		{
 			Assert.Throws<IndexOutOfRangeException>(() => Matrix.RectFilter(cols, width, matrix => matrix.Sum(c => c.Value)));
 		}
-
+		
 		[Test]
 		public void GetRectSum_ReturnSum()
 		{
@@ -50,6 +50,15 @@ namespace NeoMatrix.Test
 			var sum = Matrix.RectFilter(3, 3, m => m.Sum(c => c.Value));
 
 			Assert.AreEqual(sum, matrix);
+		}
+
+		[Test]
+		public void GetRectSum_CorrectSize()
+		{
+			var sum = Matrix.RectFilter(3, 3, m => m.Sum(c => c.Value));
+
+			Assert.AreEqual(2, sum.Rows);
+			Assert.AreEqual(2, sum.Columns);
 		}
 
 		[Test]
