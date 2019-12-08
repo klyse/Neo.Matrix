@@ -89,7 +89,7 @@ namespace NeoMatrix
 			matrix.ExecuteOnAll((t, r, c) =>
 								{
 									var val = 255 - (int)(delta * func(t));
-									bmp.SetPixel(r, c, Color.FromArgb(val, val, val));
+									bmp.SetPixel(c, r, Color.FromArgb(val, val, val));
 								});
 			return bmp;
 		}

@@ -57,5 +57,14 @@ namespace NeoMatrix.Test
 
 			Assert.NotNull(bitmap);
 		}
+
+		[Test]
+		public void ToBitmap_UnevenMatrix_ReturnsBitmapOfMatrix()
+		{
+			var bitmap = Matrix<int>.NewMatrix(10, 15, () => 1)
+									.ToBitmap(c => c);
+
+			Assert.NotNull(bitmap);
+		}
 	}
 }

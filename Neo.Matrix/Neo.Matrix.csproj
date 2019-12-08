@@ -9,7 +9,7 @@
 		<License>https://github.com/klyse/Neo.Matrix/blob/master/LICENSE</License>
 		<PackageProjectUrl>https://github.com/klyse/Neo.Matrix</PackageProjectUrl>
 		<RootNamespace>NeoMatrix</RootNamespace>
-		<Version>1.4.0</Version>
+		<Version>1.4.1</Version>
 	</PropertyGroup>
 
 	<PropertyGroup>
