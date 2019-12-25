@@ -77,5 +77,15 @@ namespace NeoMatrix.Test
 			Assert.AreEqual(Color.Black.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
 			Assert.AreEqual(Color.Red.ToArgb(), bitmap.GetPixel(0, 6).ToArgb());
 		}
+
+		[Test]
+		public void ToBitmap_UnevenMatrixWithRowColumnParameter_ReturnsColoredBitmapOfMatrix()
+		{
+			var bitmap = Matrix<int>.NewMatrix(10, 15, () => 1)
+									.ToBitmap((r, c, v) => c > 5 ? Color.Red : Color.Black);
+
+			Assert.AreEqual(Color.Black.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
+			Assert.AreEqual(Color.Red.ToArgb(), bitmap.GetPixel(6, 0).ToArgb());
+		}
 	}
 }

@@ -101,15 +101,32 @@ namespace NeoMatrix
 		/// <param name="color">color</param>
 		/// <typeparam name="TMatrixValueType">Matrix element type</typeparam>
 		/// <returns>max of matrix</returns>
-		public static Bitmap ToBitmap<TMatrixValueType>(this Matrix<TMatrixValueType> matrix, Expression<Func<TMatrixValueType, Color>> color)
+		public static Bitmap ToBitmap<TMatrixValueType>(this Matrix<TMatrixValueType> matrix, Func<TMatrixValueType, Color> color)
 		{
 			var bmp = new Bitmap(matrix.Columns, matrix.Rows);
-			var func = color.Compile();
 
 
 			matrix.ExecuteOnAll((t, r, c) =>
 								{
-									bmp.SetPixel(c, r, func(t));
+									bmp.SetPixel(c, r, color(t));
+								});
+			return bmp;
+		}
+
+		/// <summary>
+		///     Matrix to bitmap
+		/// </summary>
+		/// <param name="matrix">current matrix</param>
+		/// <param name="color">color</param>
+		/// <typeparam name="TMatrixValueType">Matrix element type</typeparam>
+		/// <returns>max of matrix</returns>
+		public static Bitmap ToBitmap<TMatrixValueType>(this Matrix<TMatrixValueType> matrix, Func<int, int, TMatrixValueType, Color> color)
+		{
+			var bmp = new Bitmap(matrix.Columns, matrix.Rows);
+
+			matrix.ExecuteOnAll((t, r, c) =>
+								{
+									bmp.SetPixel(c, r, color(r, c, t));
 								});
 			return bmp;
 		}
