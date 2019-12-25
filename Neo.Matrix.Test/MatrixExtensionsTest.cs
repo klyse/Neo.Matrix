@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Drawing;
+using NUnit.Framework;
 
 namespace NeoMatrix.Test
 {
@@ -65,6 +66,16 @@ namespace NeoMatrix.Test
 									.ToBitmap(c => c);
 
 			Assert.NotNull(bitmap);
+		}
+
+		[Test]
+		public void ToBitmap_UnevenMatrix_ReturnsColoredBitmapOfMatrix()
+		{
+			var bitmap = Matrix<int>.NewMatrix(10, 15, (row, column) => row)
+									.ToBitmap(c => c > 5 ? Color.Red : Color.Black);
+
+			Assert.AreEqual(Color.Black.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
+			Assert.AreEqual(Color.Red.ToArgb(), bitmap.GetPixel(0, 6).ToArgb());
 		}
 	}
 }

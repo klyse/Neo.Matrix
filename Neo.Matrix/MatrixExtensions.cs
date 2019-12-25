@@ -69,7 +69,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		///     Calculates max of matrix
+		///     Matrix to bitmap
 		/// </summary>
 		/// <param name="matrix">current matrix</param>
 		/// <param name="selector">selector</param>
@@ -90,6 +90,26 @@ namespace NeoMatrix
 								{
 									var val = 255 - (int)(delta * func(t));
 									bmp.SetPixel(c, r, Color.FromArgb(val, val, val));
+								});
+			return bmp;
+		}
+
+		/// <summary>
+		///     Matrix to bitmap
+		/// </summary>
+		/// <param name="matrix">current matrix</param>
+		/// <param name="color">color</param>
+		/// <typeparam name="TMatrixValueType">Matrix element type</typeparam>
+		/// <returns>max of matrix</returns>
+		public static Bitmap ToBitmap<TMatrixValueType>(this Matrix<TMatrixValueType> matrix, Expression<Func<TMatrixValueType, Color>> color)
+		{
+			var bmp = new Bitmap(matrix.Columns, matrix.Rows);
+			var func = color.Compile();
+
+
+			matrix.ExecuteOnAll((t, r, c) =>
+								{
+									bmp.SetPixel(c, r, func(t));
 								});
 			return bmp;
 		}
