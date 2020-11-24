@@ -87,10 +87,10 @@ namespace NeoMatrix
 			var delta = 255 / offset;
 
 			matrix.ExecuteOnAll((t, r, c) =>
-								{
-									var val = 255 - (int)(delta * func(t));
-									bmp.SetPixel(c, r, Color.FromArgb(val, val, val));
-								});
+			{
+				var val = 255 - (int) (delta * func(t));
+				bmp.SetPixel(c, r, Color.FromArgb(val, val, val));
+			});
 			return bmp;
 		}
 
@@ -106,10 +106,7 @@ namespace NeoMatrix
 			var bmp = new Bitmap(matrix.Columns, matrix.Rows);
 
 
-			matrix.ExecuteOnAll((t, r, c) =>
-								{
-									bmp.SetPixel(c, r, color(t));
-								});
+			matrix.ExecuteOnAll((t, r, c) => { bmp.SetPixel(c, r, color(t)); });
 			return bmp;
 		}
 
@@ -124,10 +121,7 @@ namespace NeoMatrix
 		{
 			var bmp = new Bitmap(matrix.Columns, matrix.Rows);
 
-			matrix.ExecuteOnAll((t, r, c) =>
-								{
-									bmp.SetPixel(c, r, color(r, c, t));
-								});
+			matrix.ExecuteOnAll((t, r, c) => { bmp.SetPixel(c, r, color(r, c, t)); });
 			return bmp;
 		}
 	}

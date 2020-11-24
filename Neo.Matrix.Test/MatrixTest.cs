@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace NeoMatrix.Test
 {
@@ -23,12 +22,45 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
-		public void NewMatrix_CreateNewMatrixAndInitializeIt()
+		public void NewMatrix_Create_IsEqual()
 		{
-			var x = Matrix<int>.NewMatrix(2, 2, () => 4).GetFlat();
+			var newMatrix = Matrix<int>.NewMatrix(2, 3, () => 4);
 
-			var expectedCol = new List<int> { 4, 4, 4, 4 };
-			Assert.That(x, Is.EqualTo(expectedCol));
+			var expected = new Matrix<int>(new[,]
+			{
+				{4, 4, 4},
+				{4, 4, 4}
+			});
+
+			Assert.AreEqual(expected, newMatrix);
+		}
+
+		[Test]
+		public void NewMatrix_CreateNewEmptyMatrixAndInitializeIt()
+		{
+			var newMatrix = Matrix<int?>.NewMatrix(2, 3, () => null);
+
+			var expected = new Matrix<int?>(new int?[,]
+			{
+				{null, null, null},
+				{null, null, null}
+			});
+
+			Assert.AreEqual(expected, newMatrix);
+		}
+
+		[Test]
+		public void NewMatrix_CreateNewEmptyMatrix_WithDifferentSize()
+		{
+			var newMatrix = Matrix<int?>.NewMatrix(2, 3, () => null);
+
+			var expected = new Matrix<int?>(new int?[,]
+			{
+				{null, null},
+				{null, null}
+			});
+
+			Assert.AreNotEqual(expected, newMatrix);
 		}
 	}
 }
