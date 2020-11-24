@@ -8,8 +8,6 @@ namespace NeoMatrix.Test
 	[TestFixture]
 	public class MatrixWithStartupTest
 	{
-		public Matrix<int> Mat { get; set; }
-
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
@@ -21,14 +19,16 @@ namespace NeoMatrix.Test
 			});
 		}
 
+		public Matrix<int> Mat { get; set; }
+
 		[Test]
 		public void ArrayAccess_ReturnsCorrectValue()
 		{
 			Assert.AreEqual(1, Mat[0, 0]);
-			Assert.AreEqual(2,Mat[0, 1]);
-			Assert.AreEqual(3,Mat[0, 2]);
-			Assert.AreEqual(5,Mat[1, 1]);
-			Assert.AreEqual(9,Mat[2, 2]);
+			Assert.AreEqual(2, Mat[0, 1]);
+			Assert.AreEqual(3, Mat[0, 2]);
+			Assert.AreEqual(5, Mat[1, 1]);
+			Assert.AreEqual(9, Mat[2, 2]);
 		}
 
 		[Test]
@@ -49,7 +49,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetAbove_ReturnsValue()
 		{
-			Assert.AreEqual(2,Mat.GetAbove(1, 1));
+			Assert.AreEqual(2, Mat.GetAbove(1, 1));
 		}
 
 		[Test]
@@ -93,7 +93,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetLeft_ReturnsValue()
 		{
-			Assert.AreEqual(4,Mat.GetLeft(1, 1));
+			Assert.AreEqual(4, Mat.GetLeft(1, 1));
 		}
 
 		[Test]
@@ -105,7 +105,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetRight_ReturnsValue()
 		{
-			Assert.AreEqual(6,Mat.GetRight(1, 1));
+			Assert.AreEqual(6, Mat.GetRight(1, 1));
 		}
 
 		[Test]

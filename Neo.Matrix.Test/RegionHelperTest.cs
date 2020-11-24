@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using NUnit.Framework;
 
 namespace NeoMatrix.Test
@@ -25,6 +24,7 @@ namespace NeoMatrix.Test
 			Assert.AreEqual(5, roi.Height);
 			Assert.AreEqual(9, roi.Width);
 			Assert.AreEqual(3, roi.Top);
+			// I'm not really sure if this is correct
 			Assert.AreEqual(8, roi.Bottom);
 			Assert.AreEqual(6, roi.Left);
 			Assert.AreEqual(15, roi.Right);
@@ -58,10 +58,11 @@ namespace NeoMatrix.Test
 			 * 9	|  |  |  |  |  |  |  |  |  |  |
 			 * y	+--+--+--+--+--+--+--+--+--+--+
 			 */
-			
+
 			Assert.AreEqual(3, roi.Height);
 			Assert.AreEqual(3, roi.Width);
 			Assert.AreEqual(4, roi.Top);
+			// I'm not really sure if this is correct
 			Assert.AreEqual(7, roi.Bottom);
 			Assert.AreEqual(5, roi.Left);
 			Assert.AreEqual(8, roi.Right);
@@ -78,6 +79,7 @@ namespace NeoMatrix.Test
 		{
 			Assert.Catch<Exception>(() => RegionHelper.FromCenter(5, 10, 4, 5));
 		}
+
 		[Test]
 		public void FromCenter_ReturnRegion_ToSmallWidth_ThrowsError()
 		{

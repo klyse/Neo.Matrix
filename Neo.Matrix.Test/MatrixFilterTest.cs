@@ -11,13 +11,13 @@ namespace NeoMatrix.Test
 		{
 			var val = 0;
 			Matrix = Matrix<DummyObject>.NewMatrix(4, 4, () =>
-														 {
-															 val++;
-															 return new DummyObject
-																	{
-																		Value = val
-																	};
-														 });
+			{
+				val++;
+				return new DummyObject
+				{
+					Value = val
+				};
+			});
 		}
 
 		public class DummyObject
@@ -28,7 +28,7 @@ namespace NeoMatrix.Test
 		public Matrix<DummyObject> Matrix { get; set; }
 
 		[Test]
-		public void GetRectSum_CorrectSize()
+		public void RectBoxedSum_CorrectSize()
 		{
 			var sum = Matrix.RectBoxedSum(3, 3, m => m.Sum(c => c.Value));
 
@@ -42,32 +42,32 @@ namespace NeoMatrix.Test
 		[TestCase(5, 1)]
 		[TestCase(1, 5)]
 		[TestCase(5, 5)]
-		public void GetRectSum_NotAllowedDimension(int cols, int width)
+		public void RectBoxedSum_NotAllowedDimension(int cols, int width)
 		{
 			Assert.Throws<IndexOutOfRangeException>(() => Matrix.RectBoxedSum(cols, width, matrix => matrix.Sum(c => c.Value)));
 		}
 
 		[Test]
-		public void GetRectSum_ReturnSum()
+		public void RectBoxedSum_ReturnSum()
 		{
-			var matrix = new Matrix<double>(new double[,]
-											{
-												{ 54, 63 },
-												{ 90, 99 }
-											});
+			var expected = new Matrix<double>(new double[,]
+			{
+				{54, 63},
+				{90, 99}
+			});
 
 			var sum = Matrix.RectBoxedSum(3, 3, m => m.Sum(c => c.Value));
 
-			Assert.AreEqual(matrix, sum);
+			Assert.AreEqual(expected, sum);
 		}
 
 		[Test]
-		public void RectFilter_Test()
+		public void RectBoxedSum_Test()
 		{
 			var matrix = Matrix<DummyObject>.NewMatrix(300, 300, () => new DummyObject
-																	   {
-																		   Value = new Random().Next(0, 3000)
-																	   });
+			{
+				Value = new Random().Next(0, 3000)
+			});
 
 			var filtered = matrix.RectBoxedSum(11, 11, m => m.Average(c => c.Value));
 
@@ -80,7 +80,7 @@ namespace NeoMatrix.Test
 		[TestCase(0, 0)]
 		[TestCase(3, 2)]
 		[TestCase(4, 3)]
-		public void RectSumFilter_DimensionAreEven(int cols, int width)
+		public void RectBoxedSum_DimensionAreEven(int cols, int width)
 		{
 			Assert.Throws<Exception>(() => Matrix.RectBoxedSum(cols, width, m => m.Sum(c => c.Value)));
 		}

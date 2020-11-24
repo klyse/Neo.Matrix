@@ -20,8 +20,8 @@ namespace NeoMatrix
 			if (rows % 2 == 0 || columns % 2 == 0) throw new Exception("Matrix rectangle rows or columns are even.");
 
 			if (columns > matrix.Columns - 1 ||
-				rows > matrix.Rows - 1 ||
-				columns <= 0 || rows <= 0)
+			    rows > matrix.Rows - 1 ||
+			    columns <= 0 || rows <= 0)
 				throw new IndexOutOfRangeException("Rectangle is not in valid range.");
 
 			var colOffset = (columns - 1) / 2;

@@ -17,20 +17,38 @@ namespace NeoMatrix
 		private readonly TElement[,] _mat;
 
 		/// <summary>
+		///     Constructor
+		/// </summary>
+		/// <param name="rows"></param>
+		/// <param name="columns"></param>
+		public Matrix(int rows, int columns)
+		{
+			_mat = new TElement[rows, columns];
+		}
+
+		/// <summary>
+		///     Constructor
+		///     <paramref name="data" /> if formatted: Dimension 0 is Rows, Dimension 1 is Columns
+		/// </summary>
+		/// <param name="data">Data array</param>
+		public Matrix(TElement[,] data)
+		{
+			_mat = new TElement[data.GetLength(0), data.GetLength(1)];
+
+			for (var i = 0; i < Rows; i++)
+			for (var j = 0; j < Columns; j++)
+				_mat[i, j] = data[i, j];
+		}
+
+		/// <summary>
 		///     Total Rows
 		/// </summary>
-		public int Rows { get; }
+		public int Rows => _mat.GetLength(0);
 
 		/// <summary>
 		///     Total Columns
 		/// </summary>
-		public int Columns { get; }
-
-		/// <summary>
-		///     Total elements count.
-		///     <see cref="Rows" /> * <see cref="Columns" />
-		/// </summary>
-		public int TotalCount => Rows * Columns;
+		public int Columns => _mat.GetLength(1);
 
 		/// <summary>
 		///     Access matrix as 2D array
@@ -42,35 +60,6 @@ namespace NeoMatrix
 		{
 			get => _mat[row, col];
 			set => _mat[row, col] = value;
-		}
-
-		/// <summary>
-		///     Constructor
-		/// </summary>
-		/// <param name="rows"></param>
-		/// <param name="columns"></param>
-		public Matrix(int rows, int columns)
-		{
-			Rows = rows;
-			Columns = columns;
-			_mat = new TElement[Rows, Columns];
-		}
-
-		/// <summary>
-		///     Constructor
-		///     <paramref name="data" /> if formatted: Dimension 0 is Rows, Dimension 1 is Columns
-		/// </summary>
-		/// <param name="data">Data array</param>
-		public Matrix(TElement[,] data)
-		{
-			Rows = data.GetLength(0);
-			Columns = data.GetLength(1);
-
-			_mat = new TElement[Rows, Columns];
-
-			for (var i = 0; i < Rows; i++)
-			for (var j = 0; j < Columns; j++)
-				_mat[i, j] = data[i, j];
 		}
 
 		/// <inheritdoc />
@@ -85,7 +74,9 @@ namespace NeoMatrix
 			if (b is null || a is null)
 				return false;
 
-			return a.GetHashCode() == b.GetHashCode();
+			return a.Rows == b.Rows &&
+			       a.Columns == b.Columns &&
+			       a.GetHashCode() == b.GetHashCode();
 		}
 
 		/// <inheritdoc />
@@ -97,6 +88,18 @@ namespace NeoMatrix
 		public int GetHashCode(Matrix<TElement> obj)
 		{
 			return obj.GetHashCode();
+		}
+
+		/// <summary>
+		///     Checks if current instance is to another
+		/// </summary>
+		/// <param name="other">instance to compare</param>
+		/// <returns>true if equal, false if not</returns>
+		public virtual bool Equals(Matrix<TElement>? other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return Equals(this, other);
 		}
 
 		/// <summary>
@@ -309,16 +312,6 @@ namespace NeoMatrix
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
 				f.Invoke(_mat[i, j], i, j);
-		}
-
-		/// <summary>
-		///     Checks if current instance is to another
-		/// </summary>
-		/// <param name="other">instance to compare</param>
-		/// <returns>true if equal, false if not</returns>
-		public virtual bool Equals(Matrix<TElement>? other)
-		{
-			return Equals(this, other);
 		}
 
 

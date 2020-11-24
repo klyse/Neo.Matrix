@@ -7,8 +7,6 @@ namespace NeoMatrix.Test
 	[TestFixture]
 	public class MatrixBigStartupTest
 	{
-		public Matrix<int> Mat { get; set; }
-
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
@@ -19,6 +17,8 @@ namespace NeoMatrix.Test
 				return i;
 			});
 		}
+
+		public Matrix<int> Mat { get; set; }
 
 		[Test]
 		[TestCase(33)]

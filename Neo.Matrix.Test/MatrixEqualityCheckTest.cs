@@ -22,7 +22,7 @@ namespace NeoMatrix.Test
 				if (ReferenceEquals(null, obj)) return false;
 				if (ReferenceEquals(this, obj)) return true;
 				if (obj.GetType() != GetType()) return false;
-				return Equals((CustomElement)obj);
+				return Equals((CustomElement) obj);
 			}
 
 			public override int GetHashCode()
@@ -56,19 +56,19 @@ namespace NeoMatrix.Test
 		public void Equals_Matrix_IsEqual()
 		{
 			var matrix1 = new Matrix<double>(new double[,]
-											 {
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 }
-											 });
+			{
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4}
+			});
 			var matrix2 = new Matrix<double>(new double[,]
-											 {
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 }
-											 });
+			{
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4}
+			});
 
 			Assert.AreEqual(matrix1, matrix2);
 		}
@@ -77,19 +77,19 @@ namespace NeoMatrix.Test
 		public void Equals_Matrix_IsUnequal1()
 		{
 			var matrix1 = new Matrix<double>(new double[,]
-											 {
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 4, 4 },
-												 { 1, 2, 3, 4 }
-											 });
+			{
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 4, 4},
+				{1, 2, 3, 4}
+			});
 			var matrix2 = new Matrix<double>(new double[,]
-											 {
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 }
-											 });
+			{
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4}
+			});
 
 			Assert.AreNotEqual(matrix1, matrix2);
 		}
@@ -98,19 +98,19 @@ namespace NeoMatrix.Test
 		public void Equals_Matrix_IsUnequal2()
 		{
 			var matrix1 = new Matrix<double>(new double[,]
-											 {
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 1 }
-											 });
+			{
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 1}
+			});
 			var matrix2 = new Matrix<double>(new double[,]
-											 {
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 }
-											 });
+			{
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4}
+			});
 
 			Assert.AreNotEqual(matrix1, matrix2);
 		}
@@ -119,19 +119,19 @@ namespace NeoMatrix.Test
 		public void Equals_Matrix_IsUnequal3()
 		{
 			var matrix1 = new Matrix<double>(new double[,]
-											 {
-												 { 2, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 }
-											 });
+			{
+				{2, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4}
+			});
 			var matrix2 = new Matrix<double>(new double[,]
-											 {
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 },
-												 { 1, 2, 3, 4 }
-											 });
+			{
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4},
+				{1, 2, 3, 4}
+			});
 
 			Assert.AreNotEqual(matrix1, matrix2);
 		}
