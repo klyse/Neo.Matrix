@@ -30,25 +30,25 @@ namespace NeoMatrix.Test
 		[Test]
 		public void Average_CalculatesAverageOnMatrix()
 		{
-			Assert.AreEqual(Matrix.Average(c => c.Value), 8.5);
+			Assert.AreEqual(8.5,Matrix.Average(c => c.Value));
 		}
 
 		[Test]
 		public void Max_ReturnsMaxValueOfMatrix()
 		{
-			Assert.AreEqual(Matrix.Max(c => c.Value), 16);
+			Assert.AreEqual(16, Matrix.Max(c => c.Value));
 		}
 
 		[Test]
 		public void Min_ReturnsMinValueOfMatrix()
 		{
-			Assert.AreEqual(Matrix.Min(c => c.Value), 1);
+			Assert.AreEqual(1, Matrix.Min(c => c.Value));
 		}
 
 		[Test]
 		public void Sum_CalculatesTotalSumOnMatrix()
 		{
-			Assert.AreEqual(Matrix.Sum(c => c.Value), (16 * 16 + 16) / 2);
+			Assert.AreEqual((16 * 16 + 16) / 2, Matrix.Sum(c => c.Value));
 		}
 
 		[Test]

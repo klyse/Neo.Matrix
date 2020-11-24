@@ -8,14 +8,14 @@ namespace NeoMatrix
 	public static class MatrixFilter
 	{
 		/// <summary>
-		///     Sum of a rectangle
+		///     Boxed sum of a matrix
 		/// </summary>
 		/// <param name="matrix">matrix</param>
 		/// <param name="rows">rows</param>
 		/// <param name="columns">columns</param>
 		/// <param name="func">function for filter</param>
 		/// <returns>matrix with results</returns>
-		public static Matrix<double> RectFilter<TType>(this Matrix<TType> matrix, int rows, int columns, Func<Matrix<TType>, double> func)
+		public static Matrix<double> RectBoxedSum<TType>(this Matrix<TType> matrix, int rows, int columns, Func<Matrix<TType>, double> func)
 		{
 			if (rows % 2 == 0 || columns % 2 == 0) throw new Exception("Matrix rectangle rows or columns are even.");
 

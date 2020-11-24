@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -9,12 +9,12 @@ namespace NeoMatrix
 	///     Neo.Matrix
 	/// </summary>
 	/// <typeparam name="TElement">type of content</typeparam>
-	public class Matrix<TElement> : IEqualityComparer<Matrix<TElement>>
+	public record Matrix<TElement> : IEqualityComparer<Matrix<TElement>>, IEquatable<Matrix<TElement>>
 	{
 		/// <summary>
 		///     Matrix
 		/// </summary>
-		public readonly TElement[,] Mat;
+		private readonly TElement[,] _mat;
 
 		/// <summary>
 		///     Total Rows
@@ -40,8 +40,8 @@ namespace NeoMatrix
 		/// <returns></returns>
 		public TElement this[int row, int col]
 		{
-			get => Mat[row, col];
-			set => Mat[row, col] = value;
+			get => _mat[row, col];
+			set => _mat[row, col] = value;
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace NeoMatrix
 		{
 			Rows = rows;
 			Columns = columns;
-			Mat = new TElement[Rows, Columns];
+			_mat = new TElement[Rows, Columns];
 		}
 
 		/// <summary>
@@ -66,11 +66,11 @@ namespace NeoMatrix
 			Rows = data.GetLength(0);
 			Columns = data.GetLength(1);
 
-			Mat = new TElement[Rows, Columns];
+			_mat = new TElement[Rows, Columns];
 
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
-				Mat[i, j] = data[i, j];
+				_mat[i, j] = data[i, j];
 		}
 
 		/// <inheritdoc />
@@ -80,7 +80,7 @@ namespace NeoMatrix
 		/// <param name="a">first matrix</param>
 		/// <param name="b">second matrix</param>
 		/// <returns></returns>
-		public bool Equals(Matrix<TElement> a, Matrix<TElement> b)
+		public bool Equals(Matrix<TElement>? a, Matrix<TElement>? b)
 		{
 			if (b is null || a is null)
 				return false;
@@ -107,7 +107,7 @@ namespace NeoMatrix
 		/// <param name="f">func to create new element</param>
 		public static Matrix<TElement> NewMatrix(int rows, int columns, Func<TElement> f)
 		{
-			return NewMatrix(rows, columns, (r, c) => f.Invoke());
+			return NewMatrix(rows, columns, (_, _) => f.Invoke());
 		}
 
 		/// <summary>
@@ -142,7 +142,7 @@ namespace NeoMatrix
 		public IEnumerable<TElement> GetCol(int k)
 		{
 			for (var i = 0; i < Rows; i++)
-				yield return Mat[i, k];
+				yield return _mat[i, k];
 		}
 
 		/// <summary>
@@ -152,7 +152,7 @@ namespace NeoMatrix
 		public IEnumerable<TElement> GetRow(int k)
 		{
 			for (var i = 0; i < Columns; i++)
-				yield return Mat[k, i];
+				yield return _mat[k, i];
 		}
 
 		/// <summary>
@@ -162,7 +162,7 @@ namespace NeoMatrix
 		{
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
-				yield return Mat[i, j];
+				yield return _mat[i, j];
 		}
 
 		/// <summary>
@@ -174,7 +174,7 @@ namespace NeoMatrix
 			var matrix = new Matrix<TElement>(Rows, Columns);
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
-				matrix[i, j] = Mat[i, j];
+				matrix[i, j] = _mat[i, j];
 			return matrix;
 		}
 
@@ -188,7 +188,7 @@ namespace NeoMatrix
 
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
-				t[j, i] = Mat[i, j];
+				t[j, i] = _mat[i, j];
 
 			return t;
 		}
@@ -202,7 +202,7 @@ namespace NeoMatrix
 		/// <returns></returns>
 		public TElement GetAbove(int row, int column)
 		{
-			return Mat[row - 1, column];
+			return _mat[row - 1, column];
 		}
 
 		/// <summary>
@@ -213,7 +213,7 @@ namespace NeoMatrix
 		/// <returns></returns>
 		public TElement GetBelow(int row, int column)
 		{
-			return Mat[row + 1, column];
+			return _mat[row + 1, column];
 		}
 
 		/// <summary>
@@ -224,7 +224,7 @@ namespace NeoMatrix
 		/// <returns></returns>
 		public TElement GetLeft(int row, int column)
 		{
-			return Mat[row, column - 1];
+			return _mat[row, column - 1];
 		}
 
 		/// <summary>
@@ -235,23 +235,23 @@ namespace NeoMatrix
 		/// <returns></returns>
 		public TElement GetRight(int row, int column)
 		{
-			return Mat[row, column + 1];
+			return _mat[row, column + 1];
 		}
 
 		/// <summary>
-		///     Returns matrix subset of a given region
+		///     Returns a rectangle sized matrix of elements around the center
 		/// </summary>
 		/// <param name="region">region</param>
 		/// <returns>Matrix according dimensions from region</returns>
-		public Matrix<TElement> GetRect(Region region)
+		public Matrix<TElement> GetRect(Rectangle region)
 		{
 			var t = new Matrix<TElement>(region.Height, region.Width);
 
-			var r = 0;
-			var c = 0;
-			for (var i = region.Top; i < region.Bottom; i++, r++, c = 0)
-			for (var j = region.Left; j < region.Right; j++, c++)
-				t[r, c] = Mat[i, j];
+			var r1 = 0;
+			var c1 = 0;
+			for (var r2 = region.Top; r2 < region.Bottom; r2++, r1++, c1 = 0)
+			for (var c2 = region.Left; c2 < region.Right; c2++, c1++)
+				t[r1, c1] = _mat[r2, c2];
 
 			return t;
 		}
@@ -265,18 +265,9 @@ namespace NeoMatrix
 		/// <param name="columns">columns of rectangle</param>
 		public Matrix<TElement> GetRect(int centerRow, int centerColumn, int rows, int columns)
 		{
-			var reg = Region.FromCenter(centerRow, centerColumn, rows, columns);
+			var reg = RegionHelper.FromCenter(centerRow, centerColumn, rows, columns);
 
 			return GetRect(reg);
-		}
-
-		/// <summary>
-		///     Returns a rectangle sized matrix of elements around the center
-		/// </summary>
-		/// <param name="rect">rectangle</param>
-		public Matrix<TElement> GetRect(Rectangle rect)
-		{
-			return GetRect(rect.Y, rect.X, rect.Height, rect.Width);
 		}
 
 		/// <summary>
@@ -317,21 +308,19 @@ namespace NeoMatrix
 		{
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
-				f.Invoke(Mat[i, j], i, j);
+				f.Invoke(_mat[i, j], i, j);
 		}
 
 		/// <summary>
 		///     Checks if current instance is to another
 		/// </summary>
-		/// <param name="obj">instance to compare</param>
+		/// <param name="other">instance to compare</param>
 		/// <returns>true if equal, false if not</returns>
-		public override bool Equals(object obj)
+		public virtual bool Equals(Matrix<TElement>? other)
 		{
-			if (ReferenceEquals(null, obj)) return false;
-			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != GetType()) return false;
-			return Equals(this, (Matrix<TElement>)obj);
+			return Equals(this, other);
 		}
+
 
 		/// <summary>
 		///     Get Hashcode for matrix. Every element in the array is evaluated.
@@ -346,12 +335,12 @@ namespace NeoMatrix
 					var flatView = GetFlat().ToList();
 					var len = flatView.Count;
 					var hc = len;
-					for (var i = 0; i < len; ++i) hc = unchecked(hc * 314159 + flatView[i].GetHashCode());
+					for (var i = 0; i < len; ++i) hc = unchecked(hc * 314159 + flatView[i]?.GetHashCode() ?? 0);
 
 					return hc;
 				}
 
-				var hashCode = Mat != null ? MatHashCode() : 0;
+				var hashCode = _mat != null ? MatHashCode() : 0;
 				hashCode = (hashCode * 397) ^ Rows;
 				hashCode = (hashCode * 397) ^ Columns;
 				return hashCode;

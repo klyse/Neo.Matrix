@@ -30,7 +30,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetRectSum_CorrectSize()
 		{
-			var sum = Matrix.RectFilter(3, 3, m => m.Sum(c => c.Value));
+			var sum = Matrix.RectBoxedSum(3, 3, m => m.Sum(c => c.Value));
 
 			Assert.AreEqual(2, sum.Rows);
 			Assert.AreEqual(2, sum.Columns);
@@ -44,7 +44,7 @@ namespace NeoMatrix.Test
 		[TestCase(5, 5)]
 		public void GetRectSum_NotAllowedDimension(int cols, int width)
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => Matrix.RectFilter(cols, width, matrix => matrix.Sum(c => c.Value)));
+			Assert.Throws<IndexOutOfRangeException>(() => Matrix.RectBoxedSum(cols, width, matrix => matrix.Sum(c => c.Value)));
 		}
 
 		[Test]
@@ -56,9 +56,9 @@ namespace NeoMatrix.Test
 												{ 90, 99 }
 											});
 
-			var sum = Matrix.RectFilter(3, 3, m => m.Sum(c => c.Value));
+			var sum = Matrix.RectBoxedSum(3, 3, m => m.Sum(c => c.Value));
 
-			Assert.AreEqual(sum, matrix);
+			Assert.AreEqual(matrix, sum);
 		}
 
 		[Test]
@@ -69,10 +69,10 @@ namespace NeoMatrix.Test
 																		   Value = new Random().Next(0, 3000)
 																	   });
 
-			var filtered = matrix.RectFilter(11, 11, m => m.Average(c => c.Value));
+			var filtered = matrix.RectBoxedSum(11, 11, m => m.Average(c => c.Value));
 
-			//matrix.ToBitmap(c => c.Value).Save("C:\\Users\\Klaus\\Downloads\\test.bmp");
-			//filtered.ToBitmap(c => c).Save("C:\\Users\\Klaus\\Downloads\\test1.bmp");
+			// matrix.ToBitmap(c => c.Value).Save("C:\\Users\\Klaus\\Downloads\\test.bmp");
+			// filtered.ToBitmap(c => c).Save("C:\\Users\\Klaus\\Downloads\\test1.bmp");
 			Assert.NotNull(filtered);
 		}
 
@@ -82,7 +82,7 @@ namespace NeoMatrix.Test
 		[TestCase(4, 3)]
 		public void RectSumFilter_DimensionAreEven(int cols, int width)
 		{
-			Assert.Throws<Exception>(() => Matrix.RectFilter(cols, width, m => m.Sum(c => c.Value)));
+			Assert.Throws<Exception>(() => Matrix.RectBoxedSum(cols, width, m => m.Sum(c => c.Value)));
 		}
 	}
 }
