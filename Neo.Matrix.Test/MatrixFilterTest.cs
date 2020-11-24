@@ -1,4 +1,5 @@
 ﻿using System;
+using NeoMatrix.Exceptions;
 using NUnit.Framework;
 
 namespace NeoMatrix.Test
@@ -42,9 +43,9 @@ namespace NeoMatrix.Test
 		[TestCase(5, 1)]
 		[TestCase(1, 5)]
 		[TestCase(5, 5)]
-		public void RectBoxedSum_NotAllowedDimension(int cols, int width)
+		public void RectBoxedSum_NotAllowedDimension(int rows, int columns)
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => Matrix.RectBoxedSum(cols, width, matrix => matrix.Sum(c => c.Value)));
+			Assert.Throws<OutOfRangeException>(() => Matrix.RectBoxedSum(rows, columns, matrix => matrix.Sum(c => c.Value)));
 		}
 
 		[Test]
@@ -77,12 +78,19 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
-		[TestCase(0, 0)]
-		[TestCase(3, 2)]
+		[TestCase(0, 1)]
 		[TestCase(4, 3)]
-		public void RectBoxedSum_DimensionAreEven(int cols, int width)
+		public void RectBoxedSum_EvenRows_ThrowsErrors(int rows, int columns)
 		{
-			Assert.Throws<Exception>(() => Matrix.RectBoxedSum(cols, width, m => m.Sum(c => c.Value)));
+			Assert.Throws<EvenRowsException>(() => Matrix.RectBoxedSum(rows, columns, m => m.Sum(c => c.Value)));
+		}
+
+		[Test]
+		[TestCase(1, 0)]
+		[TestCase(5, 4)]
+		public void RectBoxedSum_EvenColumns_ThrowsErrors(int rows, int columns)
+		{
+			Assert.Throws<EvenColumnsException>(() => Matrix.RectBoxedSum(rows, columns, m => m.Sum(c => c.Value)));
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using NeoMatrix.Exceptions;
 
 namespace NeoMatrix
 {
@@ -17,12 +18,11 @@ namespace NeoMatrix
 		/// <returns>matrix with results</returns>
 		public static Matrix<double> RectBoxedSum<TType>(this Matrix<TType> matrix, int rows, int columns, Func<Matrix<TType>, double> func)
 		{
-			if (rows % 2 == 0 || columns % 2 == 0) throw new Exception("Matrix rectangle rows or columns are even.");
+			EvenRowsException.Check(rows);
+			EvenColumnsException.Check(columns);
 
-			if (columns > matrix.Columns - 1 ||
-			    rows > matrix.Rows - 1 ||
-			    columns <= 0 || rows <= 0)
-				throw new IndexOutOfRangeException("Rectangle is not in valid range.");
+			OutOfRangeException.Check(columns, 0, matrix.Columns);
+			OutOfRangeException.Check(rows, 0, matrix.Rows);
 
 			var colOffset = (columns - 1) / 2;
 			var rowOffset = (rows - 1) / 2;
@@ -32,6 +32,7 @@ namespace NeoMatrix
 
 			var returnMat = new Matrix<double>(resRows, resCols);
 
+			// k.p. todo: save already calculated values to speedup algorithm
 			for (var i = rowOffset; i < matrix.Rows - rowOffset; i++)
 			for (var j = colOffset; j < matrix.Columns - colOffset; j++)
 				returnMat[i - rowOffset, j - colOffset] = func(matrix.GetRect(i, j, columns, rows));

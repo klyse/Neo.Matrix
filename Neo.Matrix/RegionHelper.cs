@@ -1,5 +1,5 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
+using NeoMatrix.Exceptions;
 
 namespace NeoMatrix
 {
@@ -11,14 +11,14 @@ namespace NeoMatrix
 		/// <summary>
 		///     Create rectangle from top left coordinates and height / width
 		/// </summary>
-		/// <param name="row">top row</param>
-		/// <param name="column">left column</param>
+		/// <param name="y">top row</param>
+		/// <param name="x">left column</param>
 		/// <param name="height">total height</param>
 		/// <param name="width">total width</param>
 		/// <returns>a new rectangle</returns>
-		public static Rectangle FromTopLeft(int row, int column, int height, int width)
+		public static Rectangle FromTopLeft(int y, int x, int height, int width)
 		{
-			var region = new Rectangle(column, row, width, height);
+			var region = new Rectangle(x, y, width, height);
 
 			return region;
 		}
@@ -26,23 +26,26 @@ namespace NeoMatrix
 		/// <summary>
 		///     Create rectangle from center coordinates and height / width
 		/// </summary>
-		/// <param name="row">center row</param>
-		/// <param name="column">center column</param>
-		/// <param name="height">total height</param>
-		/// <param name="width">total width</param>
+		/// <param name="y">center row</param>
+		/// <param name="x">center column</param>
+		/// <param name="rows">total height</param>
+		/// <param name="columns">total width</param>
 		/// <returns>a new rectangle</returns>
-		public static Rectangle FromCenter(int row, int column, int height, int width)
+		public static Rectangle FromCenter(int y, int x, int rows, int columns)
 		{
-			if (height % 2 == 0 || width % 2 == 0) throw new Exception("Region height or with is even.");
-			if (height <= 1 || width <= 1) throw new Exception("Region height or with is to small.");
+			EvenRowsException.Check(rows);
+			EvenColumnsException.Check(columns);
 
-			var relHeight = (height - 1) / 2;
-			var relWidth = (width - 1) / 2;
+			OutOfRangeException.Check(rows, 1);
+			OutOfRangeException.Check(columns, 1);
 
-			var top = row - relHeight;
-			var left = column - relWidth;
+			var relHeight = (rows - 1) / 2;
+			var relWidth = (columns - 1) / 2;
 
-			var region = new Rectangle(left, top, width, height);
+			var top = y - relHeight;
+			var left = x - relWidth;
+
+			var region = new Rectangle(left, top, columns, rows);
 
 			return region;
 		}

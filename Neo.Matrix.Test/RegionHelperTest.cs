@@ -1,4 +1,5 @@
 ﻿using System;
+using NeoMatrix.Exceptions;
 using NUnit.Framework;
 
 namespace NeoMatrix.Test
@@ -89,7 +90,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void FromCenter_ReturnRegion_ToSmallHeight_ThrowsError()
 		{
-			Assert.Catch<Exception>(() => RegionHelper.FromCenter(5, 10, 5, 1));
+			Assert.Catch<OutOfRangeException>(() => RegionHelper.FromCenter(5, 10, 5, 1));
 		}
 
 		[Test]
