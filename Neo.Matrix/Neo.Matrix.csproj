@@ -6,17 +6,13 @@
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-		<Authors>derKlyse</Authors>
+		<Authors>Klyse</Authors>
 		<Description>This is a small Matrix helper</Description>
 		<RepositoryUrl>https://github.com/klyse/Neo.Matrix</RepositoryUrl>
 		<License>https://github.com/klyse/Neo.Matrix/blob/master/LICENSE</License>
 		<PackageProjectUrl>https://github.com/klyse/Neo.Matrix</PackageProjectUrl>
 		<RootNamespace>NeoMatrix</RootNamespace>
 		<Version>1.4.3</Version>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<DocumentationFile>.\Neo.Matrix.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

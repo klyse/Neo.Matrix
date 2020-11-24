@@ -340,7 +340,7 @@ namespace NeoMatrix
 					return hc;
 				}
 
-				var hashCode = _mat != null ? MatHashCode() : 0;
+				var hashCode = MatHashCode();
 				hashCode = (hashCode * 397) ^ Rows;
 				hashCode = (hashCode * 397) ^ Columns;
 				return hashCode;
