@@ -22,10 +22,12 @@ namespace NeoMatrix.Test
 		{
 			var roi = RegionHelper.FromCenter(5, 10, 5, 9);
 
+			Assert.AreEqual(5, roi.Height);
+			Assert.AreEqual(9, roi.Width);
 			Assert.AreEqual(3, roi.Top);
-			Assert.AreEqual(7, roi.Bottom);
+			Assert.AreEqual(8, roi.Bottom);
 			Assert.AreEqual(6, roi.Left);
-			Assert.AreEqual(14, roi.Right);
+			Assert.AreEqual(15, roi.Right);
 		}
 
 		[Test]
@@ -56,10 +58,13 @@ namespace NeoMatrix.Test
 			 * 9	|  |  |  |  |  |  |  |  |  |  |
 			 * y	+--+--+--+--+--+--+--+--+--+--+
 			 */
+			
+			Assert.AreEqual(3, roi.Height);
+			Assert.AreEqual(3, roi.Width);
 			Assert.AreEqual(4, roi.Top);
-			Assert.AreEqual(6, roi.Bottom);
+			Assert.AreEqual(7, roi.Bottom);
 			Assert.AreEqual(5, roi.Left);
-			Assert.AreEqual(7, roi.Right);
+			Assert.AreEqual(8, roi.Right);
 		}
 
 		[Test]
