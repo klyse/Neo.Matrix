@@ -110,7 +110,7 @@ namespace NeoMatrix
 		/// <param name="f">func to create new element</param>
 		public static Matrix<TElement> NewMatrix(int rows, int columns, Func<TElement> f)
 		{
-			return NewMatrix(rows, columns, (_, _) => f.Invoke());
+			return NewMatrix(rows, columns, (_, _) => f());
 		}
 
 		/// <summary>
@@ -125,7 +125,7 @@ namespace NeoMatrix
 
 			for (var i = 0; i < rows; i++)
 			for (var j = 0; j < columns; j++)
-				matrix[i, j] = f.Invoke(i, j);
+				matrix[i, j] = f(i, j);
 
 			return matrix;
 		}
@@ -145,7 +145,7 @@ namespace NeoMatrix
 		public IEnumerable<TElement> GetCol(int k)
 		{
 			for (var i = 0; i < Rows; i++)
-				yield return _mat[i, k];
+				yield return this[i, k];
 		}
 
 		/// <summary>
@@ -165,7 +165,7 @@ namespace NeoMatrix
 		{
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
-				yield return _mat[i, j];
+				yield return this[i, j];
 		}
 
 		/// <summary>
@@ -177,7 +177,7 @@ namespace NeoMatrix
 			var matrix = new Matrix<TElement>(Rows, Columns);
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
-				matrix[i, j] = _mat[i, j];
+				matrix[i, j] = this[i, j];
 			return matrix;
 		}
 
@@ -191,7 +191,7 @@ namespace NeoMatrix
 
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
-				t[j, i] = _mat[i, j];
+				t[j, i] = this[i, j];
 
 			return t;
 		}
@@ -205,7 +205,7 @@ namespace NeoMatrix
 		/// <returns></returns>
 		public TElement GetAbove(int row, int column)
 		{
-			return _mat[row - 1, column];
+			return this[row - 1, column];
 		}
 
 		/// <summary>
@@ -216,7 +216,7 @@ namespace NeoMatrix
 		/// <returns></returns>
 		public TElement GetBelow(int row, int column)
 		{
-			return _mat[row + 1, column];
+			return this[row + 1, column];
 		}
 
 		/// <summary>
@@ -227,7 +227,7 @@ namespace NeoMatrix
 		/// <returns></returns>
 		public TElement GetLeft(int row, int column)
 		{
-			return _mat[row, column - 1];
+			return this[row, column - 1];
 		}
 
 		/// <summary>
@@ -238,7 +238,7 @@ namespace NeoMatrix
 		/// <returns></returns>
 		public TElement GetRight(int row, int column)
 		{
-			return _mat[row, column + 1];
+			return this[row, column + 1];
 		}
 
 		/// <summary>
@@ -254,7 +254,7 @@ namespace NeoMatrix
 			var c1 = 0;
 			for (var r2 = region.Top; r2 < region.Bottom; r2++, r1++, c1 = 0)
 			for (var c2 = region.Left; c2 < region.Right; c2++, c1++)
-				t[r1, c1] = _mat[r2, c2];
+				t[r1, c1] = this[r2, c2];
 
 			return t;
 		}
@@ -311,7 +311,7 @@ namespace NeoMatrix
 		{
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
-				f.Invoke(_mat[i, j], i, j);
+				f(this[i, j], i, j);
 		}
 
 
