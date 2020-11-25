@@ -228,5 +228,27 @@ namespace NeoMatrix.Test
 			Console.WriteLine($"Not optimized: {reference.Elapsed} optimized: {optimizedAlgo.Elapsed}");
 			Assert.GreaterOrEqual(reference.ElapsedMilliseconds, optimizedAlgo.ElapsedMilliseconds);
 		}
+
+		[Test]
+		[Combinatorial]
+		public void RectBoxedSum_CheckAvgResult([Values(300, 100, 30)] int matRows, [Values(300, 100, 30)] int matColumns, [Values(11, 5)] int rows, [Values(11, 5)] int columns, [Values(1, 2, 5, 10)] int yStride, [Values(1, 2, 5, 10)] int xStride)
+		{
+			// some combinations are illegal, skip them now!
+			if ((300 - columns + 1) % xStride != 0 ||
+			    (300 - rows + 1) % yStride != 0 ||
+			    columns < xStride ||
+			    rows < yStride)
+				Assert.Pass("skipped: invalid combination");
+
+			var matrix = Matrix<DummyObject>.NewMatrix(matRows, matColumns, () => new DummyObject
+			{
+				Value = new Random().Next(0, 3000)
+			});
+
+			var expected = matrix.RectBoxedAlgo(rows, columns, (_, _, mat) => mat.Sum(c => c.Value), yStride, xStride);
+			var result = matrix.RectBoxedSum(rows, columns, c => c.Value, yStride, xStride);
+
+			Assert.AreEqual(expected, result);
+		}
 	}
 }
