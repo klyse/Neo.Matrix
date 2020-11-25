@@ -6,7 +6,6 @@ namespace NeoMatrix.Test
 	{
 		public LongRunningAttribute() : base("LongRunning")
 		{
-			
 		}
 	}
 }
