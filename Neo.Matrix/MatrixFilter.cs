@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using NeoMatrix.Exceptions;
 
 namespace NeoMatrix
@@ -14,11 +15,148 @@ namespace NeoMatrix
 		/// <param name="matrix">matrix</param>
 		/// <param name="rows">rows</param>
 		/// <param name="columns">columns</param>
-		/// <param name="func">function for filter</param>
+		/// <param name="func">function with algo</param>
+		/// <param name="yStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Rows"/> - <paramref name="rows"/> +1)
+		/// </param>
+		/// <param name="xStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Columns"/> - <paramref name="columns" /> +1)
+		/// </param>
+		/// <returns>
+		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows"/> - <paramref name="rows" /> +1)
+		///     x (<paramref name="matrix.Columns"/> - <paramref name="columns" /> +1) containing the avg value of the box
+		/// </returns>
+		public static Matrix<double> RectBoxedAlgo<TType>(this Matrix<TType> matrix, int rows, int columns, Func<int, int, Matrix<TType>, double> func, int yStride = 1, int xStride = 1)
+		{
+			CalculateMatrixParameters(matrix, rows, columns, yStride, xStride, out var rowOffset, out var colOffset, out var remainingRows, out var remainingColumns);
+
+			var returnMat = new Matrix<double>(remainingRows, remainingColumns);
+
+			var column = 0;
+			var row = 0;
+			for (var i = rowOffset; i < matrix.Rows - rowOffset; i += yStride, row++, column = 0)
+			for (var j = colOffset; j < matrix.Columns - colOffset; j += xStride, column++)
+				returnMat[row, column] = func(i, j, matrix.GetRect(i, j, rows, columns));
+
+			return returnMat;
+		}
+
+		/// <summary>
+		///     Calculate the average within a moving box
+		/// </summary>
+		/// <param name="matrix">self</param>
+		/// <param name="rows">box rows</param>
+		/// <param name="columns">box columns</param>
+		/// <param name="selector">selector for property</param>
+		/// <param name="yStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Rows"/> - <paramref name="rows" /> +1)
+		/// </param>
+		/// <param name="xStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Columns"/> - <paramref name="columns" /> +1)
+		/// </param>
+		/// <returns>
+		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows"/> - <paramref name="rows" /> +1)
+		///     x (<paramref name="matrix.Columns"/> - <paramref name="columns" /> +1) containing the avg value of the box
+		/// </returns>
+		public static Matrix<double> RectBoxedAvg<TType>(this Matrix<TType> matrix, int rows, int columns, Expression<Func<TType, double>> selector, int yStride = 1, int xStride = 1)
+		{
+			CalculateMatrixParameters(matrix, rows, columns, yStride, xStride, out var rowOffset, out var colOffset, out var remainingRows, out var remainingColumns);
+
+			var cacheMatrix = CalculateRowCacheMatrix(matrix, selector, rowOffset);
+
+			var returnMat = new Matrix<double>(remainingRows, remainingColumns);
+			double space = rows * columns;
+
+			var column = 0;
+			var row = 0;
+			for (var i = rowOffset; i < matrix.Rows - rowOffset; i += yStride, row++, column = 0)
+			for (var j = colOffset; j < matrix.Columns - colOffset; j += xStride, column++)
+			{
+				double sum = 0;
+				for (var c = j - colOffset; c <= j + colOffset; c++)
+					sum += cacheMatrix[i, c];
+
+				returnMat[row, column] = sum / space;
+			}
+
+			return returnMat;
+		}
+
+		/// <summary>
+		///     Calculate the sum within a moving box
+		/// </summary>
+		/// <param name="matrix">self</param>
+		/// <param name="rows">box rows</param>
+		/// <param name="columns">box columns</param>
+		/// <param name="selector">selector for property</param>
+		/// <param name="yStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Rows"/> - <paramref name="rows" /> +1)
+		/// </param>
+		/// <param name="xStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Columns"/> - <paramref name="columns" /> +1)
+		/// </param>
+		/// <returns>
+		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows"/> - <paramref name="rows" /> +1)
+		///     x (<paramref name="matrix.Columns"/> - <paramref name="columns" /> +1) containing the sum value of the box
+		/// </returns>
+		public static Matrix<double> RectBoxedSum<TType>(this Matrix<TType> matrix, int rows, int columns, Expression<Func<TType, double>> selector, int yStride = 1, int xStride = 1)
+		{
+			CalculateMatrixParameters(matrix, rows, columns, yStride, xStride, out var rowOffset, out var colOffset, out var remainingRows, out var remainingColumns);
+
+			var cacheMatrix = CalculateRowCacheMatrix(matrix, selector, rowOffset);
+
+			var returnMat = new Matrix<double>(remainingRows, remainingColumns);
+
+			var column = 0;
+			var row = 0;
+			for (var i = rowOffset; i < matrix.Rows - rowOffset; i += yStride, row++, column = 0)
+			for (var j = colOffset; j < matrix.Columns - colOffset; j += xStride, column++)
+			{
+				double sum = 0;
+				for (var c = j - colOffset; c <= j + colOffset; c++)
+					sum += cacheMatrix[i, c];
+
+				returnMat[row, column] = sum;
+			}
+
+			return returnMat;
+		}
+
+		/// <summary>
+		///     Calculates a cache matrix to speedup algorithms to avoid multiple calculation of the same fields
+		/// </summary>
+		private static Matrix<double> CalculateRowCacheMatrix<TType>(Matrix<TType> matrix, Expression<Func<TType, double>> selector, int rowOffset)
+		{
+			var cacheMatrix = new Matrix<double>(matrix.Rows, matrix.Columns);
+
+			var func = selector.Compile();
+
+			for (var i = rowOffset; i < matrix.Rows - rowOffset; i++)
+			for (var j = 0; j < matrix.Columns; j++)
+			for (var r = i - rowOffset; r <= i + rowOffset; r++)
+				cacheMatrix[i, j] += func(matrix[r, j]!);
+			return cacheMatrix;
+		}
+
+		/// <summary>
+		///     Check if parameters are valid and calculate important parameters for the algorithm to work
+		/// </summary>
+		/// <param name="matrix"></param>
+		/// <param name="rows">box rows</param>
+		/// <param name="columns">box columns</param>
 		/// <param name="yStride">steps in y direction</param>
 		/// <param name="xStride">steps in x direction</param>
-		/// <returns>matrix with results</returns>
-		public static Matrix<double> RectBoxedAlgo<TType>(this Matrix<TType> matrix, int rows, int columns, Func<int, int, Matrix<TType>, double> func, int yStride = 1, int xStride = 1)
+		/// <param name="rowOffset">top and bottom space from box</param>
+		/// <param name="colOffset">left and right space from box</param>
+		/// <param name="remainingRows">new height of matrix</param>
+		/// <param name="remainingColumns">new width of matrix</param>
+		private static void CalculateMatrixParameters<TType>(Matrix<TType> matrix, int rows, int columns, int yStride, int xStride, out int rowOffset, out int colOffset, out int remainingRows, out int remainingColumns)
 		{
 			EvenRowsException.Check(rows);
 			EvenColumnsException.Check(columns);
@@ -29,31 +167,27 @@ namespace NeoMatrix
 			OutOfRangeException.Check(xStride, 0);
 			OutOfRangeException.Check(yStride, 0);
 
-			var rowOffset = (rows - 1) / 2;
-			var colOffset = (columns - 1) / 2;
+			if (yStride > rows)
+				throw new MatrixException("yStride must be <= rows");
 
-			var resRows = matrix.Rows - 2 * rowOffset;
-			var resCols = matrix.Columns - 2 * colOffset;
+			if (xStride > columns)
+				throw new MatrixException("xStride must be <= columns");
 
-			if (resRows % yStride != 0)
+
+			rowOffset = (rows - 1) / 2;
+			colOffset = (columns - 1) / 2;
+
+			remainingRows = matrix.Rows - 2 * rowOffset;
+			remainingColumns = matrix.Columns - 2 * colOffset;
+
+			if (remainingRows % yStride != 0)
 				throw new MatrixException("rows must be divisible by stride");
 
-			if (resCols % xStride != 0)
+			if (remainingColumns % xStride != 0)
 				throw new MatrixException("columns must be divisible by stride");
 
-			resRows /= yStride;
-			resCols /= xStride;
-
-			var returnMat = new Matrix<double>(resRows, resCols);
-
-			// k.p. todo: save already calculated values to speedup algorithm
-			var column = 0;
-			var row = 0;
-			for (var i = rowOffset; i < matrix.Rows - rowOffset; i += yStride, row++, column = 0)
-			for (var j = colOffset; j < matrix.Columns - colOffset; j += xStride, column++)
-				returnMat[row, column] = func(i, j, matrix.GetRect(i, j, columns, rows));
-
-			return returnMat;
+			remainingRows /= yStride;
+			remainingColumns /= xStride;
 		}
 	}
 }
