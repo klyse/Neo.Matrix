@@ -21,7 +21,7 @@ namespace NeoMatrix
 		{
 			var func = selector.Compile();
 
-			var v = matrix.GetFlat().Sum(c => func(c));
+			var v = matrix.GetFlat().Sum(c => func(c!));
 			return v;
 		}
 
@@ -35,7 +35,7 @@ namespace NeoMatrix
 		public static double Average<TMatrixValueType>(this Matrix<TMatrixValueType> matrix, Expression<Func<TMatrixValueType, double>> selector)
 		{
 			var func = selector.Compile();
-			var avg = matrix.GetFlat().Average(c => func(c));
+			var avg = matrix.GetFlat().Average(c => func(c!));
 
 			return avg;
 		}
@@ -50,7 +50,7 @@ namespace NeoMatrix
 		public static double Min<TMatrixValueType>(this Matrix<TMatrixValueType> matrix, Expression<Func<TMatrixValueType, double>> selector)
 		{
 			var func = selector.Compile();
-			var minV = matrix.GetFlat().Min(c => func(c));
+			var minV = matrix.GetFlat().Min(c => func(c!));
 			return minV;
 		}
 
@@ -64,7 +64,7 @@ namespace NeoMatrix
 		public static double Max<TMatrixValueType>(this Matrix<TMatrixValueType> matrix, Expression<Func<TMatrixValueType, double>> selector)
 		{
 			var func = selector.Compile();
-			var maxV = matrix.GetFlat().Max(c => func(c));
+			var maxV = matrix.GetFlat().Max(c => func(c!));
 			return maxV;
 		}
 
@@ -88,7 +88,7 @@ namespace NeoMatrix
 
 			matrix.ExecuteOnAll((t, r, c) =>
 			{
-				var val = 255 - (int) (delta * func(t));
+				var val = 255 - (int) (delta * func(t!));
 				bmp.SetPixel(c, r, Color.FromArgb(val, val, val));
 			});
 			return bmp;
@@ -106,7 +106,7 @@ namespace NeoMatrix
 			var bmp = new Bitmap(matrix.Columns, matrix.Rows);
 
 
-			matrix.ExecuteOnAll((t, r, c) => { bmp.SetPixel(c, r, color(t)); });
+			matrix.ExecuteOnAll((t, r, c) => { bmp.SetPixel(c, r, color(t!)); });
 			return bmp;
 		}
 
@@ -121,7 +121,7 @@ namespace NeoMatrix
 		{
 			var bmp = new Bitmap(matrix.Columns, matrix.Rows);
 
-			matrix.ExecuteOnAll((t, r, c) => { bmp.SetPixel(c, r, color(r, c, t)); });
+			matrix.ExecuteOnAll((t, r, c) => { bmp.SetPixel(c, r, color(r, c, t!)); });
 			return bmp;
 		}
 	}

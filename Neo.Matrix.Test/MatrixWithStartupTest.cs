@@ -11,7 +11,7 @@ namespace NeoMatrix.Test
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
-			Mat = new Matrix<int>(new[,]
+			_mat = new Matrix<int>(new[,]
 			{
 				{1, 2, 3},
 				{4, 5, 6},
@@ -19,55 +19,55 @@ namespace NeoMatrix.Test
 			});
 		}
 
-		public Matrix<int> Mat { get; set; }
+		private Matrix<int> _mat = null!;
 
 		[Test]
 		public void ArrayAccess_ReturnsCorrectValue()
 		{
-			Assert.AreEqual(1, Mat[0, 0]);
-			Assert.AreEqual(2, Mat[0, 1]);
-			Assert.AreEqual(3, Mat[0, 2]);
-			Assert.AreEqual(5, Mat[1, 1]);
-			Assert.AreEqual(9, Mat[2, 2]);
+			Assert.AreEqual(1, _mat[0, 0]);
+			Assert.AreEqual(2, _mat[0, 1]);
+			Assert.AreEqual(3, _mat[0, 2]);
+			Assert.AreEqual(5, _mat[1, 1]);
+			Assert.AreEqual(9, _mat[2, 2]);
 		}
 
 		[Test]
 		public void Duplicate_ReturnsDuplicate()
 		{
-			var duplicate = Mat.Duplicate();
+			var duplicate = _mat.Duplicate();
 
-			Assert.That(Mat.GetFlat(), Is.EqualTo(duplicate.GetFlat()));
-			Assert.That(Mat, Is.Not.SameAs(duplicate));
+			Assert.That(_mat.GetFlat(), Is.EqualTo(duplicate.GetFlat()));
+			Assert.That(_mat, Is.Not.SameAs(duplicate));
 		}
 
 		[Test]
 		public void GetAbove_OutOfRange_ThrowsException()
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetAbove(0, 0));
+			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetAbove(0, 0));
 		}
 
 		[Test]
 		public void GetAbove_ReturnsValue()
 		{
-			Assert.AreEqual(2, Mat.GetAbove(1, 1));
+			Assert.AreEqual(2, _mat.GetAbove(1, 1));
 		}
 
 		[Test]
 		public void GetBelow_OutOfRange_ThrowsException()
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetBelow(2, 2));
+			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetBelow(2, 2));
 		}
 
 		[Test]
 		public void GetBelow_ReturnsValue()
 		{
-			Assert.AreEqual(8, Mat.GetBelow(1, 1));
+			Assert.AreEqual(8, _mat.GetBelow(1, 1));
 		}
 
 		[Test]
 		public void GetCol_ReturnsColumn()
 		{
-			var col = Mat.GetCol(1).ToList();
+			var col = _mat.GetCol(1).ToList();
 
 			var expectedCol = new List<int> {2, 5, 8};
 
@@ -77,7 +77,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetFlat_ReturnsUniDimensionalView()
 		{
-			var col = Mat.GetFlat().ToList();
+			var col = _mat.GetFlat().ToList();
 
 			var expectedCol = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
@@ -87,31 +87,31 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetLeft_OutOfRange_ThrowsException()
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetLeft(0, 0));
+			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetLeft(0, 0));
 		}
 
 		[Test]
 		public void GetLeft_ReturnsValue()
 		{
-			Assert.AreEqual(4, Mat.GetLeft(1, 1));
+			Assert.AreEqual(4, _mat.GetLeft(1, 1));
 		}
 
 		[Test]
 		public void GetRight_OutOfRange_ThrowsException()
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetRight(2, 2));
+			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetRight(2, 2));
 		}
 
 		[Test]
 		public void GetRight_ReturnsValue()
 		{
-			Assert.AreEqual(6, Mat.GetRight(1, 1));
+			Assert.AreEqual(6, _mat.GetRight(1, 1));
 		}
 
 		[Test]
 		public void GetRow_ReturnsRow()
 		{
-			var row = Mat.GetRow(1).ToList();
+			var row = _mat.GetRow(1).ToList();
 
 			var expectedRow = new List<int> {4, 5, 6};
 
@@ -121,7 +121,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void Transpose_TransposesMatrix()
 		{
-			var x = Mat.Transpose().GetFlat();
+			var x = _mat.Transpose().GetFlat();
 
 			var expectedCol = new List<int> {1, 4, 7, 2, 5, 8, 3, 6, 9};
 

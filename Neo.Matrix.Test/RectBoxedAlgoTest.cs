@@ -11,7 +11,7 @@ namespace NeoMatrix.Test
 		public void SetUp()
 		{
 			var val = 0;
-			Matrix = Matrix<DummyObject>.NewMatrix(4, 4, () =>
+			_matrix = Matrix<DummyObject>.NewMatrix(4, 4, () =>
 			{
 				val++;
 				return new DummyObject
@@ -21,17 +21,17 @@ namespace NeoMatrix.Test
 			});
 		}
 
-		public class DummyObject
+		private class DummyObject
 		{
 			public int Value { get; set; }
 		}
 
-		public Matrix<DummyObject> Matrix { get; set; }
+		private Matrix<DummyObject> _matrix = null!;
 
 		[Test]
 		public void RectBoxedAlgo_CorrectSize()
 		{
-			var sum = Matrix.RectBoxedAlgo(3, 3, (_, _, m) => m.Sum(c => c.Value));
+			var sum = _matrix.RectBoxedAlgo(3, 3, (_, _, m) => m.Sum(c => c.Value));
 
 			Assert.AreEqual(2, sum.Rows);
 			Assert.AreEqual(2, sum.Columns);
@@ -45,7 +45,7 @@ namespace NeoMatrix.Test
 		[TestCase(5, 5)]
 		public void RectBoxedAlgo_NotAllowedDimension(int rows, int columns)
 		{
-			Assert.Throws<OutOfRangeException>(() => Matrix.RectBoxedAlgo(rows, columns, (_, _, m) => m.Sum(c => c.Value)));
+			Assert.Throws<OutOfRangeException>(() => _matrix.RectBoxedAlgo(rows, columns, (_, _, m) => m.Sum(c => c.Value)));
 		}
 
 		[Test]
@@ -57,7 +57,7 @@ namespace NeoMatrix.Test
 				{90, 99}
 			});
 
-			var sum = Matrix.RectBoxedAlgo(3, 3, (_, _, m) => m.Sum(c => c.Value));
+			var sum = _matrix.RectBoxedAlgo(3, 3, (_, _, m) => m.Sum(c => c.Value));
 
 			Assert.AreEqual(expected, sum);
 		}
@@ -145,7 +145,7 @@ namespace NeoMatrix.Test
 		[TestCase(4, 3)]
 		public void RectBoxedAlgo_EvenRows_ThrowsErrors(int rows, int columns)
 		{
-			Assert.Throws<EvenRowsException>(() => Matrix.RectBoxedAlgo(rows, columns, (_, _, m) => m.Sum(c => c.Value)));
+			Assert.Throws<EvenRowsException>(() => _matrix.RectBoxedAlgo(rows, columns, (_, _, m) => m.Sum(c => c.Value)));
 		}
 
 		[Test]
@@ -153,7 +153,7 @@ namespace NeoMatrix.Test
 		[TestCase(5, 4)]
 		public void RectBoxedAlgo_EvenColumns_ThrowsErrors(int rows, int columns)
 		{
-			Assert.Throws<EvenColumnsException>(() => Matrix.RectBoxedAlgo(rows, columns, (_, _, m) => m.Sum(c => c.Value)));
+			Assert.Throws<EvenColumnsException>(() => _matrix.RectBoxedAlgo(rows, columns, (_, _, m) => m.Sum(c => c.Value)));
 		}
 	}
 }
