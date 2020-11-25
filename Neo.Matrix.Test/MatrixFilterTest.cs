@@ -6,7 +6,6 @@ using NUnit.Framework;
 namespace NeoMatrix.Test
 {
 	[TestFixture]
-	[Category("LongRunning")]
 	[Parallelizable(ParallelScope.All)]
 	public class MatrixFilterTest
 	{
@@ -66,6 +65,7 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
+		[LongRunning]
 		[Combinatorial]
 		public void RectBoxedAlgo_CalculateBigArray([Values(31, 11, 5)] int rows, [Values(31, 11, 5)] int columns)
 		{
@@ -81,6 +81,7 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
+		[LongRunning]
 		public void RectBoxedAlgo_CalculateBigArray_Stride2()
 		{
 			var matrix = Matrix<DummyObject>.NewMatrix(300, 300, () => new DummyObject
@@ -182,6 +183,7 @@ namespace NeoMatrix.Test
 
 		[Test]
 		[Combinatorial]
+		[LongRunning]
 		public void RectBoxedAvg_CheckAvgResult([Values(300, 100, 30)] int matRows, [Values(300, 100, 30)] int matColumns, [Values(11, 5)] int rows, [Values(11, 5)] int columns, [Values(1, 2, 5, 10)] int yStride, [Values(1, 2, 5, 10)] int xStride)
 		{
 			// some combinations are illegal, skip them now!
@@ -204,6 +206,7 @@ namespace NeoMatrix.Test
 
 		[Test]
 		[Combinatorial]
+		[LongRunning]
 		public void RectBoxedSum_CheckAvgResult([Values(300, 100, 30)] int matRows, [Values(300, 100, 30)] int matColumns, [Values(11, 5)] int rows, [Values(11, 5)] int columns, [Values(1, 2, 5, 10)] int yStride, [Values(1, 2, 5, 10)] int xStride)
 		{
 			// some combinations are illegal, skip them now!
