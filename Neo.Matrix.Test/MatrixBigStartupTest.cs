@@ -11,14 +11,14 @@ namespace NeoMatrix.Test
 		public void OneTimeSetUp()
 		{
 			var i = 0;
-			Mat = Matrix<int>.NewMatrix(9, 9, () =>
+			_mat = Matrix<int>.NewMatrix(9, 9, () =>
 			{
 				i++;
 				return i;
 			});
 		}
 
-		public Matrix<int> Mat { get; set; }
+		private Matrix<int> _mat = null!;
 
 		[Test]
 		[TestCase(33)]
@@ -26,13 +26,13 @@ namespace NeoMatrix.Test
 		[TestCase(5)]
 		public void GetBox_OutOfRange_ThrowsException(int size)
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetBox(8, 8, size));
+			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetBox(8, 8, size));
 		}
 
 		[Test]
 		public void GetBox_ReturnsBox()
 		{
-			var box = Mat.GetBox(2, 2, 3);
+			var box = _mat.GetBox(2, 2, 3);
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -47,7 +47,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetBox_ReturnsBox_TakesPointInput2()
 		{
-			var box = Mat.GetBox(new Point(3, 2), 3);
+			var box = _mat.GetBox(new Point(3, 2), 3);
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -65,13 +65,13 @@ namespace NeoMatrix.Test
 		[TestCase(5)]
 		public void GetBox_TakesPoint_OutOfRange_ThrowsException(int size)
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetBox(new Point(8, 8), size));
+			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetBox(new Point(8, 8), size));
 		}
 
 		[Test]
 		public void GetFromRegion()
 		{
-			var matReg = Mat.GetRect(RegionHelper.FromCenter(3, 2, 3, 5));
+			var matReg = _mat.GetRect(RegionHelper.FromCenter(3, 2, 3, 5));
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -89,13 +89,13 @@ namespace NeoMatrix.Test
 		[TestCase(11, 3)]
 		public void GetRect_OutOfRange_ThrowsException(int height, int width)
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetRect(1, 1, height, width));
+			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetRect(1, 1, height, width));
 		}
 
 		[Test]
 		public void GetRect_ReturnsRect()
 		{
-			var box = Mat.GetRect(2, 2, 3, 5);
+			var box = _mat.GetRect(2, 2, 3, 5);
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -110,7 +110,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetRect_ReturnsRect_TakesRectInput()
 		{
-			var box = Mat.GetRect(new Rectangle(0, 1, 5, 3));
+			var box = _mat.GetRect(new Rectangle(0, 1, 5, 3));
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -125,7 +125,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetRect_ReturnsRect_TakesRectInput2()
 		{
-			var box = Mat.GetRect(new Rectangle(1, 1, 5, 3));
+			var box = _mat.GetRect(new Rectangle(1, 1, 5, 3));
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -140,7 +140,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetRect_ReturnsRect1()
 		{
-			var box = Mat.GetRect(2, 2, 3, 3);
+			var box = _mat.GetRect(2, 2, 3, 3);
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -158,7 +158,7 @@ namespace NeoMatrix.Test
 		[TestCase(11, 3)]
 		public void GetRect_TakesRectInput_OutOfRange_ThrowsException(int height, int width)
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => Mat.GetRect(new Rectangle(1, 1, height, width)));
+			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetRect(new Rectangle(1, 1, height, width)));
 		}
 	}
 }

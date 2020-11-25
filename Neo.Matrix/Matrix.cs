@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace NeoMatrix
 {
@@ -14,7 +13,7 @@ namespace NeoMatrix
 		/// <summary>
 		///     Matrix
 		/// </summary>
-		private readonly TElement[,] _mat;
+		private readonly TElement?[,] _mat;
 
 		/// <summary>
 		///     Constructor
@@ -56,7 +55,7 @@ namespace NeoMatrix
 		/// <param name="row"></param>
 		/// <param name="col"></param>
 		/// <returns></returns>
-		public TElement this[int row, int col]
+		public TElement? this[int row, int col]
 		{
 			get => _mat[row, col];
 			set => _mat[row, col] = value;
@@ -131,6 +130,23 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
+		///     Create new matrix of element
+		/// </summary>
+		/// <param name="rows">rows</param>
+		/// <param name="columns">columns</param>
+		/// <param name="filler">fill up empty space with this value</param>
+		public static Matrix<TElement> NewMatrix(int rows, int columns, TElement? filler)
+		{
+			var matrix = new Matrix<TElement>(rows, columns);
+
+			for (var i = 0; i < rows; i++)
+			for (var j = 0; j < columns; j++)
+				matrix[i, j] = filler;
+
+			return matrix;
+		}
+
+		/// <summary>
 		///     Square Matrix
 		/// </summary>
 		public bool IsSquare()
@@ -142,7 +158,7 @@ namespace NeoMatrix
 		///     Get Matrix for one column
 		/// </summary>
 		/// <param name="k">column index</param>
-		public IEnumerable<TElement> GetCol(int k)
+		public IEnumerable<TElement?> GetCol(int k)
 		{
 			for (var i = 0; i < Rows; i++)
 				yield return this[i, k];
@@ -152,7 +168,7 @@ namespace NeoMatrix
 		///     Get Matrix for one row
 		/// </summary>
 		/// <param name="k">row index</param>
-		public IEnumerable<TElement> GetRow(int k)
+		public IEnumerable<TElement?> GetRow(int k)
 		{
 			for (var i = 0; i < Columns; i++)
 				yield return _mat[k, i];
@@ -161,7 +177,7 @@ namespace NeoMatrix
 		/// <summary>
 		///     Get Uni Dimensional Matrix view
 		/// </summary>
-		public IEnumerable<TElement> GetFlat()
+		public IEnumerable<TElement?> GetFlat()
 		{
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
@@ -203,7 +219,7 @@ namespace NeoMatrix
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
 		/// <returns></returns>
-		public TElement GetAbove(int row, int column)
+		public TElement? GetAbove(int row, int column)
 		{
 			return this[row - 1, column];
 		}
@@ -214,7 +230,7 @@ namespace NeoMatrix
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
 		/// <returns></returns>
-		public TElement GetBelow(int row, int column)
+		public TElement? GetBelow(int row, int column)
 		{
 			return this[row + 1, column];
 		}
@@ -225,7 +241,7 @@ namespace NeoMatrix
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
 		/// <returns></returns>
-		public TElement GetLeft(int row, int column)
+		public TElement? GetLeft(int row, int column)
 		{
 			return this[row, column - 1];
 		}
@@ -236,7 +252,7 @@ namespace NeoMatrix
 		/// <param name="row">current row</param>
 		/// <param name="column">current column</param>
 		/// <returns></returns>
-		public TElement GetRight(int row, int column)
+		public TElement? GetRight(int row, int column)
 		{
 			return this[row, column + 1];
 		}
@@ -295,25 +311,61 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
+		///     Add padding around matrix
+		/// </summary>
+		/// <param name="padding">for all sides</param>
+		/// <param name="filler">fill padding space up with this value</param>
+		public Matrix<TElement> AddPadding(int padding, TElement? filler = default)
+		{
+			return AddPadding(padding, padding, padding, padding, filler);
+		}
+
+		/// <summary>
+		///     Add padding around matrix
+		/// </summary>
+		/// <param name="top">padding top</param>
+		/// <param name="right">padding right</param>
+		/// <param name="bottom">padding bottom</param>
+		/// <param name="left">padding left</param>
+		/// <param name="filler">fill padding space up with this value</param>
+		public Matrix<TElement> AddPadding(int top, int right, int bottom, int left, TElement? filler = default)
+		{
+			var columns = Columns + left + right;
+			var rows = Rows + top + bottom;
+
+			var mat = NewMatrix(rows, columns, filler);
+
+			var r1 = top;
+			var c1 = left;
+			for (var r0 = 0; r0 < Rows; r0++, r1++, c1 = left)
+			for (var c0 = 0; c0 < Columns; c0++, c1++)
+				mat[r1, c1] = this[r0, c0];
+
+			return mat;
+		}
+
+		/// <summary>
 		///     Executes an <see cref="Action{T}" /> on every element
 		/// </summary>
 		/// <param name="f">Action function</param>
-		public void ExecuteOnAll(Action<TElement> f)
+		public Matrix<TElement> ExecuteOnAll(Action<TElement?> f)
 		{
 			foreach (var element in GetFlat()) f.Invoke(element);
+			return this;
 		}
 
 		/// <summary>
 		///     Executes an <see cref="Action{T}" /> on every element
 		/// </summary>
 		/// <param name="f">Action element, row, column</param>
-		public void ExecuteOnAll(Action<TElement, int, int> f)
+		public Matrix<TElement> ExecuteOnAll(Action<TElement?, int, int> f)
 		{
 			for (var i = 0; i < Rows; i++)
 			for (var j = 0; j < Columns; j++)
 				f(this[i, j], i, j);
-		}
 
+			return this;
+		}
 
 		/// <summary>
 		///     Get Hashcode for matrix. Every element in the array is evaluated.
@@ -323,17 +375,13 @@ namespace NeoMatrix
 		{
 			unchecked
 			{
-				int MatHashCode()
-				{
-					var flatView = GetFlat().ToList();
-					var len = flatView.Count;
-					var hc = len;
-					for (var i = 0; i < len; ++i) hc = unchecked(hc * 314159 + flatView[i]?.GetHashCode() ?? 0);
+				var hashCode = Rows * Columns;
 
-					return hc;
-				}
+				for (var i = 0; i < Rows; i++)
+				for (var j = 0; j < Columns; j++)
+					hashCode ^= (16777619 * i + 999999937 * j) ^ this[i, j]?.GetHashCode() ?? i * j; // todo null values???
 
-				var hashCode = MatHashCode();
+
 				hashCode = (hashCode * 397) ^ Rows;
 				hashCode = (hashCode * 397) ^ Columns;
 				return hashCode;

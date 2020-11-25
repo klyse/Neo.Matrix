@@ -9,30 +9,30 @@ namespace NeoMatrix.Test
 		[SetUp]
 		public void SetUp()
 		{
-			Matrix = Matrix<DummyObject>.NewMatrix(4, 4, () => new DummyObject());
+			_matrix = Matrix<DummyObject>.NewMatrix(4, 4, new DummyObject());
 		}
 
-		public class DummyObject
+		private class DummyObject
 		{
 			public bool IsExecuted { get; set; }
 		}
 
-		public Matrix<DummyObject> Matrix { get; set; }
+		private Matrix<DummyObject> _matrix = null!;
 
 		[Test]
 		public void ExecuteOnAll_ExecutesFuncOnAll()
 		{
-			Matrix.ExecuteOnAll(c => c.IsExecuted = true);
+			_matrix.ExecuteOnAll(c => c!.IsExecuted = true);
 
-			Assert.IsTrue(Matrix.GetFlat().All(c => c.IsExecuted));
+			Assert.IsTrue(_matrix.GetFlat().All(c => c!.IsExecuted));
 		}
 
 		[Test]
 		public void ExecuteOnAll_RowColumnOverload_ExecutesFuncOnAll()
 		{
-			Matrix.ExecuteOnAll((c, row, column) => c.IsExecuted = true);
+			_matrix.ExecuteOnAll((c, _, _) => c!.IsExecuted = true);
 
-			Assert.IsTrue(Matrix.GetFlat().All(c => c.IsExecuted));
+			Assert.IsTrue(_matrix.GetFlat().All(c => c!.IsExecuted));
 		}
 	}
 }

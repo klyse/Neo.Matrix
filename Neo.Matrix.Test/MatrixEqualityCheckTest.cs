@@ -10,14 +10,14 @@ namespace NeoMatrix.Test
 		{
 			public int I { get; set; } = 100;
 
-			public bool Equals(CustomElement other)
+			public bool Equals(CustomElement? other)
 			{
 				if (ReferenceEquals(null, other)) return false;
 				if (ReferenceEquals(this, other)) return true;
 				return I == other.I;
 			}
 
-			public override bool Equals(object obj)
+			public override bool Equals(object? obj)
 			{
 				if (ReferenceEquals(null, obj)) return false;
 				if (ReferenceEquals(this, obj)) return true;
@@ -35,8 +35,8 @@ namespace NeoMatrix.Test
 		[Test]
 		public void Equals_Matrix_CustomElement_IsEqual()
 		{
-			var newMatrix1 = Matrix<CustomElement>.NewMatrix(3, 3, () => new CustomElement());
-			var newMatrix2 = Matrix<CustomElement>.NewMatrix(3, 3, () => new CustomElement());
+			var newMatrix1 = Matrix<CustomElement>.NewMatrix(3, 3, new CustomElement());
+			var newMatrix2 = Matrix<CustomElement>.NewMatrix(3, 3, new CustomElement());
 
 			Assert.AreEqual(newMatrix1, newMatrix2);
 		}
@@ -44,10 +44,10 @@ namespace NeoMatrix.Test
 		[Test]
 		public void Equals_Matrix_CustomElement_IsUnequal()
 		{
-			var newMatrix1 = Matrix<CustomElement>.NewMatrix(3, 3, () => new CustomElement());
-			var newMatrix2 = Matrix<CustomElement>.NewMatrix(3, 3, () => new CustomElement());
+			var newMatrix1 = Matrix<CustomElement>.NewMatrix(3, 3, new CustomElement());
+			var newMatrix2 = Matrix<CustomElement>.NewMatrix(3, 3, new CustomElement());
 
-			newMatrix1[0, 0].I = 1;
+			newMatrix1[0, 0]!.I = 1;
 
 			Assert.AreNotEqual(newMatrix1, newMatrix2);
 		}
@@ -134,6 +134,114 @@ namespace NeoMatrix.Test
 			});
 
 			Assert.AreNotEqual(matrix1, matrix2);
+		}
+
+		[Test]
+		public void Equals_Matrix_IsUnequalNull()
+		{
+			var matrix1 = new Matrix<int?>(new int?[,]
+			{
+				{null, 2},
+				{1, null}
+			});
+			var matrix2 = new Matrix<int?>(new int?[,]
+			{
+				{2, null},
+				{null, 1}
+			});
+
+			Assert.AreNotEqual(matrix1, matrix2);
+		}
+
+		[Test]
+		public void Equals_Matrix_IsUnequalNull2()
+		{
+			var matrix1 = new Matrix<int?>(new int?[,]
+			{
+				{null, 1, null},
+				{null, 1, null}
+			});
+			var matrix2 = new Matrix<int?>(new int?[,]
+			{
+				{null, null, 1},
+				{null, null, 1}
+			});
+
+			Assert.AreNotEqual(matrix1, matrix2);
+		}
+
+		[Test]
+		public void Equals_Matrix_IsUnequalNull3()
+		{
+			var matrix1 = new Matrix<int?>(new int?[,]
+			{
+				{null, null},
+				{null, null}
+			});
+			var matrix2 = new Matrix<int?>(new int?[,]
+			{
+				{null, null, null},
+				{null, null, null},
+				{null, null, null}
+			});
+
+			Assert.AreNotEqual(matrix1, matrix2);
+		}
+
+		[Test]
+		public void Equals_Matrix_IsUnequalNull4()
+		{
+			var matrix1 = new Matrix<int?>(new int?[,]
+			{
+				{1, 1, null, null},
+				{1, 1, null, null},
+				{null, null, null, null},
+				{null, null, null, null}
+			});
+
+			var matrix2 = new Matrix<int?>(new int?[,]
+			{
+				{null, null, null, null},
+				{null, 1, 1, null},
+				{null, 1, 1, null},
+				{null, null, null, null}
+			});
+
+			Assert.AreNotEqual(matrix1, matrix2);
+		}
+
+		[Test]
+		public void Equals_Matrix_IsEqualNull()
+		{
+			var matrix1 = new Matrix<int?>(new int?[,]
+			{
+				{null, 2},
+				{1, null}
+			});
+			var matrix2 = new Matrix<int?>(new int?[,]
+			{
+				{null, 2},
+				{1, null}
+			});
+
+			Assert.AreEqual(matrix1, matrix2);
+		}
+
+		[Test]
+		public void Equals_Matrix_IsEqualNull2()
+		{
+			var matrix1 = new Matrix<int?>(new int?[,]
+			{
+				{null, null},
+				{null, null}
+			});
+			var matrix2 = new Matrix<int?>(new int?[,]
+			{
+				{null, null},
+				{null, null}
+			});
+
+			Assert.AreEqual(matrix1, matrix2);
 		}
 	}
 }

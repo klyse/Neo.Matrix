@@ -10,7 +10,7 @@ namespace NeoMatrix.Test
 		public void SetUp()
 		{
 			var val = 0;
-			Matrix = Matrix<DummyObject>.NewMatrix(4, 4, () =>
+			_matrix = Matrix<DummyObject>.NewMatrix(4, 4, () =>
 			{
 				val++;
 				return new DummyObject
@@ -20,41 +20,41 @@ namespace NeoMatrix.Test
 			});
 		}
 
-		public class DummyObject
+		private class DummyObject
 		{
-			public int Value { get; set; }
+			public int Value { get; init; }
 		}
 
-		public Matrix<DummyObject> Matrix { get; set; }
+		private Matrix<DummyObject> _matrix = null!;
 
 		[Test]
 		public void Average_CalculatesAverageOnMatrix()
 		{
-			Assert.AreEqual(8.5, Matrix.Average(c => c.Value));
+			Assert.AreEqual(8.5, _matrix.Average(c => c.Value));
 		}
 
 		[Test]
 		public void Max_ReturnsMaxValueOfMatrix()
 		{
-			Assert.AreEqual(16, Matrix.Max(c => c.Value));
+			Assert.AreEqual(16, _matrix.Max(c => c.Value));
 		}
 
 		[Test]
 		public void Min_ReturnsMinValueOfMatrix()
 		{
-			Assert.AreEqual(1, Matrix.Min(c => c.Value));
+			Assert.AreEqual(1, _matrix.Min(c => c.Value));
 		}
 
 		[Test]
 		public void Sum_CalculatesTotalSumOnMatrix()
 		{
-			Assert.AreEqual((16 * 16 + 16) / 2, Matrix.Sum(c => c.Value));
+			Assert.AreEqual((16 * 16 + 16) / 2, _matrix.Sum(c => c.Value));
 		}
 
 		[Test]
 		public void ToBitmap_ReturnsBitmapOfMatrix()
 		{
-			var bitmap = Matrix.ToBitmap(c => c.Value);
+			var bitmap = _matrix.ToBitmap(c => c.Value);
 
 			Assert.NotNull(bitmap);
 		}
@@ -62,7 +62,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void ToBitmap_UnevenMatrix_ReturnsBitmapOfMatrix()
 		{
-			var bitmap = Matrix<int>.NewMatrix(10, 15, () => 1)
+			var bitmap = Matrix<int>.NewMatrix(10, 15, 1)
 				.ToBitmap(c => c);
 
 			Assert.NotNull(bitmap);
@@ -81,7 +81,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void ToBitmap_UnevenMatrixWithRowColumnParameter_ReturnsColoredBitmapOfMatrix()
 		{
-			var bitmap = Matrix<int>.NewMatrix(10, 15, () => 1)
+			var bitmap = Matrix<int>.NewMatrix(10, 15, 1)
 				.ToBitmap((r, c, v) => c > 5 ? Color.Red : Color.Black);
 
 			Assert.AreEqual(Color.Black.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
