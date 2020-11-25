@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace NeoMatrix.Test
 {
 	[TestFixture]
+	[Category("LongRunning")]
 	[Parallelizable(ParallelScope.All)]
 	public class MatrixFilterTest
 	{
