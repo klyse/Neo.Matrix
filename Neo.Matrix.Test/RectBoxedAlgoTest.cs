@@ -106,8 +106,8 @@ namespace NeoMatrix.Test
 
 			var filtered = matrix.RectBoxedAlgo(11, 11, (_, _, m) => m.Average(c => c.Value), 5, 10);
 
-			matrix.ToBitmap(c => c.Value).Save("C:\\Users\\Klaus\\Downloads\\test.bmp");
-			filtered.ToBitmap(c => c).Save("C:\\Users\\Klaus\\Downloads\\test1.bmp");
+			// matrix.ToBitmap(c => c.Value).Save("C:\\Users\\Klaus\\Downloads\\test.bmp");
+			// filtered.ToBitmap(c => c).Save("C:\\Users\\Klaus\\Downloads\\test1.bmp");
 
 			Assert.AreEqual(59, filtered.Columns);
 			Assert.AreEqual(58, filtered.Rows);
