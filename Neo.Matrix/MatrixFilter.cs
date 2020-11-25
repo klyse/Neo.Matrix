@@ -16,9 +16,18 @@ namespace NeoMatrix
 		/// <param name="rows">rows</param>
 		/// <param name="columns">columns</param>
 		/// <param name="func">function with algo</param>
-		/// <param name="yStride">stride defaults to 1; must be a multiple of output array size (<see cref="Matrix{TElement}.Rows"/> - <see cref="rows"/> +1)</param>
-		/// <param name="xStride">stride defaults to 1; must be a multiple of output array size (<see cref="Matrix{TElement}.Columns"/> - <see cref="columns"/> +1)</param>
-		/// <returns>new <see cref="Matrix{TElement}"/> with size: (<see cref="Matrix{TElement}.Rows"/> - <see cref="rows"/> +1) x (<see cref="Matrix{TElement}.Columns"/> - <see cref="columns"/> +1) containing the avg value of the box</returns>
+		/// <param name="yStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Rows"/> - <paramref name="rows"/> +1)
+		/// </param>
+		/// <param name="xStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Columns"/> - <paramref name="columns" /> +1)
+		/// </param>
+		/// <returns>
+		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows"/> - <paramref name="rows" /> +1)
+		///     x (<paramref name="matrix.Columns"/> - <paramref name="columns" /> +1) containing the avg value of the box
+		/// </returns>
 		public static Matrix<double> RectBoxedAlgo<TType>(this Matrix<TType> matrix, int rows, int columns, Func<int, int, Matrix<TType>, double> func, int yStride = 1, int xStride = 1)
 		{
 			CalculateMatrixParameters(matrix, rows, columns, yStride, xStride, out var rowOffset, out var colOffset, out var remainingRows, out var remainingColumns);
@@ -35,15 +44,24 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Calculate the average within a moving box
+		///     Calculate the average within a moving box
 		/// </summary>
 		/// <param name="matrix">self</param>
 		/// <param name="rows">box rows</param>
 		/// <param name="columns">box columns</param>
 		/// <param name="selector">selector for property</param>
-		/// <param name="yStride">stride defaults to 1; must be a multiple of output array size (<see cref="Matrix{TElement}.Rows"/> - <see cref="rows"/> +1)</param>
-		/// <param name="xStride">stride defaults to 1; must be a multiple of output array size (<see cref="Matrix{TElement}.Columns"/> - <see cref="columns"/> +1)</param>
-		/// <returns>new <see cref="Matrix{TElement}"/> with size: (<see cref="Matrix{TElement}.Rows"/> - <see cref="rows"/> +1) x (<see cref="Matrix{TElement}.Columns"/> - <see cref="columns"/> +1) containing the avg value of the box</returns>
+		/// <param name="yStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Rows"/> - <paramref name="rows" /> +1)
+		/// </param>
+		/// <param name="xStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Columns"/> - <paramref name="columns" /> +1)
+		/// </param>
+		/// <returns>
+		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows"/> - <paramref name="rows" /> +1)
+		///     x (<paramref name="matrix.Columns"/> - <paramref name="columns" /> +1) containing the avg value of the box
+		/// </returns>
 		public static Matrix<double> RectBoxedAvg<TType>(this Matrix<TType> matrix, int rows, int columns, Expression<Func<TType, double>> selector, int yStride = 1, int xStride = 1)
 		{
 			CalculateMatrixParameters(matrix, rows, columns, yStride, xStride, out var rowOffset, out var colOffset, out var remainingRows, out var remainingColumns);
@@ -67,17 +85,26 @@ namespace NeoMatrix
 
 			return returnMat;
 		}
-		
+
 		/// <summary>
-		/// Calculate the sum within a moving box
+		///     Calculate the sum within a moving box
 		/// </summary>
 		/// <param name="matrix">self</param>
 		/// <param name="rows">box rows</param>
 		/// <param name="columns">box columns</param>
 		/// <param name="selector">selector for property</param>
-		/// <param name="yStride">stride defaults to 1; must be a multiple of output array size (<see cref="Matrix{TElement}.Rows"/> - <see cref="rows"/> +1)</param>
-		/// <param name="xStride">stride defaults to 1; must be a multiple of output array size (<see cref="Matrix{TElement}.Columns"/> - <see cref="columns"/> +1)</param>
-		/// <returns>new <see cref="Matrix{TElement}"/> with size: (<see cref="Matrix{TElement}.Rows"/> - <see cref="rows"/> +1) x (<see cref="Matrix{TElement}.Columns"/> - <see cref="columns"/> +1) containing the sum value of the box</returns>
+		/// <param name="yStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Rows"/> - <paramref name="rows" /> +1)
+		/// </param>
+		/// <param name="xStride">
+		///     stride defaults to 1; must be a multiple of output array size (
+		///     <paramref name="matrix.Columns"/> - <paramref name="columns" /> +1)
+		/// </param>
+		/// <returns>
+		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows"/> - <paramref name="rows" /> +1)
+		///     x (<paramref name="matrix.Columns"/> - <paramref name="columns" /> +1) containing the sum value of the box
+		/// </returns>
 		public static Matrix<double> RectBoxedSum<TType>(this Matrix<TType> matrix, int rows, int columns, Expression<Func<TType, double>> selector, int yStride = 1, int xStride = 1)
 		{
 			CalculateMatrixParameters(matrix, rows, columns, yStride, xStride, out var rowOffset, out var colOffset, out var remainingRows, out var remainingColumns);
@@ -102,7 +129,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Calculates a cache matrix to speedup algorithms to avoid multiple calculation of the same fields
+		///     Calculates a cache matrix to speedup algorithms to avoid multiple calculation of the same fields
 		/// </summary>
 		private static Matrix<double> CalculateRowCacheMatrix<TType>(Matrix<TType> matrix, Expression<Func<TType, double>> selector, int rowOffset)
 		{
@@ -118,7 +145,7 @@ namespace NeoMatrix
 		}
 
 		/// <summary>
-		/// Check if parameters are valid and calculate important parameters for the algorithm to work
+		///     Check if parameters are valid and calculate important parameters for the algorithm to work
 		/// </summary>
 		/// <param name="matrix"></param>
 		/// <param name="rows">box rows</param>
