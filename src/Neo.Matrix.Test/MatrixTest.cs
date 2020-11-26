@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 
 namespace NeoMatrix.Test
 {
@@ -67,7 +67,7 @@ namespace NeoMatrix.Test
 		[Test]
 		public void NewMatrix_CreateNewEmptyMatrix_WithDifferentSize()
 		{
-			var newMatrix = Matrix<int?>.NewMatrix(2, 3, () => null);
+			var newMatrix = Matrix<int?>.NewMatrix(2, 3, filler: null);
 
 			var expected = new Matrix<int?>(new int?[,]
 			{
