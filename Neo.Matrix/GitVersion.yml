@@ -1,0 +1,12 @@
+mode: ContinuousDelivery
+
+branches:
+  master:
+    tag: alpha
+    increment: None
+  feature:
+    regex: ^(?!.*release).*/.+
+    increment: None
+  release:
+    regex: ^release/.*
+    is-release-branch: true
