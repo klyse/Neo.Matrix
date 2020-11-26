@@ -67,11 +67,21 @@ namespace NeoMatrix.Test
 
 			Assert.NotNull(bitmap);
 		}
+		
+		[Test]
+		public void ToBitmap_UnevenMatrix_CheckSize()
+		{
+			var bitmap = Matrix<int>.NewMatrix(10, 15, 1)
+				.ToBitmap(c => c);
+			
+			Assert.AreEqual(10,bitmap.Height);
+			Assert.AreEqual(15,bitmap.Width);
+		}
 
 		[Test]
 		public void ToBitmap_UnevenMatrix_ReturnsColoredBitmapOfMatrix()
 		{
-			var bitmap = Matrix<int>.NewMatrix(10, 15, (row, column) => row)
+			var bitmap = Matrix<int>.NewMatrix(10, 15, (row, _) => row)
 				.ToBitmap(c => c > 5 ? Color.Red : Color.Black);
 
 			Assert.AreEqual(Color.Black.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
@@ -82,7 +92,7 @@ namespace NeoMatrix.Test
 		public void ToBitmap_UnevenMatrixWithRowColumnParameter_ReturnsColoredBitmapOfMatrix()
 		{
 			var bitmap = Matrix<int>.NewMatrix(10, 15, 1)
-				.ToBitmap((r, c, v) => c > 5 ? Color.Red : Color.Black);
+				.ToBitmap((_, c, _) => c > 5 ? Color.Red : Color.Black);
 
 			Assert.AreEqual(Color.Black.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
 			Assert.AreEqual(Color.Red.ToArgb(), bitmap.GetPixel(6, 0).ToArgb());
