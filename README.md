@@ -107,6 +107,58 @@ Get a flat (unidimensional) representation of data:
 var flat = matrix.GetFlat();
 ```
 
+Execute some function on all cells:
+
+```csharp
+var matrix = Matrix<DummyObject>.NewMatrix(4, 4, new DummyObject());
+matrix.ExecuteOnAll((c, row, column) => {/* custom code */ });
+```
+
+### Create bitmap
+
+```csharp
+var bitmap = Matrix<int>.NewMatrix(10, 15, (row, _) => row) // creat a new matrix and set the row as cell value
+                        .ToBitmap(c => c > 5 ? Color.Red : Color.Black); // generate a bitmap and assign a custom color if value is > 5
+bitmap.Save("test.bmp");
+```
+Output: 
+![](img/bitmapRedBlack.bmp) This is a verry small 10x15 bitmap :)
+
+## Aggregations
+
+```csharp
+var matrix = Matrix<DummyObject>.NewMatrix(4, 4, () =>
+{
+    val++;
+    return new DummyObject
+    {
+        Value = val
+    };
+});
+
+matrix.Sum(c => c.Value); // 136
+matrix.Min(c => c.Value); // 1
+matrix.Max(c => c.Value); // 16
+matrix.Avg(c => c.Value); // 8.5
+```
+
+### Boxed aggregations
+
+Runs very performant boxed filters on Matrix.
+```csharp
+var matrix = Matrix<DummyObject>.NewMatrix(300, 300, () => new DummyObject
+{
+    Value = new Random().Next(0, 3000)
+});
+
+matrix.RectBoxedSum(rows, columns, c => c.Value, yStride, xStride);
+matrix.RectBoxedAvg(rows, columns, c => c.Value, yStride, xStride);
+
+// this is basically the same as RectBoxedSum but it's not optimized and in most cases 10 times slower, but you can implement whatever algorithm you need
+var expected = matrix.RectBoxedAlgo(rows, columns, (_, _, mat) => mat.Sum(c => c.Value), yStride, xStride);
+
+```
+
 ## Access a subset of data
 
 Requests can be chained:
