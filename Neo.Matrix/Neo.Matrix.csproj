@@ -12,10 +12,13 @@
 		<License>https://github.com/klyse/Neo.Matrix/blob/master/LICENSE</License>
 		<PackageProjectUrl>https://github.com/klyse/Neo.Matrix</PackageProjectUrl>
 		<RootNamespace>NeoMatrix</RootNamespace>
-		<Version>1.4.3</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="GitVersionTask" Version="5.5.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="System.Drawing.Common" Version="5.0.0" />
 	</ItemGroup>
 
