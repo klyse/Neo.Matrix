@@ -20,7 +20,7 @@ namespace NeoMatrix.Test
 			});
 		}
 
-		private class DummyObject
+		private record DummyObject
 		{
 			public int Value { get; init; }
 		}
@@ -67,15 +67,15 @@ namespace NeoMatrix.Test
 
 			Assert.NotNull(bitmap);
 		}
-		
+
 		[Test]
 		public void ToBitmap_UnevenMatrix_CheckSize()
 		{
 			var bitmap = Matrix<int>.NewMatrix(10, 15, 1)
 				.ToBitmap(c => c);
-			
-			Assert.AreEqual(10,bitmap.Height);
-			Assert.AreEqual(15,bitmap.Width);
+
+			Assert.AreEqual(10, bitmap.Height);
+			Assert.AreEqual(15, bitmap.Width);
 		}
 
 		[Test]
@@ -96,6 +96,33 @@ namespace NeoMatrix.Test
 
 			Assert.AreEqual(Color.Black.ToArgb(), bitmap.GetPixel(0, 0).ToArgb());
 			Assert.AreEqual(Color.Red.ToArgb(), bitmap.GetPixel(6, 0).ToArgb());
+		}
+
+		[Test]
+		public void ToMatrix_ConvertBitmapToMatrix()
+		{
+			var bitmap = _matrix.ToBitmap((_, _, v) => Color.FromArgb(v.Value, v.Value, v.Value));
+
+			var matrix = bitmap.ToMatrix((_, _, color) => new DummyObject
+			{
+				Value = color.G
+			});
+
+			Assert.AreEqual(_matrix, matrix);
+		}
+
+		[Test]
+		public void ToMatrix_UnevenMatrix_ConvertBitmapToMatrix()
+		{
+			var expected = _matrix.AddPadding(2, 0, 2, 0, new DummyObject {Value = 10});
+			var bitmap = expected.ToBitmap((_, _, v) => Color.FromArgb(v.Value, v.Value, v.Value));
+
+			var matrix = bitmap.ToMatrix((_, _, color) => new DummyObject
+			{
+				Value = color.G
+			});
+
+			Assert.AreEqual(expected, matrix);
 		}
 	}
 }

@@ -105,7 +105,6 @@ namespace NeoMatrix
 		{
 			var bmp = new Bitmap(matrix.Columns, matrix.Rows);
 
-
 			matrix.ExecuteOnAll((t, r, c) => { bmp.SetPixel(c, r, color(t!)); });
 			return bmp;
 		}
@@ -123,6 +122,21 @@ namespace NeoMatrix
 
 			matrix.ExecuteOnAll((t, r, c) => { bmp.SetPixel(c, r, color(r, c, t!)); });
 			return bmp;
+		}
+
+		/// <summary>
+		///     Read bitmap and convert it to Matrix
+		/// </summary>
+		/// <param name="bitmap">source bitmap</param>
+		/// <param name="convertor">converter function</param>
+		/// <typeparam name="TMatrixValueType">Matrix element type</typeparam>
+		public static Matrix<TMatrixValueType> ToMatrix<TMatrixValueType>(this Bitmap bitmap, Func<int, int, Color, TMatrixValueType> convertor)
+		{
+			var matrix = new Matrix<TMatrixValueType>(bitmap.Height, bitmap.Width);
+
+			matrix.ExecuteOnAll((_, r, c) => { matrix[r, c] = convertor(r, c, bitmap.GetPixel(c, r)); });
+
+			return matrix;
 		}
 	}
 }
