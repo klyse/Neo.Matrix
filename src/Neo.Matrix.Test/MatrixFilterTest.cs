@@ -1,4 +1,4 @@
-﻿using NeoMatrix.Exceptions;
+using NeoMatrix.Exceptions;
 using NeoMatrix.Test.Helpers;
 using NUnit.Framework;
 
@@ -152,7 +152,7 @@ namespace NeoMatrix.Test
 		[Test]
 		[Combinatorial]
 		[LongRunning]
-		public void RectBoxedAvg_CheckAvgResult([Values(300, 100, 30)] int matRows, [Values(300, 100, 30)] int matColumns, [Values(11, 5)] int rows, [Values(11, 5)] int columns, [Values(1, 2, 5, 10)] int yStride, [Values(1, 2, 5, 10)] int xStride)
+		public void RectBoxedAvg_CheckResult([Values(300, 100, 30)] int matRows, [Values(300, 100, 30)] int matColumns, [Values(11, 5)] int rows, [Values(11, 5)] int columns, [Values(1, 2, 5, 10)] int yStride, [Values(1, 2, 5, 10)] int xStride)
 		{
 			// some combinations are illegal, skip them now!
 			if ((300 - columns + 1) % xStride != 0 ||
@@ -172,7 +172,7 @@ namespace NeoMatrix.Test
 		[Test]
 		[Combinatorial]
 		[LongRunning]
-		public void RectBoxedSum_CheckAvgResult([Values(300, 100, 30)] int matRows, [Values(300, 100, 30)] int matColumns, [Values(11, 5)] int rows, [Values(11, 5)] int columns, [Values(1, 2, 5, 10)] int yStride, [Values(1, 2, 5, 10)] int xStride)
+		public void RectBoxedSum_CheckResult([Values(300, 100, 30)] int matRows, [Values(300, 100, 30)] int matColumns, [Values(11, 5)] int rows, [Values(11, 5)] int columns, [Values(1, 2, 5, 10)] int yStride, [Values(1, 2, 5, 10)] int xStride)
 		{
 			// some combinations are illegal, skip them now!
 			if ((300 - columns + 1) % xStride != 0 ||
