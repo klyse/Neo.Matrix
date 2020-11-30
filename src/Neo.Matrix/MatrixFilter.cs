@@ -13,7 +13,7 @@ namespace NeoMatrix
 	public static class MatrixFilter
 	{
 		/// <summary>
-		/// Delegate to the innermost action in a matrix filter function.
+		///     Delegate to the innermost action in a matrix filter function.
 		/// </summary>
 		/// <param name="iRow">index row (starts from offset)</param>
 		/// <param name="row">row (starts from 0)</param>
@@ -52,7 +52,7 @@ namespace NeoMatrix
 
 			void InnerCycle(int iRow, int row, int iColumn, int column)
 			{
-				returnMat[row, column] = func(iRow, iColumn, matrix.GetRect(iRow, iColumn, rows, columns)); 
+				returnMat[row, column] = func(iRow, iColumn, matrix.GetRect(iRow, iColumn, rows, columns));
 			}
 
 			return returnMat;
@@ -98,7 +98,7 @@ namespace NeoMatrix
 
 				returnMat[row, column] = sum / space;
 			}
-			
+
 			return returnMat;
 		}
 
@@ -226,7 +226,7 @@ namespace NeoMatrix
 			OutOfRangeException.Check(nameof(yStride), yStride, 0);
 
 			if (yStride > rows)
-				 StrideException.YStrideException();
+				StrideException.YStrideException();
 
 			if (xStride > columns)
 				StrideException.XStrideException();

@@ -4,8 +4,6 @@ namespace NeoMatrix.Test.Helpers
 {
 	public static class MatrixPopulator
 	{
-		public record Dummy(int Value);
-
 		public static Matrix<double> CreateRandomDouble(int rows, int columns, int min = -3000, int max = 3000)
 		{
 			var random = new Random();
@@ -43,5 +41,7 @@ namespace NeoMatrix.Test.Helpers
 				return new Dummy(i - 1);
 			});
 		}
+
+		public record Dummy(int Value);
 	}
 }

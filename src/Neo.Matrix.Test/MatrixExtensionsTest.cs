@@ -7,12 +7,11 @@ namespace NeoMatrix.Test
 	[TestFixture]
 	public class MatrixExtensionsTest
 	{
-
 		[Test]
 		public void Average_CalculatesAverageOnMatrix()
 		{
 			var matrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
-			
+
 			Assert.AreEqual(8.5, matrix.Average(c => c.Value));
 		}
 
@@ -89,7 +88,7 @@ namespace NeoMatrix.Test
 		public void ToMatrix_ConvertBitmapToMatrix()
 		{
 			var initMatrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
-			
+
 			var bitmap = initMatrix.ToBitmap((_, _, v) => Color.FromArgb(v.Value, v.Value, v.Value));
 
 			var matrix = bitmap.ToMatrix((_, _, color) => new MatrixPopulator.Dummy(color.G));
@@ -101,7 +100,7 @@ namespace NeoMatrix.Test
 		public void ToMatrix_UnevenMatrix_ConvertBitmapToMatrix()
 		{
 			var initMatrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
-			
+
 			var expected = initMatrix.AddPadding(2, 0, 2, 0, new MatrixPopulator.Dummy(10));
 			var bitmap = expected.ToBitmap((_, _, v) => Color.FromArgb(v.Value, v.Value, v.Value));
 

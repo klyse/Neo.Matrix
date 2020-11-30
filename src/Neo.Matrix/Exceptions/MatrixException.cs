@@ -36,10 +36,12 @@ namespace NeoMatrix.Exceptions
 		{
 			throw new StrideException("xStride must be <= columns");
 		}
+
 		public static void ColumnsStrideException()
 		{
 			throw new StrideException("columns must be divisible by stride");
 		}
+
 		public static void RowsStrideException()
 		{
 			throw new StrideException("rows must be divisible by stride");

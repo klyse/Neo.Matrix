@@ -1,5 +1,4 @@
-﻿using System;
-using NeoMatrix.Exceptions;
+﻿using NeoMatrix.Exceptions;
 using NeoMatrix.Test.Helpers;
 using NUnit.Framework;
 
@@ -57,7 +56,7 @@ namespace NeoMatrix.Test
 
 			Assert.Throws<OutOfRangeException>(() => MatrixFilter.CalculateMatrixParameters(matrix, 3, 3, yStride, xStride, out _, out _, out _, out _));
 		}
-		
+
 		[Test]
 		[TestCase(10, 10)]
 		[TestCase(10, 2)]
@@ -85,42 +84,42 @@ namespace NeoMatrix.Test
 			var matrix = MatrixPopulator.CreateIncrementedInt(10, 10);
 
 			MatrixFilter.CalculateMatrixParameters(matrix, 3, 3, 1, 1, out var rowOffset, out var colOffset, out _, out _);
-			
-			Assert.AreEqual(1,rowOffset);
-			Assert.AreEqual(1,colOffset);
+
+			Assert.AreEqual(1, rowOffset);
+			Assert.AreEqual(1, colOffset);
 		}
-		
+
 		[Test]
 		public void CalculateMatrixParameters_CalculatesOffsetCorrect1()
 		{
 			var matrix = MatrixPopulator.CreateIncrementedInt(100, 200);
 
 			MatrixFilter.CalculateMatrixParameters(matrix, 31, 21, 1, 1, out var rowOffset, out var colOffset, out _, out _);
-			
-			Assert.AreEqual(15,rowOffset);
-			Assert.AreEqual(10,colOffset);
+
+			Assert.AreEqual(15, rowOffset);
+			Assert.AreEqual(10, colOffset);
 		}
-		
+
 		[Test]
 		public void CalculateMatrixParameters_CalculatesRemainingCorrect()
 		{
 			var matrix = MatrixPopulator.CreateIncrementedInt(10, 10);
 
 			MatrixFilter.CalculateMatrixParameters(matrix, 3, 3, 1, 1, out _, out _, out var remainingRows, out var remainingColumns);
-			
-			Assert.AreEqual(8,remainingRows);
-			Assert.AreEqual(8,remainingColumns);
+
+			Assert.AreEqual(8, remainingRows);
+			Assert.AreEqual(8, remainingColumns);
 		}
-		
+
 		[Test]
 		public void CalculateMatrixParameters_CalculatesRemainingCorrect1()
 		{
 			var matrix = MatrixPopulator.CreateIncrementedInt(100, 200);
 
 			MatrixFilter.CalculateMatrixParameters(matrix, 3, 11, 1, 1, out _, out _, out var remainingRows, out var remainingColumns);
-			
-			Assert.AreEqual(98,remainingRows);
-			Assert.AreEqual(190,remainingColumns);
+
+			Assert.AreEqual(98, remainingRows);
+			Assert.AreEqual(190, remainingColumns);
 		}
 
 		[Test]
