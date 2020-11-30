@@ -1,5 +1,9 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 using NeoMatrix.Exceptions;
 
 namespace NeoMatrix
@@ -105,7 +109,7 @@ namespace NeoMatrix
 		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows" /> - <paramref name="rows" /> +1)
 		///     x (<paramref name="matrix.Columns" /> - <paramref name="columns" /> +1) containing the sum value of the box
 		/// </returns>
-		public static Matrix<double> RectBoxedSum<TType>(this Matrix<TType> matrix, int rows, int columns, Expression<Func<TType, double>> selector, int yStride = 1, int xStride = 1)
+		public static Matrix<double> RectBoxedSum<TType>(this Matrix<TType> matrix, int rows, int columns, Expression<Func<TType, double>> selector, int yStride = 1, int xStride = 1, int maxDegreeOfParallelism = 1, CancellationToken cancellationToken = default)
 		{
 			CalculateMatrixParameters(matrix, rows, columns, yStride, xStride, out var rowOffset, out var colOffset, out var remainingRows, out var remainingColumns);
 
@@ -113,19 +117,48 @@ namespace NeoMatrix
 
 			var returnMat = new Matrix<double>(remainingRows, remainingColumns);
 
-			var column = 0;
-			var row = 0;
-			for (var i = rowOffset; i < matrix.Rows - rowOffset; i += yStride, row++, column = 0)
-			for (var j = colOffset; j < matrix.Columns - colOffset; j += xStride, column++)
-			{
-				double sum = 0;
-				for (var c = j - colOffset; c <= j + colOffset; c++)
-					sum += cacheMatrix[i, c];
+			RowCycle(rowOffset, matrix.Rows - rowOffset - 1, yStride, maxDegreeOfParallelism, ColumnCycle, cancellationToken);
 
-				returnMat[row, column] = sum;
+			void ColumnCycle(int i)
+			{
+				var row = (i - rowOffset) / yStride;
+				var column = 0;
+				for (var j = colOffset; j < matrix.Columns - colOffset; j += xStride, column++)
+				{
+					double sum = 0;
+					for (var c = j - colOffset; c <= j + colOffset; c++)
+						sum += cacheMatrix[i, c];
+
+					returnMat[row, column] = sum;
+				}
 			}
 
 			return returnMat;
+		}
+
+		private static void RowCycle(int fromInclusive, int toInclusive, int yStride, int maxDegreeOfParallelism, Action<int> columnCycle, CancellationToken cancellationToken = default)
+		{
+			OutOfRangeException.Check(maxDegreeOfParallelism, 0);
+
+			var iList = new List<int>();
+			for (var i = fromInclusive; i <= toInclusive; i += yStride)
+				iList.Add(i);
+
+			if (maxDegreeOfParallelism > 1)
+			{
+				Parallel.ForEach(iList,
+					new ParallelOptions
+					{
+						MaxDegreeOfParallelism = maxDegreeOfParallelism,
+						CancellationToken = cancellationToken
+					},
+					columnCycle);
+			}
+			else
+			{
+				foreach (var i in iList)
+					columnCycle(i);
+			}
 		}
 
 		/// <summary>
