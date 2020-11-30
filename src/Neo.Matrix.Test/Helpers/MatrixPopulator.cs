@@ -21,7 +21,7 @@ namespace NeoMatrix.Test.Helpers
 		public static Matrix<int> CreateIncrementedInt(int rows, int columns, int start = 1)
 		{
 			var i = start;
-			return Matrix<int>.NewMatrix(9, 9, () =>
+			return Matrix<int>.NewMatrix(rows, columns, () =>
 			{
 				i++;
 				return i - 1;
@@ -32,6 +32,16 @@ namespace NeoMatrix.Test.Helpers
 		{
 			var random = new Random();
 			return Matrix<Dummy>.NewMatrix(rows, columns, () => new Dummy(random.Next(min, max)));
+		}
+
+		public static Matrix<Dummy> CreateIncrementedDummy(int rows, int columns, int start = 1)
+		{
+			var i = start;
+			return Matrix<Dummy>.NewMatrix(rows, columns, () =>
+			{
+				i++;
+				return new Dummy(i - 1);
+			});
 		}
 	}
 }
