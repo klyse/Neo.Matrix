@@ -150,32 +150,6 @@ namespace NeoMatrix.Test
 		}
 
 		[Test]
-		[LongRunning]
-		[Combinatorial]
-		public void RectBoxedAlgo_CalculateBigArray([Values(31, 11, 5)] int rows, [Values(31, 11, 5)] int columns)
-		{
-			var matrix = MatrixPopulator.CreateRandomDummy(300, 300, 0);
-
-			var filtered = matrix.RectBoxedAlgo(rows, columns, (_, _, m) => m.Average(c => c.Value));
-
-			Assert.AreEqual(300 - columns + 1, filtered.Columns);
-			Assert.AreEqual(300 - rows + 1, filtered.Rows);
-		}
-
-		[Test]
-		[LongRunning]
-		public void RectBoxedAlgo_CalculateBigArray_Stride2()
-		{
-			var matrix = MatrixPopulator.CreateRandomDummy(300, 300, 0);
-
-			var filtered = matrix.RectBoxedAlgo(11, 11, (_, _, m) => m.Average(c => c.Value), 2, 2);
-
-			Assert.AreEqual(145, filtered.Columns);
-			Assert.AreEqual(145, filtered.Rows);
-		}
-
-
-		[Test]
 		[Combinatorial]
 		[LongRunning]
 		public void RectBoxedAvg_CheckAvgResult([Values(300, 100, 30)] int matRows, [Values(300, 100, 30)] int matColumns, [Values(11, 5)] int rows, [Values(11, 5)] int columns, [Values(1, 2, 5, 10)] int yStride, [Values(1, 2, 5, 10)] int xStride)
