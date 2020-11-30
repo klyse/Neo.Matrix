@@ -216,8 +216,8 @@ namespace NeoMatrix
 		/// <param name="remainingColumns">new width of matrix</param>
 		internal static void CalculateMatrixParameters<TType>(Matrix<TType> matrix, int rows, int columns, int yStride, int xStride, out int rowOffset, out int colOffset, out int remainingRows, out int remainingColumns)
 		{
-			EvenRowsException.Check(rows);
-			EvenColumnsException.Check(columns);
+			EvenException.Check(nameof(rows), rows);
+			EvenException.Check(nameof(columns), columns);
 
 			OutOfRangeException.Check(nameof(columns), columns, 0, matrix.Columns);
 			OutOfRangeException.Check(nameof(rows), rows, 0, matrix.Rows);

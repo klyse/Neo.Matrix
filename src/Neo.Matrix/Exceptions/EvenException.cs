@@ -3,22 +3,22 @@
 	/// <summary>
 	///     Even rows are not permitted
 	/// </summary>
-	public class EvenColumnsException : MatrixException
+	public class EvenException : MatrixException
 	{
 		/// <summary>
 		///     Default constructor
 		/// </summary>
-		public EvenColumnsException() : base("even column number is not permitted")
+		private EvenException(string message) : base(message)
 		{
 		}
 
 		/// <summary>
 		///     check and throw exception
 		/// </summary>
-		public static void Check(int n)
+		public static void Check(string param, int n)
 		{
 			if (n % 2 == 0)
-				throw new EvenColumnsException();
+				throw new EvenException($"'{param}' cannot be even");
 		}
 	}
 }

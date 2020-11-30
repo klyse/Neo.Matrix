@@ -38,55 +38,30 @@ namespace NeoMatrix.Test.Exceptions
 		}
 
 		[Test]
-		public void EvenColumns_Exception_Ok()
+		public void EvenException_Ok()
 		{
-			EvenColumnsException.Check(1);
+			EvenException.Check("", 1);
 			Assert.Pass();
 		}
 
 		[Test]
-		public void EvenColumns_Exception()
+		public void EvenException_ThrowsException()
 		{
-			Assert.Catch<EvenColumnsException>(() => EvenColumnsException.Check(2));
+			Assert.Catch<EvenException>(() => EvenException.Check("", 2));
 		}
 
+
 		[Test]
-		public void EvenRows_Exception_Ok()
+		public void UnevenException_Ok()
 		{
-			EvenColumnsException.Check(1);
+			UnevenException.Check("", 1);
 			Assert.Pass();
 		}
 
 		[Test]
-		public void EvenRows_Exception()
+		public void UnevenException_ThrowsException()
 		{
-			Assert.Catch<EvenColumnsException>(() => EvenColumnsException.Check(2));
-		}
-
-		[Test]
-		public void UnevenColumns_Exception_Ok()
-		{
-			EvenColumnsException.Check(1);
-			Assert.Pass();
-		}
-
-		[Test]
-		public void UnevenColumns_Exception()
-		{
-			Assert.Catch<UnevenColumnsException>(() => UnevenColumnsException.Check(1));
-		}
-
-		[Test]
-		public void UnevenRows_Exception_Ok()
-		{
-			UnevenColumnsException.Check(2);
-			Assert.Pass();
-		}
-
-		[Test]
-		public void UnevenRows_Exception()
-		{
-			Assert.Catch<UnevenColumnsException>(() => UnevenColumnsException.Check(1));
+			Assert.Catch<UnevenException>(() => UnevenException.Check("", 1));
 		}
 	}
 }

@@ -33,8 +33,8 @@ namespace NeoMatrix
 		/// <returns>a new rectangle</returns>
 		public static Rectangle FromCenter(int y, int x, int rows, int columns)
 		{
-			EvenRowsException.Check(rows);
-			EvenColumnsException.Check(columns);
+			EvenException.Check(nameof(rows), rows);
+			EvenException.Check(nameof(columns), columns);
 
 			OutOfRangeException.Check(nameof(rows), rows, 1);
 			OutOfRangeException.Check(nameof(columns), columns, 1);
