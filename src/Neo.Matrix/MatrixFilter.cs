@@ -119,45 +119,57 @@ namespace NeoMatrix
 
 			RowCycle(rowOffset, matrix.Rows - rowOffset - 1, yStride, maxDegreeOfParallelism, ColumnCycle, cancellationToken);
 
-			void ColumnCycle(int i)
+			void InnerCycle(int iRow, int iColumn, int row, int column)
 			{
-				var row = (i - rowOffset) / yStride;
-				var column = 0;
-				for (var j = colOffset; j < matrix.Columns - colOffset; j += xStride, column++)
-				{
-					double sum = 0;
-					for (var c = j - colOffset; c <= j + colOffset; c++)
-						sum += cacheMatrix[i, c];
+				double sum = 0;
+				for (var c = iColumn - colOffset; c <= iColumn + colOffset; c++)
+					sum += cacheMatrix[iRow, c];
 
-					returnMat[row, column] = sum;
+				returnMat[row, column] = sum;
+			}
+
+			void ColumnCycle(int iRow, int row)
+			{
+				var column = 0;
+				for (var iColumn = colOffset; iColumn < matrix.Columns - colOffset; iColumn += xStride, column++)
+				{
+					InnerCycle(iRow, iColumn, row, column);
 				}
 			}
 
 			return returnMat;
 		}
 
-		private static void RowCycle(int fromInclusive, int toInclusive, int yStride, int maxDegreeOfParallelism, Action<int> columnCycle, CancellationToken cancellationToken = default)
+		private static void RowCycle(int fromInclusive, int toInclusive, int yStride, int maxDegreeOfParallelism, Action<int, int> columnCycle, CancellationToken cancellationToken = default)
 		{
 			OutOfRangeException.Check(maxDegreeOfParallelism, 0);
 
-			var iList = new List<int>();
-			for (var i = fromInclusive; i <= toInclusive; i += yStride)
-				iList.Add(i);
+			var iRows = new List<int>();
+			for (var iRow = fromInclusive; iRow <= toInclusive; iRow += yStride)
+				iRows.Add(iRow);
 
 			if (maxDegreeOfParallelism > 1)
 			{
-				Parallel.ForEach(iList,
+				Parallel.ForEach(iRows,
 					new ParallelOptions
 					{
 						MaxDegreeOfParallelism = maxDegreeOfParallelism,
 						CancellationToken = cancellationToken
 					},
-					columnCycle);
+					i =>
+					{
+						var row = (i - fromInclusive) / yStride;
+						columnCycle(i, row);
+					});
 			}
 			else
 			{
-				foreach (var i in iList)
-					columnCycle(i);
+				var row = 0;
+				foreach (var iRow in iRows)
+				{
+					columnCycle(iRow, row);
+					row++;
+				}
 			}
 		}
 
