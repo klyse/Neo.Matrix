@@ -22,7 +22,7 @@ namespace NeoMatrix
 		public delegate void InnerCycle(int iRow, int row, int iColumn, int column);
 
 		/// <summary>
-		///     Boxed sum of a matrix
+		///     Boxed Algo
 		/// </summary>
 		/// <param name="matrix">matrix</param>
 		/// <param name="rows">rows</param>
@@ -36,6 +36,8 @@ namespace NeoMatrix
 		///     stride defaults to 1; must be a multiple of output array size (
 		///     <paramref name="matrix.Columns" /> - <paramref name="columns" /> +1)
 		/// </param>
+		/// <param name="maxDegreeOfParallelism">if this value is bigger than 1 the algorithm is parallelized</param>
+		/// <param name="cancellationToken">cancellation token</param>
 		/// <returns>
 		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows" /> - <paramref name="rows" /> +1)
 		///     x (<paramref name="matrix.Columns" /> - <paramref name="columns" /> +1) containing the avg value of the box
@@ -71,6 +73,8 @@ namespace NeoMatrix
 		///     stride defaults to 1; must be a multiple of output array size (
 		///     <paramref name="matrix.Columns" /> - <paramref name="columns" /> +1)
 		/// </param>
+		/// <param name="maxDegreeOfParallelism">if this value is bigger than 1 the algorithm is parallelized</param>
+		/// <param name="cancellationToken">cancellation token</param>
 		/// <returns>
 		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows" /> - <paramref name="rows" /> +1)
 		///     x (<paramref name="matrix.Columns" /> - <paramref name="columns" /> +1) containing the avg value of the box
@@ -79,7 +83,7 @@ namespace NeoMatrix
 		{
 			CalculateMatrixParameters(matrix, rows, columns, yStride, xStride, out var rowOffset, out var colOffset, out var remainingRows, out var remainingColumns);
 
-			var cacheMatrix = CalculateRowCacheMatrix(matrix, selector, rowOffset);
+			var cacheMatrix = CalculateRowSumCacheMatrix(matrix, selector, rowOffset);
 
 			var returnMat = new Matrix<double>(remainingRows, remainingColumns);
 			double space = rows * columns;
@@ -113,6 +117,8 @@ namespace NeoMatrix
 		///     stride defaults to 1; must be a multiple of output array size (
 		///     <paramref name="matrix.Columns" /> - <paramref name="columns" /> +1)
 		/// </param>
+		/// <param name="maxDegreeOfParallelism">if this value is bigger than 1 the algorithm is parallelized</param>
+		/// <param name="cancellationToken">cancellation token</param>
 		/// <returns>
 		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows" /> - <paramref name="rows" /> +1)
 		///     x (<paramref name="matrix.Columns" /> - <paramref name="columns" /> +1) containing the sum value of the box
@@ -121,7 +127,7 @@ namespace NeoMatrix
 		{
 			CalculateMatrixParameters(matrix, rows, columns, yStride, xStride, out var rowOffset, out var colOffset, out var remainingRows, out var remainingColumns);
 
-			var cacheMatrix = CalculateRowCacheMatrix(matrix, selector, rowOffset);
+			var cacheMatrix = CalculateRowSumCacheMatrix(matrix, selector, rowOffset);
 
 			var returnMat = new Matrix<double>(remainingRows, remainingColumns);
 
@@ -183,7 +189,7 @@ namespace NeoMatrix
 		/// <summary>
 		///     Calculates a cache matrix to speedup algorithms to avoid multiple calculation of the same fields
 		/// </summary>
-		private static Matrix<double> CalculateRowCacheMatrix<TType>(Matrix<TType> matrix, Expression<Func<TType, double>> selector, int rowOffset)
+		private static Matrix<double> CalculateRowSumCacheMatrix<TType>(Matrix<TType> matrix, Expression<Func<TType, double>> selector, int rowOffset)
 		{
 			var cacheMatrix = new Matrix<double>(matrix.Rows, matrix.Columns);
 
