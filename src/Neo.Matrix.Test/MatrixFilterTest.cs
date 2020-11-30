@@ -15,7 +15,7 @@ namespace NeoMatrix.Test
 		{
 			var matrix = MatrixPopulator.CreateIncrementedInt(10, 10);
 
-			Assert.Throws<EvenRowsException>(() => MatrixFilter.CalculateMatrixParameters(matrix, rows, columns, 1, 1, out _, out _, out _, out _));
+			Assert.Throws<EvenException>(() => MatrixFilter.CalculateMatrixParameters(matrix, rows, columns, 1, 1, out _, out _, out _, out _));
 		}
 
 		[Test]
@@ -25,7 +25,7 @@ namespace NeoMatrix.Test
 		{
 			var matrix = MatrixPopulator.CreateRandomInt(10, 10);
 
-			Assert.Throws<EvenColumnsException>(() => MatrixFilter.CalculateMatrixParameters(matrix, rows, columns, 1, 1, out _, out _, out _, out _));
+			Assert.Throws<EvenException>(() => MatrixFilter.CalculateMatrixParameters(matrix, rows, columns, 1, 1, out _, out _, out _, out _));
 		}
 
 		[Test]

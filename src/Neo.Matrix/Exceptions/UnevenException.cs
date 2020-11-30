@@ -3,22 +3,22 @@
 	/// <summary>
 	///     Uneven columns are not permitted
 	/// </summary>
-	public class UnevenColumnsException : MatrixException
+	public class UnevenException : MatrixException
 	{
 		/// <summary>
 		///     Default constructor
 		/// </summary>
-		public UnevenColumnsException() : base("uneven column number is not permitted")
+		private UnevenException(string message) : base(message)
 		{
 		}
 
 		/// <summary>
 		///     check and throw exception
 		/// </summary>
-		public static void Check(int n)
+		public static void Check(string param, int n)
 		{
 			if (n % 2 != 0)
-				throw new UnevenColumnsException();
+				throw new UnevenException($"'{param}' cannot be uneven");
 		}
 	}
 }
