@@ -8,20 +8,20 @@
 		/// <summary>
 		///     Default constructor
 		/// </summary>
-		public OutOfRangeException() : base("value is out of range")
+		public OutOfRangeException(string param) : base($"'{param}' value is out of range")
 		{
 		}
 
 		/// <summary>
 		///     check and throw exception
 		/// </summary>
-		public static void Check(int n, int? min = null, int? max = null)
+		public static void Check(string param, int n, int? min = null, int? max = null)
 		{
 			if (max is { } && n >= max)
-				throw new OutOfRangeException();
+				throw new OutOfRangeException(param);
 
 			if (min is { } && n <= min)
-				throw new OutOfRangeException();
+				throw new OutOfRangeException(param);
 		}
 	}
 }

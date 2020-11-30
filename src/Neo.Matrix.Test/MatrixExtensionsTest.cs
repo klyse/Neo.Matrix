@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using NeoMatrix.Test.Helpers;
 using NUnit.Framework;
 
 namespace NeoMatrix.Test
@@ -6,55 +7,40 @@ namespace NeoMatrix.Test
 	[TestFixture]
 	public class MatrixExtensionsTest
 	{
-		[SetUp]
-		public void SetUp()
-		{
-			var val = 0;
-			_matrix = Matrix<DummyObject>.NewMatrix(4, 4, () =>
-			{
-				val++;
-				return new DummyObject
-				{
-					Value = val
-				};
-			});
-		}
-
-		private record DummyObject
-		{
-			public int Value { get; init; }
-		}
-
-		private Matrix<DummyObject> _matrix = null!;
-
 		[Test]
 		public void Average_CalculatesAverageOnMatrix()
 		{
-			Assert.AreEqual(8.5, _matrix.Average(c => c.Value));
+			var matrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
+
+			Assert.AreEqual(8.5, matrix.Average(c => c.Value));
 		}
 
 		[Test]
 		public void Max_ReturnsMaxValueOfMatrix()
 		{
-			Assert.AreEqual(16, _matrix.Max(c => c.Value));
+			var matrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
+			Assert.AreEqual(16, matrix.Max(c => c.Value));
 		}
 
 		[Test]
 		public void Min_ReturnsMinValueOfMatrix()
 		{
-			Assert.AreEqual(1, _matrix.Min(c => c.Value));
+			var matrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
+			Assert.AreEqual(1, matrix.Min(c => c.Value));
 		}
 
 		[Test]
 		public void Sum_CalculatesTotalSumOnMatrix()
 		{
-			Assert.AreEqual((16 * 16 + 16) / 2, _matrix.Sum(c => c.Value));
+			var matrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
+			Assert.AreEqual((16 * 16 + 16) / 2, matrix.Sum(c => c.Value));
 		}
 
 		[Test]
 		public void ToBitmap_ReturnsBitmapOfMatrix()
 		{
-			var bitmap = _matrix.ToBitmap(c => c.Value);
+			var matrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
+			var bitmap = matrix.ToBitmap(c => c.Value);
 
 			Assert.NotNull(bitmap);
 		}
@@ -101,26 +87,24 @@ namespace NeoMatrix.Test
 		[Test]
 		public void ToMatrix_ConvertBitmapToMatrix()
 		{
-			var bitmap = _matrix.ToBitmap((_, _, v) => Color.FromArgb(v.Value, v.Value, v.Value));
+			var initMatrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
 
-			var matrix = bitmap.ToMatrix((_, _, color) => new DummyObject
-			{
-				Value = color.G
-			});
+			var bitmap = initMatrix.ToBitmap((_, _, v) => Color.FromArgb(v.Value, v.Value, v.Value));
 
-			Assert.AreEqual(_matrix, matrix);
+			var matrix = bitmap.ToMatrix((_, _, color) => new MatrixPopulator.Dummy(color.G));
+
+			Assert.AreEqual(initMatrix, matrix);
 		}
 
 		[Test]
 		public void ToMatrix_UnevenMatrix_ConvertBitmapToMatrix()
 		{
-			var expected = _matrix.AddPadding(2, 0, 2, 0, new DummyObject {Value = 10});
+			var initMatrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
+
+			var expected = initMatrix.AddPadding(2, 0, 2, 0, new MatrixPopulator.Dummy(10));
 			var bitmap = expected.ToBitmap((_, _, v) => Color.FromArgb(v.Value, v.Value, v.Value));
 
-			var matrix = bitmap.ToMatrix((_, _, color) => new DummyObject
-			{
-				Value = color.G
-			});
+			var matrix = bitmap.ToMatrix((_, _, color) => new MatrixPopulator.Dummy(color.G));
 
 			Assert.AreEqual(expected, matrix);
 		}

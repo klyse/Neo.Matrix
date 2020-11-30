@@ -9,32 +9,32 @@ namespace NeoMatrix.Test.Exceptions
 		[Test]
 		public void OutOfRange()
 		{
-			OutOfRangeException.Check(1, 0, 10);
+			OutOfRangeException.Check("", 1, 0, 10);
 			Assert.Pass();
 		}
 
 		[Test]
 		public void OutOfRange_Exception_ToSmall()
 		{
-			Assert.Catch<OutOfRangeException>(() => OutOfRangeException.Check(1, 5, 10));
+			Assert.Catch<OutOfRangeException>(() => OutOfRangeException.Check("", 1, 5, 10));
 		}
 
 		[Test]
 		public void OutOfRange_Exception_ToSmall1()
 		{
-			Assert.Catch<OutOfRangeException>(() => OutOfRangeException.Check(1, 5));
+			Assert.Catch<OutOfRangeException>(() => OutOfRangeException.Check("", 1, 5));
 		}
 
 		[Test]
 		public void OutOfRange_Exception_ToBig()
 		{
-			Assert.Catch<OutOfRangeException>(() => OutOfRangeException.Check(11, 1, 10));
+			Assert.Catch<OutOfRangeException>(() => OutOfRangeException.Check("", 11, 1, 10));
 		}
 
 		[Test]
 		public void OutOfRange_Exception_ToBig1()
 		{
-			Assert.Catch<OutOfRangeException>(() => OutOfRangeException.Check(11, max: 10));
+			Assert.Catch<OutOfRangeException>(() => OutOfRangeException.Check("", 11, max: 10));
 		}
 
 		[Test]

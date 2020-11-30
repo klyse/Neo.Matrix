@@ -36,8 +36,8 @@ namespace NeoMatrix
 			EvenRowsException.Check(rows);
 			EvenColumnsException.Check(columns);
 
-			OutOfRangeException.Check(rows, 1);
-			OutOfRangeException.Check(columns, 1);
+			OutOfRangeException.Check(nameof(rows), rows, 1);
+			OutOfRangeException.Check(nameof(columns), columns, 1);
 
 			var relHeight = (rows - 1) / 2;
 			var relWidth = (columns - 1) / 2;
