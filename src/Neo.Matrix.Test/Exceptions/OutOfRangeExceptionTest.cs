@@ -54,7 +54,7 @@ namespace NeoMatrix.Test.Exceptions
 		[Test]
 		public void UnevenException_Ok()
 		{
-			UnevenException.Check("", 1);
+			UnevenException.Check("", 2);
 			Assert.Pass();
 		}
 
