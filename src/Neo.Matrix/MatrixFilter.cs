@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +12,15 @@ namespace NeoMatrix
 	/// </summary>
 	public static class MatrixFilter
 	{
+		/// <summary>
+		/// Delegate to the innermost action in a matrix filter function.
+		/// </summary>
+		/// <param name="iRow">index row (starts from offset)</param>
+		/// <param name="row">row (starts from 0)</param>
+		/// <param name="iColumn">index column (starts from offset)</param>
+		/// <param name="column">column (starts from 0)</param>
+		public delegate void InnerCycle(int iRow, int row, int iColumn, int column);
+
 		/// <summary>
 		///     Boxed sum of a matrix
 		/// </summary>
@@ -32,17 +40,18 @@ namespace NeoMatrix
 		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows" /> - <paramref name="rows" /> +1)
 		///     x (<paramref name="matrix.Columns" /> - <paramref name="columns" /> +1) containing the avg value of the box
 		/// </returns>
-		public static Matrix<double> RectBoxedAlgo<TType>(this Matrix<TType> matrix, int rows, int columns, Func<int, int, Matrix<TType>, double> func, int yStride = 1, int xStride = 1)
+		public static Matrix<double> RectBoxedAlgo<TType>(this Matrix<TType> matrix, int rows, int columns, Func<int, int, Matrix<TType>, double> func, int yStride = 1, int xStride = 1, int maxDegreeOfParallelism = 1, CancellationToken cancellationToken = default)
 		{
 			CalculateMatrixParameters(matrix, rows, columns, yStride, xStride, out var rowOffset, out var colOffset, out var remainingRows, out var remainingColumns);
 
 			var returnMat = new Matrix<double>(remainingRows, remainingColumns);
 
-			var column = 0;
-			var row = 0;
-			for (var i = rowOffset; i < matrix.Rows - rowOffset; i += yStride, row++, column = 0)
-			for (var j = colOffset; j < matrix.Columns - colOffset; j += xStride, column++)
-				returnMat[row, column] = func(i, j, matrix.GetRect(i, j, rows, columns));
+			MatrixCycle(rowOffset, matrix.Rows - rowOffset - 1, colOffset, matrix.Columns - colOffset - 1, yStride, xStride, maxDegreeOfParallelism, InnerCycle, cancellationToken);
+
+			void InnerCycle(int iRow, int row, int iColumn, int column)
+			{
+				returnMat[row, column] = func(iRow, iColumn, matrix.GetRect(iRow, iColumn, rows, columns)); 
+			}
 
 			return returnMat;
 		}
@@ -66,7 +75,7 @@ namespace NeoMatrix
 		///     new <see cref="Matrix{TElement}" /> with size: (<paramref name="matrix.Rows" /> - <paramref name="rows" /> +1)
 		///     x (<paramref name="matrix.Columns" /> - <paramref name="columns" /> +1) containing the avg value of the box
 		/// </returns>
-		public static Matrix<double> RectBoxedAvg<TType>(this Matrix<TType> matrix, int rows, int columns, Expression<Func<TType, double>> selector, int yStride = 1, int xStride = 1)
+		public static Matrix<double> RectBoxedAvg<TType>(this Matrix<TType> matrix, int rows, int columns, Expression<Func<TType, double>> selector, int yStride = 1, int xStride = 1, int maxDegreeOfParallelism = 1, CancellationToken cancellationToken = default)
 		{
 			CalculateMatrixParameters(matrix, rows, columns, yStride, xStride, out var rowOffset, out var colOffset, out var remainingRows, out var remainingColumns);
 
@@ -75,18 +84,17 @@ namespace NeoMatrix
 			var returnMat = new Matrix<double>(remainingRows, remainingColumns);
 			double space = rows * columns;
 
-			var column = 0;
-			var row = 0;
-			for (var i = rowOffset; i < matrix.Rows - rowOffset; i += yStride, row++, column = 0)
-			for (var j = colOffset; j < matrix.Columns - colOffset; j += xStride, column++)
+			MatrixCycle(rowOffset, matrix.Rows - rowOffset - 1, colOffset, matrix.Columns - colOffset - 1, yStride, xStride, maxDegreeOfParallelism, InnerCycle, cancellationToken);
+
+			void InnerCycle(int iRow, int row, int iColumn, int column)
 			{
 				double sum = 0;
-				for (var c = j - colOffset; c <= j + colOffset; c++)
-					sum += cacheMatrix[i, c];
+				for (var c = iColumn - colOffset; c <= iColumn + colOffset; c++)
+					sum += cacheMatrix[iRow, c];
 
 				returnMat[row, column] = sum / space;
 			}
-
+			
 			return returnMat;
 		}
 
@@ -117,7 +125,7 @@ namespace NeoMatrix
 
 			var returnMat = new Matrix<double>(remainingRows, remainingColumns);
 
-			RowCycle(rowOffset, matrix.Rows - rowOffset - 1, colOffset, matrix.Columns - colOffset - 1, yStride, xStride, maxDegreeOfParallelism, InnerCycle, cancellationToken);
+			MatrixCycle(rowOffset, matrix.Rows - rowOffset - 1, colOffset, matrix.Columns - colOffset - 1, yStride, xStride, maxDegreeOfParallelism, InnerCycle, cancellationToken);
 
 			void InnerCycle(int iRow, int row, int iColumn, int column)
 			{
@@ -131,18 +139,8 @@ namespace NeoMatrix
 			return returnMat;
 		}
 
-		public delegate void InnerCycle(int iRow, int row, int iColumn, int column);
 
-		private static void ColumnCycle(int fromInclusive, int toInclusive, int iRow, int row, int xStride, InnerCycle innerCycle)
-		{
-			var column = 0;
-			for (var iColumn = fromInclusive; iColumn <= toInclusive; iColumn += xStride, column++)
-			{
-				innerCycle(iRow, row, iColumn, column);
-			}
-		}
-
-		private static void RowCycle(int rowFromInclusive, int rowToInclusive, int columnFromInclusive, int columnToInclusive, int yStride, int xStride, int maxDegreeOfParallelism, InnerCycle innerCycle, CancellationToken cancellationToken = default)
+		private static void MatrixCycle(int rowFromInclusive, int rowToInclusive, int columnFromInclusive, int columnToInclusive, int yStride, int xStride, int maxDegreeOfParallelism, InnerCycle innerCycle, CancellationToken cancellationToken = default)
 		{
 			OutOfRangeException.Check(maxDegreeOfParallelism, 0);
 
@@ -172,6 +170,13 @@ namespace NeoMatrix
 					ColumnCycle(columnFromInclusive, columnToInclusive, iRow, row, xStride, innerCycle);
 					row++;
 				}
+			}
+
+
+			static void ColumnCycle(int fromInclusive, int toInclusive, int iRow, int row, int xStride, InnerCycle innerCycle)
+			{
+				var column = 0;
+				for (var iColumn = fromInclusive; iColumn <= toInclusive; iColumn += xStride, column++) innerCycle(iRow, row, iColumn, column);
 			}
 		}
 
