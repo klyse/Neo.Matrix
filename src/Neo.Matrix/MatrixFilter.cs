@@ -214,7 +214,7 @@ namespace NeoMatrix
 		/// <param name="colOffset">left and right space from box</param>
 		/// <param name="remainingRows">new height of matrix</param>
 		/// <param name="remainingColumns">new width of matrix</param>
-		private static void CalculateMatrixParameters<TType>(Matrix<TType> matrix, int rows, int columns, int yStride, int xStride, out int rowOffset, out int colOffset, out int remainingRows, out int remainingColumns)
+		internal static void CalculateMatrixParameters<TType>(Matrix<TType> matrix, int rows, int columns, int yStride, int xStride, out int rowOffset, out int colOffset, out int remainingRows, out int remainingColumns)
 		{
 			EvenRowsException.Check(rows);
 			EvenColumnsException.Check(columns);
