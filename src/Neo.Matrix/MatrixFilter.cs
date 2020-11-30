@@ -117,9 +117,9 @@ namespace NeoMatrix
 
 			var returnMat = new Matrix<double>(remainingRows, remainingColumns);
 
-			RowCycle(rowOffset, matrix.Rows - rowOffset - 1, yStride, maxDegreeOfParallelism, ColumnCycle, cancellationToken);
+			RowCycle(rowOffset, matrix.Rows - rowOffset - 1, colOffset, matrix.Columns - colOffset - 1, yStride, xStride, maxDegreeOfParallelism, InnerCycle, cancellationToken);
 
-			void InnerCycle(int iRow, int iColumn, int row, int column)
+			void InnerCycle(int iRow, int row, int iColumn, int column)
 			{
 				double sum = 0;
 				for (var c = iColumn - colOffset; c <= iColumn + colOffset; c++)
@@ -128,24 +128,26 @@ namespace NeoMatrix
 				returnMat[row, column] = sum;
 			}
 
-			void ColumnCycle(int iRow, int row)
-			{
-				var column = 0;
-				for (var iColumn = colOffset; iColumn < matrix.Columns - colOffset; iColumn += xStride, column++)
-				{
-					InnerCycle(iRow, iColumn, row, column);
-				}
-			}
-
 			return returnMat;
 		}
 
-		private static void RowCycle(int fromInclusive, int toInclusive, int yStride, int maxDegreeOfParallelism, Action<int, int> columnCycle, CancellationToken cancellationToken = default)
+		public delegate void InnerCycle(int iRow, int row, int iColumn, int column);
+
+		private static void ColumnCycle(int fromInclusive, int toInclusive, int iRow, int row, int xStride, InnerCycle innerCycle)
+		{
+			var column = 0;
+			for (var iColumn = fromInclusive; iColumn <= toInclusive; iColumn += xStride, column++)
+			{
+				innerCycle(iRow, row, iColumn, column);
+			}
+		}
+
+		private static void RowCycle(int rowFromInclusive, int rowToInclusive, int columnFromInclusive, int columnToInclusive, int yStride, int xStride, int maxDegreeOfParallelism, InnerCycle innerCycle, CancellationToken cancellationToken = default)
 		{
 			OutOfRangeException.Check(maxDegreeOfParallelism, 0);
 
 			var iRows = new List<int>();
-			for (var iRow = fromInclusive; iRow <= toInclusive; iRow += yStride)
+			for (var iRow = rowFromInclusive; iRow <= rowToInclusive; iRow += yStride)
 				iRows.Add(iRow);
 
 			if (maxDegreeOfParallelism > 1)
@@ -156,10 +158,10 @@ namespace NeoMatrix
 						MaxDegreeOfParallelism = maxDegreeOfParallelism,
 						CancellationToken = cancellationToken
 					},
-					i =>
+					iRow =>
 					{
-						var row = (i - fromInclusive) / yStride;
-						columnCycle(i, row);
+						var row = (iRow - rowFromInclusive) / yStride;
+						ColumnCycle(columnFromInclusive, columnToInclusive, iRow, row, xStride, innerCycle);
 					});
 			}
 			else
@@ -167,7 +169,7 @@ namespace NeoMatrix
 				var row = 0;
 				foreach (var iRow in iRows)
 				{
-					columnCycle(iRow, row);
+					ColumnCycle(columnFromInclusive, columnToInclusive, iRow, row, xStride, innerCycle);
 					row++;
 				}
 			}
