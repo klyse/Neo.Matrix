@@ -148,7 +148,7 @@ namespace NeoMatrix
 
 		private static void MatrixCycle(int rowFromInclusive, int rowToInclusive, int columnFromInclusive, int columnToInclusive, int yStride, int xStride, int maxDegreeOfParallelism, InnerCycle innerCycle, CancellationToken cancellationToken = default)
 		{
-			OutOfRangeException.Check(maxDegreeOfParallelism, 0);
+			OutOfRangeException.Check(nameof(maxDegreeOfParallelism), maxDegreeOfParallelism, 0);
 
 			var iRows = new List<int>();
 			for (var iRow = rowFromInclusive; iRow <= rowToInclusive; iRow += yStride)
@@ -219,17 +219,17 @@ namespace NeoMatrix
 			EvenRowsException.Check(rows);
 			EvenColumnsException.Check(columns);
 
-			OutOfRangeException.Check(columns, 0, matrix.Columns);
-			OutOfRangeException.Check(rows, 0, matrix.Rows);
+			OutOfRangeException.Check(nameof(columns), columns, 0, matrix.Columns);
+			OutOfRangeException.Check(nameof(rows), rows, 0, matrix.Rows);
 
-			OutOfRangeException.Check(xStride, 0);
-			OutOfRangeException.Check(yStride, 0);
+			OutOfRangeException.Check(nameof(xStride), xStride, 0);
+			OutOfRangeException.Check(nameof(yStride), yStride, 0);
 
 			if (yStride > rows)
-				throw new MatrixException("yStride must be <= rows");
+				 StrideException.YStrideException();
 
 			if (xStride > columns)
-				throw new MatrixException("xStride must be <= columns");
+				StrideException.XStrideException();
 
 
 			rowOffset = (rows - 1) / 2;
@@ -239,10 +239,10 @@ namespace NeoMatrix
 			remainingColumns = matrix.Columns - 2 * colOffset;
 
 			if (remainingRows % yStride != 0)
-				throw new MatrixException("rows must be divisible by stride");
+				StrideException.RowsStrideException();
 
 			if (remainingColumns % xStride != 0)
-				throw new MatrixException("columns must be divisible by stride");
+				StrideException.ColumnsStrideException();
 
 			remainingRows /= yStride;
 			remainingColumns /= xStride;

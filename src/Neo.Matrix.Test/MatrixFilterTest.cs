@@ -1,5 +1,6 @@
 ﻿using System;
 using NeoMatrix.Exceptions;
+using NeoMatrix.Test.Helpers;
 using NUnit.Framework;
 
 namespace NeoMatrix.Test
@@ -8,34 +9,24 @@ namespace NeoMatrix.Test
 	[Parallelizable(ParallelScope.All)]
 	public class MatrixFilterTest
 	{
-		[SetUp]
-		public void SetUp()
+		[Test]
+		[TestCase(0, 1)]
+		[TestCase(4, 3)]
+		public void CalculateMatrixParameters_EvenRows_ThrowsError(int rows, int columns)
 		{
-			var val = 0;
-			_matrix = Matrix<DummyObject>.NewMatrix(4, 4, () =>
-			{
-				val++;
-				return new DummyObject
-				{
-					Value = val
-				};
-			});
-		}
+			var matrix = MatrixPopulator.CreateIncrementedInt(10, 10);
 
-		private class DummyObject
-		{
-			public int Value { get; set; }
+			Assert.Throws<EvenRowsException>(() => MatrixFilter.CalculateMatrixParameters(matrix, rows, columns, 1, 1, out _, out _, out _, out _));
 		}
-
-		private Matrix<DummyObject> _matrix = null!;
 
 		[Test]
-		public void RectBoxedAlgo_CorrectSize()
+		[TestCase(1, 0)]
+		[TestCase(5, 4)]
+		public void CalculateMatrixParameters_EvenColumns_ThrowsError(int rows, int columns)
 		{
-			var sum = _matrix.RectBoxedAlgo(3, 3, (_, _, m) => m.Sum(c => c.Value));
+			var matrix = MatrixPopulator.CreateRandomInt(10, 10);
 
-			Assert.AreEqual(2, sum.Rows);
-			Assert.AreEqual(2, sum.Columns);
+			Assert.Throws<EvenColumnsException>(() => MatrixFilter.CalculateMatrixParameters(matrix, rows, columns, 1, 1, out _, out _, out _, out _));
 		}
 
 		[Test]
@@ -44,21 +35,117 @@ namespace NeoMatrix.Test
 		[TestCase(5, 1)]
 		[TestCase(1, 5)]
 		[TestCase(5, 5)]
-		public void RectBoxedAlgo_NotAllowedDimension(int rows, int columns)
+		public void CalculateMatrixParameters_Invalid_RowsColumns_ThrowsError(int rows, int columns)
 		{
-			Assert.Throws<OutOfRangeException>(() => _matrix.RectBoxedAlgo(rows, columns, (_, _, m) => m.Sum(c => c.Value)));
+			var matrix = MatrixPopulator.CreateIncrementedInt(4, 4);
+
+			Assert.Throws<OutOfRangeException>(() => MatrixFilter.CalculateMatrixParameters(matrix, rows, columns, 1, 1, out _, out _, out _, out _));
+		}
+
+		[Test]
+		[TestCase(0, 0)]
+		[TestCase(0, 1)]
+		[TestCase(1, 0)]
+		[TestCase(1, -1)]
+		[TestCase(-1, -1)]
+		[TestCase(-1, 0)]
+		[TestCase(10, 0)]
+		[TestCase(0, 10)]
+		public void CalculateMatrixParameters_InvalidStride_ThrowsError(int yStride, int xStride)
+		{
+			var matrix = MatrixPopulator.CreateIncrementedInt(4, 6, 0);
+
+			Assert.Throws<OutOfRangeException>(() => MatrixFilter.CalculateMatrixParameters(matrix, 3, 3, yStride, xStride, out _, out _, out _, out _));
+		}
+		
+		[Test]
+		[TestCase(10, 10)]
+		[TestCase(10, 2)]
+		[TestCase(2, 10)]
+		public void CalculateMatrixParameters_StrideBiggerThanRowsColumns_ThrowsError(int yStride, int xStride)
+		{
+			var matrix = MatrixPopulator.CreateIncrementedInt(4, 6, 0);
+
+			Assert.Throws<StrideException>(() => MatrixFilter.CalculateMatrixParameters(matrix, 3, 3, yStride, xStride, out _, out _, out _, out _));
+		}
+
+		[Test]
+		[TestCase(3, 5)]
+		[TestCase(5, 3)]
+		public void CalculateMatrixParameters_StrideNotDivisibleByRemainingColumnsRows_ThrowsError(int yStride, int xStride)
+		{
+			var matrix = MatrixPopulator.CreateIncrementedInt(300, 600);
+
+			Assert.Throws<StrideException>(() => MatrixFilter.CalculateMatrixParameters(matrix, 11, 11, yStride, xStride, out _, out _, out _, out _));
+		}
+
+		[Test]
+		public void CalculateMatrixParameters_CalculatesOffsetCorrect()
+		{
+			var matrix = MatrixPopulator.CreateIncrementedInt(10, 10);
+
+			MatrixFilter.CalculateMatrixParameters(matrix, 3, 3, 1, 1, out var rowOffset, out var colOffset, out _, out _);
+			
+			Assert.AreEqual(1,rowOffset);
+			Assert.AreEqual(1,colOffset);
+		}
+		
+		[Test]
+		public void CalculateMatrixParameters_CalculatesOffsetCorrect1()
+		{
+			var matrix = MatrixPopulator.CreateIncrementedInt(100, 200);
+
+			MatrixFilter.CalculateMatrixParameters(matrix, 31, 21, 1, 1, out var rowOffset, out var colOffset, out _, out _);
+			
+			Assert.AreEqual(15,rowOffset);
+			Assert.AreEqual(10,colOffset);
+		}
+		
+		[Test]
+		public void CalculateMatrixParameters_CalculatesRemainingCorrect()
+		{
+			var matrix = MatrixPopulator.CreateIncrementedInt(10, 10);
+
+			MatrixFilter.CalculateMatrixParameters(matrix, 3, 3, 1, 1, out _, out _, out var remainingRows, out var remainingColumns);
+			
+			Assert.AreEqual(8,remainingRows);
+			Assert.AreEqual(8,remainingColumns);
+		}
+		
+		[Test]
+		public void CalculateMatrixParameters_CalculatesRemainingCorrect1()
+		{
+			var matrix = MatrixPopulator.CreateIncrementedInt(100, 200);
+
+			MatrixFilter.CalculateMatrixParameters(matrix, 3, 11, 1, 1, out _, out _, out var remainingRows, out var remainingColumns);
+			
+			Assert.AreEqual(98,remainingRows);
+			Assert.AreEqual(190,remainingColumns);
+		}
+
+		[Test]
+		public void RectBoxedAlgo_CorrectSize()
+		{
+			var matrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
+
+			var sum = matrix.RectBoxedAlgo(3, 3, (_, _, m) => m.Sum(c => c.Value));
+
+			Assert.AreEqual(2, sum.Rows);
+			Assert.AreEqual(2, sum.Columns);
 		}
 
 		[Test]
 		public void RectBoxedAlgo_ReturnSum()
 		{
+			var matrix = MatrixPopulator.CreateIncrementedDummy(4, 4);
+
 			var expected = new Matrix<double>(new double[,]
 			{
 				{54, 63},
 				{90, 99}
 			});
 
-			var sum = _matrix.RectBoxedAlgo(3, 3, (_, _, m) => m.Sum(c => c.Value));
+			var sum = matrix.RectBoxedAlgo(3, 3, (_, _, m) => m.Sum(c => c.Value));
 
 			Assert.AreEqual(expected, sum);
 		}
@@ -68,10 +155,7 @@ namespace NeoMatrix.Test
 		[Combinatorial]
 		public void RectBoxedAlgo_CalculateBigArray([Values(31, 11, 5)] int rows, [Values(31, 11, 5)] int columns)
 		{
-			var matrix = Matrix<DummyObject>.NewMatrix(300, 300, () => new DummyObject
-			{
-				Value = new Random().Next(0, 3000)
-			});
+			var matrix = MatrixPopulator.CreateRandomDummy(300, 300, 0);
 
 			var filtered = matrix.RectBoxedAlgo(rows, columns, (_, _, m) => m.Average(c => c.Value));
 
@@ -83,10 +167,7 @@ namespace NeoMatrix.Test
 		[LongRunning]
 		public void RectBoxedAlgo_CalculateBigArray_Stride2()
 		{
-			var matrix = Matrix<DummyObject>.NewMatrix(300, 300, () => new DummyObject
-			{
-				Value = new Random().Next(0, 3000)
-			});
+			var matrix = MatrixPopulator.CreateRandomDummy(300, 300, 0);
 
 			var filtered = matrix.RectBoxedAlgo(11, 11, (_, _, m) => m.Average(c => c.Value), 2, 2);
 
@@ -94,91 +175,6 @@ namespace NeoMatrix.Test
 			Assert.AreEqual(145, filtered.Rows);
 		}
 
-		[Test]
-		[TestCase(3, 5)]
-		[TestCase(5, 3)]
-		public void RectBoxedAlgo_StrideOutOfRange_Exception(int yStride, int xStride)
-		{
-			var matrix = Matrix<DummyObject>.NewMatrix(300, 600, () => new DummyObject
-			{
-				Value = new Random().Next(0, 3000)
-			});
-
-			Assert.Throws<MatrixException>(() => matrix.RectBoxedAlgo(11, 11, (_, _, m) => m.Average(c => c.Value), yStride, xStride));
-		}
-
-		[Test]
-		[TestCase(0, 0)]
-		[TestCase(0, 1)]
-		[TestCase(1, 0)]
-		public void RectBoxedAvg_InvalidStride_Exception(int yStride, int xStride)
-		{
-			var matrix = Matrix<DummyObject>.NewMatrix(300, 600, () => new DummyObject
-			{
-				Value = new Random().Next(0, 3000)
-			});
-
-			Assert.Throws<OutOfRangeException>(() => matrix.RectBoxedAvg(11, 11, c => c.Value, yStride, xStride));
-		}
-
-		[Test]
-		[TestCase(0, 1)]
-		[TestCase(4, 3)]
-		public void RectBoxedAvg_EvenRows_ThrowsErrors(int rows, int columns)
-		{
-			Assert.Throws<EvenRowsException>(() => _matrix.RectBoxedAvg(rows, columns, c => c.Value));
-		}
-
-		[Test]
-		[TestCase(1, 0)]
-		[TestCase(5, 4)]
-		public void RectBoxedAvg_EvenColumns_ThrowsErrors(int rows, int columns)
-		{
-			Assert.Throws<EvenColumnsException>(() => _matrix.RectBoxedAvg(rows, columns, c => c.Value));
-		}
-
-		[Test]
-		[TestCase(3, 5)]
-		[TestCase(5, 3)]
-		public void RectBoxedAvg_StrideOutOfRange_Exception(int yStride, int xStride)
-		{
-			var matrix = Matrix<DummyObject>.NewMatrix(300, 600, () => new DummyObject
-			{
-				Value = new Random().Next(0, 3000)
-			});
-
-			Assert.Throws<MatrixException>(() => matrix.RectBoxedAvg(11, 11, c => c.Value, yStride, xStride));
-		}
-
-		[Test]
-		[TestCase(0, 0)]
-		[TestCase(0, 1)]
-		[TestCase(1, 0)]
-		public void RectBoxedAlgo_InvalidStride_Exception(int yStride, int xStride)
-		{
-			var matrix = Matrix<DummyObject>.NewMatrix(300, 600, () => new DummyObject
-			{
-				Value = new Random().Next(0, 3000)
-			});
-
-			Assert.Throws<OutOfRangeException>(() => matrix.RectBoxedAlgo(11, 11, (_, _, m) => m.Average(c => c.Value), yStride, xStride));
-		}
-
-		[Test]
-		[TestCase(0, 1)]
-		[TestCase(4, 3)]
-		public void RectBoxedAlgo_EvenRows_ThrowsErrors(int rows, int columns)
-		{
-			Assert.Throws<EvenRowsException>(() => _matrix.RectBoxedAlgo(rows, columns, (_, _, m) => m.Sum(c => c.Value)));
-		}
-
-		[Test]
-		[TestCase(1, 0)]
-		[TestCase(5, 4)]
-		public void RectBoxedAlgo_EvenColumns_ThrowsErrors(int rows, int columns)
-		{
-			Assert.Throws<EvenColumnsException>(() => _matrix.RectBoxedAlgo(rows, columns, (_, _, m) => m.Sum(c => c.Value)));
-		}
 
 		[Test]
 		[Combinatorial]
@@ -192,10 +188,7 @@ namespace NeoMatrix.Test
 			    rows < yStride)
 				Assert.Pass("skipped: invalid combination");
 
-			var matrix = Matrix<DummyObject>.NewMatrix(matRows, matColumns, () => new DummyObject
-			{
-				Value = new Random().Next(0, 3000)
-			});
+			var matrix = MatrixPopulator.CreateRandomDummy(matRows, matColumns, 0);
 
 			var expected = matrix.RectBoxedAlgo(rows, columns, (_, _, mat) => mat.Average(c => c.Value), yStride, xStride);
 			var result = matrix.RectBoxedAvg(rows, columns, c => c.Value, yStride, xStride);
@@ -215,10 +208,7 @@ namespace NeoMatrix.Test
 			    rows < yStride)
 				Assert.Pass("skipped: invalid combination");
 
-			var matrix = Matrix<DummyObject>.NewMatrix(matRows, matColumns, () => new DummyObject
-			{
-				Value = new Random().Next(0, 3000)
-			});
+			var matrix = MatrixPopulator.CreateRandomDummy(matRows, matColumns, 0);
 
 			var expected = matrix.RectBoxedAlgo(rows, columns, (_, _, mat) => mat.Sum(c => c.Value), yStride, xStride);
 			var result = matrix.RectBoxedSum(rows, columns, c => c.Value, yStride, xStride);
