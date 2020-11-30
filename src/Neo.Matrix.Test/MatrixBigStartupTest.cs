@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using NeoMatrix.Test.Helpers;
 using NUnit.Framework;
 
 namespace NeoMatrix.Test
@@ -7,32 +8,21 @@ namespace NeoMatrix.Test
 	[TestFixture]
 	public class MatrixBigStartupTest
 	{
-		[OneTimeSetUp]
-		public void OneTimeSetUp()
-		{
-			var i = 0;
-			_mat = Matrix<int>.NewMatrix(9, 9, () =>
-			{
-				i++;
-				return i;
-			});
-		}
-
-		private Matrix<int> _mat = null!;
-
 		[Test]
 		[TestCase(33)]
 		[TestCase(11)]
 		[TestCase(5)]
 		public void GetBox_OutOfRange_ThrowsException(int size)
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetBox(8, 8, size));
+			var mat = MatrixPopulator.CreateIncrementedInt(9, 9);
+			Assert.Throws<IndexOutOfRangeException>(() => mat.GetBox(8, 8, size));
 		}
 
 		[Test]
 		public void GetBox_ReturnsBox()
 		{
-			var box = _mat.GetBox(2, 2, 3);
+			var mat = MatrixPopulator.CreateIncrementedInt(9, 9);
+			var box = mat.GetBox(2, 2, 3);
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -47,7 +37,9 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetBox_ReturnsBox_TakesPointInput2()
 		{
-			var box = _mat.GetBox(new Point(3, 2), 3);
+			var mat = MatrixPopulator.CreateIncrementedInt(9, 9);
+
+			var box = mat.GetBox(new Point(3, 2), 3);
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -65,13 +57,17 @@ namespace NeoMatrix.Test
 		[TestCase(5)]
 		public void GetBox_TakesPoint_OutOfRange_ThrowsException(int size)
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetBox(new Point(8, 8), size));
+			var mat = MatrixPopulator.CreateIncrementedInt(9, 9);
+
+			Assert.Throws<IndexOutOfRangeException>(() => mat.GetBox(new Point(8, 8), size));
 		}
 
 		[Test]
 		public void GetFromRegion()
 		{
-			var matReg = _mat.GetRect(RegionHelper.FromCenter(3, 2, 3, 5));
+			var mat = MatrixPopulator.CreateIncrementedInt(9, 9);
+
+			var matReg = mat.GetRect(RegionHelper.FromCenter(3, 2, 3, 5));
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -89,13 +85,17 @@ namespace NeoMatrix.Test
 		[TestCase(11, 3)]
 		public void GetRect_OutOfRange_ThrowsException(int height, int width)
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetRect(1, 1, height, width));
+			var mat = MatrixPopulator.CreateIncrementedInt(9, 9);
+
+			Assert.Throws<IndexOutOfRangeException>(() => mat.GetRect(1, 1, height, width));
 		}
 
 		[Test]
 		public void GetRect_ReturnsRect()
 		{
-			var box = _mat.GetRect(2, 2, 3, 5);
+			var mat = MatrixPopulator.CreateIncrementedInt(9, 9);
+
+			var box = mat.GetRect(2, 2, 3, 5);
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -110,7 +110,9 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetRect_ReturnsRect_TakesRectInput()
 		{
-			var box = _mat.GetRect(new Rectangle(0, 1, 5, 3));
+			var mat = MatrixPopulator.CreateIncrementedInt(9, 9);
+
+			var box = mat.GetRect(new Rectangle(0, 1, 5, 3));
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -125,7 +127,9 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetRect_ReturnsRect_TakesRectInput2()
 		{
-			var box = _mat.GetRect(new Rectangle(1, 1, 5, 3));
+			var mat = MatrixPopulator.CreateIncrementedInt(9, 9);
+
+			var box = mat.GetRect(new Rectangle(1, 1, 5, 3));
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -140,7 +144,9 @@ namespace NeoMatrix.Test
 		[Test]
 		public void GetRect_ReturnsRect1()
 		{
-			var box = _mat.GetRect(2, 2, 3, 3);
+			var mat = MatrixPopulator.CreateIncrementedInt(9, 9);
+
+			var box = mat.GetRect(2, 2, 3, 3);
 
 			var expectedBox = new Matrix<int>(new[,]
 			{
@@ -158,7 +164,9 @@ namespace NeoMatrix.Test
 		[TestCase(11, 3)]
 		public void GetRect_TakesRectInput_OutOfRange_ThrowsException(int height, int width)
 		{
-			Assert.Throws<IndexOutOfRangeException>(() => _mat.GetRect(new Rectangle(1, 1, height, width)));
+			var mat = MatrixPopulator.CreateIncrementedInt(9, 9);
+
+			Assert.Throws<IndexOutOfRangeException>(() => mat.GetRect(new Rectangle(1, 1, height, width)));
 		}
 	}
 }
